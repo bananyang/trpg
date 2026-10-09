@@ -2,8 +2,8 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MYTHOS VTT — 올인원 TRPG 시뮬레이터 & 멀티플레이어</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>MYTHOS VTT — 올인원 TRPG 시뮬레이터 & 던전월드</title>
   <!-- PeerJS for Free Serverless WebRTC P2P Multiplayer on Web Hosting -->
   <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
   <style>
@@ -44,7 +44,7 @@ body {
   color: var(--text-main);
   overflow: hidden;
   height: 100vh;
-  height: 100dvh; /* Mobile dynamic viewport */
+  height: 100dvh;
   width: 100vw;
   display: flex;
   flex-direction: column;
@@ -52,14 +52,14 @@ body {
 
 /* Header bar */
 header {
-  height: 52px;
-  min-height: 52px;
+  height: 50px;
+  min-height: 50px;
   background: linear-gradient(180deg, #181e2b 0%, #10141d 100%);
   border-bottom: 1px solid var(--border-color);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 12px;
+  padding: 0 10px;
   z-index: 50;
   box-shadow: 0 2px 10px rgba(0,0,0,0.5);
   gap: 8px;
@@ -70,25 +70,24 @@ header::-webkit-scrollbar { display: none; }
 .logo-area {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   flex-shrink: 0;
 }
 
 .logo-title {
   font-family: var(--font-serif);
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 700;
-  letter-spacing: 0.5px;
   color: var(--text-gold);
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   white-space: nowrap;
 }
 
 .badge {
-  font-size: 0.7rem;
-  padding: 2px 7px;
+  font-size: 0.68rem;
+  padding: 2px 6px;
   border-radius: 9999px;
   font-weight: 600;
   white-space: nowrap;
@@ -101,19 +100,19 @@ header::-webkit-scrollbar { display: none; }
 .room-bar {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   flex-shrink: 0;
 }
 
 .room-chip {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-size: 0.8rem;
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-size: 0.78rem;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   cursor: pointer;
   white-space: nowrap;
   transition: all 0.2s;
@@ -130,23 +129,22 @@ header::-webkit-scrollbar { display: none; }
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   padding: 3px 6px;
-  border-radius: 6px;
+  border-radius: 5px;
   white-space: nowrap;
 }
 .user-selector select {
   background: transparent;
   color: var(--text-main);
   border: none;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   outline: none;
   cursor: pointer;
-  max-width: 140px;
 }
 
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   flex-shrink: 0;
 }
 
@@ -154,9 +152,9 @@ header::-webkit-scrollbar { display: none; }
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   color: var(--text-main);
-  padding: 4px 9px;
-  border-radius: 6px;
-  font-size: 0.78rem;
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-size: 0.76rem;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -181,15 +179,15 @@ header::-webkit-scrollbar { display: none; }
   color: #fff;
 }
 
-/* App Main Layout: Desktop 3 Columns */
+/* App Main Layout */
 #app-main {
   flex: 1;
   display: grid;
   grid-template-columns: 360px 1fr 380px;
   overflow: hidden;
   position: relative;
-  height: calc(100vh - 52px);
-  height: calc(100dvh - 52px);
+  height: calc(100vh - 50px);
+  height: calc(100dvh - 50px);
 }
 
 /* Panels */
@@ -216,8 +214,8 @@ header::-webkit-scrollbar { display: none; }
 .panel-tab {
   flex: 1;
   text-align: center;
-  padding: 10px 4px;
-  font-size: 0.8rem;
+  padding: 9px 3px;
+  font-size: 0.78rem;
   font-weight: 600;
   color: var(--text-muted);
   cursor: pointer;
@@ -226,33 +224,24 @@ header::-webkit-scrollbar { display: none; }
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 3px;
 }
 .panel-tab.active {
   color: var(--text-gold);
   border-bottom-color: var(--accent-gold);
   background: rgba(229,169,60,0.06);
 }
-.panel-tab:hover:not(.active) {
-  color: var(--text-main);
-  background: rgba(255,255,255,0.02);
-}
 
 .panel-content {
   flex: 1;
   overflow-y: auto;
-  padding: 12px;
+  padding: 10px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
-.panel-content::-webkit-scrollbar {
-  width: 6px;
-}
-.panel-content::-webkit-scrollbar-thumb {
-  background: #2a3449;
-  border-radius: 3px;
-}
+.panel-content::-webkit-scrollbar { width: 5px; }
+.panel-content::-webkit-scrollbar-thumb { background: #2a3449; border-radius: 3px; }
 
 /* Center VTT Workspace */
 #center-workspace {
@@ -267,18 +256,18 @@ header::-webkit-scrollbar { display: none; }
 /* Top Map Controls Bar */
 .map-top-bar {
   position: absolute;
-  top: 10px;
-  left: 10px;
-  right: 10px;
-  height: 42px;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  height: 40px;
   background: rgba(18, 22, 31, 0.92);
   backdrop-filter: blur(8px);
   border: 1px solid var(--border-color);
-  border-radius: 8px;
+  border-radius: 7px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 10px;
+  padding: 0 8px;
   z-index: 20;
   box-shadow: 0 4px 16px rgba(0,0,0,0.4);
   overflow-x: auto;
@@ -289,7 +278,7 @@ header::-webkit-scrollbar { display: none; }
 .map-control-group {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   flex-shrink: 0;
 }
 
@@ -297,13 +286,13 @@ header::-webkit-scrollbar { display: none; }
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   color: var(--text-main);
-  padding: 4px 8px;
-  border-radius: 5px;
-  font-size: 0.75rem;
+  padding: 3px 7px;
+  border-radius: 4px;
+  font-size: 0.74rem;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 3px;
   white-space: nowrap;
   transition: all 0.2s;
 }
@@ -316,49 +305,45 @@ header::-webkit-scrollbar { display: none; }
 /* Floating Left Map Toolbar */
 .floating-toolbar {
   position: absolute;
-  top: 62px;
-  left: 10px;
+  top: 56px;
+  left: 8px;
   background: rgba(18, 22, 31, 0.94);
   backdrop-filter: blur(8px);
   border: 1px solid var(--border-color);
-  border-radius: 8px;
+  border-radius: 7px;
   display: flex;
   flex-direction: column;
-  padding: 5px;
-  gap: 5px;
+  padding: 4px;
+  gap: 4px;
   z-index: 20;
   box-shadow: 0 4px 20px rgba(0,0,0,0.5);
 }
 
 .tool-btn {
-  width: 36px;
-  height: 36px;
+  width: 34px;
+  height: 34px;
   background: transparent;
   border: 1px solid transparent;
-  border-radius: 6px;
+  border-radius: 5px;
   color: var(--text-muted);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   transition: all 0.2s;
   position: relative;
 }
-.tool-btn:hover {
-  background: var(--bg-card);
-  color: var(--text-main);
-}
+.tool-btn:hover { background: var(--bg-card); color: var(--text-main); }
 .tool-btn.active {
   background: rgba(229,169,60,0.2);
   border-color: var(--accent-gold);
   color: var(--text-gold);
 }
 
-/* Tool Submenu */
 .tool-submenu {
   position: absolute;
-  left: 44px;
+  left: 42px;
   top: 0;
   background: rgba(18, 22, 31, 0.98);
   border: 1px solid var(--border-color);
@@ -366,43 +351,31 @@ header::-webkit-scrollbar { display: none; }
   padding: 6px;
   display: none;
   flex-direction: column;
-  gap: 5px;
+  gap: 4px;
   min-width: 130px;
   box-shadow: 0 6px 16px rgba(0,0,0,0.6);
   z-index: 25;
 }
-.tool-btn:hover .tool-submenu, .tool-submenu:hover {
-  display: flex;
-}
+.tool-btn:hover .tool-submenu, .tool-submenu:hover { display: flex; }
 
-/* Canvas Viewport */
 #canvas-container {
   flex: 1;
   width: 100%;
   height: 100%;
   position: relative;
   cursor: default;
-  touch-action: none; /* Crucial for custom touch handling */
+  touch-action: none;
 }
-canvas#vtt-canvas {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
+canvas#vtt-canvas { width: 100%; height: 100%; display: block; }
 
-/* Lighting / Atmosphere Overlay */
 #lighting-overlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: 0; left: 0; width: 100%; height: 100%;
   pointer-events: none;
   z-index: 5;
   transition: background 0.8s ease;
 }
 
-/* Environment Light Presets */
 .light-day { background: transparent; }
 .light-dusk { background: rgba(180, 80, 20, 0.15); mix-blend-mode: multiply; }
 .light-night { background: rgba(5, 12, 35, 0.55); mix-blend-mode: multiply; }
@@ -414,47 +387,37 @@ canvas#vtt-canvas {
 .card {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
-  border-radius: 8px;
+  border-radius: 7px;
   padding: 10px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 7px;
 }
 .card-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid rgba(255,255,255,0.06);
-  padding-bottom: 6px;
+  padding-bottom: 5px;
 }
 .card-title {
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   font-weight: 700;
   color: var(--text-gold);
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
 }
 
-/* Scenario & Excerpt Box Styles */
-.scenario-selector-box {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.scene-nav-pills {
-  display: flex;
-  gap: 6px;
-  overflow-x: auto;
-  padding-bottom: 4px;
-}
-.scene-nav-pills::-webkit-scrollbar { height: 4px; }
+.scenario-selector-box { display: flex; flex-direction: column; gap: 7px; }
+.scene-nav-pills { display: flex; gap: 5px; overflow-x: auto; padding-bottom: 3px; }
+.scene-nav-pills::-webkit-scrollbar { height: 3px; }
 .scene-pill {
-  padding: 4px 10px;
+  padding: 3px 8px;
   background: var(--bg-panel);
   border: 1px solid var(--border-color);
   border-radius: 4px;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   color: var(--text-muted);
   cursor: pointer;
   white-space: nowrap;
@@ -469,20 +432,19 @@ canvas#vtt-canvas {
 .excerpt-box {
   background: rgba(14, 18, 27, 0.95);
   border-left: 3px solid var(--accent-gold);
-  padding: 10px;
-  border-radius: 0 6px 6px 0;
-  font-size: 0.84rem;
+  padding: 9px;
+  border-radius: 0 5px 5px 0;
+  font-size: 0.82rem;
   line-height: 1.5;
   color: #f1f5f9;
-  position: relative;
 }
 .excerpt-label {
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   font-weight: 700;
   text-transform: uppercase;
   color: var(--accent-gold);
   letter-spacing: 0.5px;
-  margin-bottom: 5px;
+  margin-bottom: 4px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -490,9 +452,9 @@ canvas#vtt-canvas {
 .gm-secret-box {
   background: rgba(45, 20, 20, 0.4);
   border-left: 3px solid #f87171;
-  padding: 8px 10px;
-  border-radius: 0 6px 6px 0;
-  font-size: 0.8rem;
+  padding: 8px;
+  border-radius: 0 5px 5px 0;
+  font-size: 0.78rem;
   color: #fecaca;
 }
 
@@ -502,19 +464,19 @@ canvas#vtt-canvas {
   justify-content: space-between;
   background: rgba(255,255,255,0.03);
   border: 1px solid var(--border-color);
-  border-radius: 6px;
-  padding: 6px 8px;
-  font-size: 0.8rem;
-  gap: 6px;
+  border-radius: 5px;
+  padding: 5px 7px;
+  font-size: 0.78rem;
+  gap: 5px;
 }
 
 .btn-small {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   color: var(--text-main);
-  padding: 3px 8px;
+  padding: 3px 7px;
   border-radius: 4px;
-  font-size: 0.74rem;
+  font-size: 0.72rem;
   cursor: pointer;
   transition: all 0.15s;
   white-space: nowrap;
@@ -530,21 +492,16 @@ canvas#vtt-canvas {
   border: none;
   font-weight: 700;
 }
-.btn-gold:hover {
-  background: var(--accent-gold-hover);
-  color: #000;
-}
+.btn-gold:hover { background: var(--accent-gold-hover); color: #000; }
 
-/* File Upload Zone */
 .upload-dropzone {
   border: 2px dashed var(--border-color);
-  border-radius: 8px;
-  padding: 12px;
+  border-radius: 7px;
+  padding: 10px;
   text-align: center;
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   color: var(--text-muted);
   cursor: pointer;
-  transition: all 0.2s;
   background: rgba(0,0,0,0.2);
 }
 .upload-dropzone:hover, .upload-dropzone.dragover {
@@ -553,225 +510,124 @@ canvas#vtt-canvas {
   background: rgba(229,169,60,0.05);
 }
 
-/* Character Sheet UI */
 .stat-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 6px;
+  gap: 5px;
 }
 .stat-box {
   background: var(--bg-panel);
   border: 1px solid var(--border-color);
-  border-radius: 6px;
-  padding: 6px 4px;
+  border-radius: 5px;
+  padding: 5px 3px;
   text-align: center;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.15s;
 }
 .stat-box:hover {
   border-color: var(--accent-gold);
   transform: translateY(-1px);
 }
-.stat-name {
-  font-size: 0.68rem;
-  color: var(--text-muted);
-  font-weight: 600;
-  text-transform: uppercase;
-}
-.stat-val {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--text-gold);
-}
-.stat-mod {
-  font-size: 0.72rem;
-  color: var(--text-main);
-}
+.stat-name { font-size: 0.65rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
+.stat-val { font-size: 1.05rem; font-weight: 700; color: var(--text-gold); }
+.stat-mod { font-size: 0.7rem; color: var(--text-main); }
 
-.resource-bar {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-.resource-label-row {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.75rem;
-  font-weight: 600;
-}
-.gauge-track {
-  height: 8px;
-  background: #0f131a;
-  border-radius: 4px;
-  overflow: hidden;
-  position: relative;
-}
-.gauge-fill {
-  height: 100%;
-  border-radius: 4px;
-  transition: width 0.3s ease;
-}
+.resource-bar { display: flex; flex-direction: column; gap: 3px; }
+.resource-label-row { display: flex; justify-content: space-between; font-size: 0.74rem; font-weight: 600; }
+.gauge-track { height: 7px; background: #0f131a; border-radius: 4px; overflow: hidden; position: relative; }
+.gauge-fill { height: 100%; border-radius: 4px; transition: width 0.3s ease; }
 .gauge-hp { background: linear-gradient(90deg, #ef4444, #f87171); }
 .gauge-mp { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
 .gauge-san { background: linear-gradient(90deg, #8b5cf6, #c084fc); }
 
-/* Initiative Tracker */
 .combatant-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
   background: var(--bg-panel);
   border: 1px solid var(--border-color);
-  border-radius: 6px;
-  padding: 6px 8px;
-  transition: all 0.2s;
+  border-radius: 5px;
+  padding: 5px 7px;
 }
 .combatant-item.active-turn {
   border-color: var(--accent-gold);
   background: rgba(229,169,60,0.1);
-  box-shadow: 0 0 12px rgba(229,169,60,0.25);
 }
-.combatant-info {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
+.combatant-info { display: flex; align-items: center; gap: 5px; }
 .combatant-avatar {
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  background: #2a3449;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.8rem;
-  border: 1px solid var(--border-color);
+  width: 24px; height: 24px; border-radius: 50%; background: #2a3449;
+  display: flex; align-items: center; justify-content: center; font-size: 0.75rem;
 }
-.combatant-init {
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--text-gold);
-  min-width: 24px;
-  text-align: right;
-}
+.combatant-init { font-size: 0.95rem; font-weight: 700; color: var(--text-gold); }
 
 /* Right Panel: Dice & Chat */
 .dice-tray-card {
   background: #11141c;
   border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 10px;
+  border-radius: 7px;
+  padding: 9px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 7px;
 }
-
-/* 3D-styled animated dice button row */
-.dice-buttons-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 5px;
-}
+.dice-buttons-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
 .dice-btn {
   background: linear-gradient(145deg, #262e40, #1b202d);
   border: 1px solid #37425c;
   color: #f1f5f9;
-  padding: 8px 0;
-  border-radius: 6px;
-  font-size: 0.82rem;
+  padding: 7px 0;
+  border-radius: 5px;
+  font-size: 0.8rem;
   font-weight: 700;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
-  transition: all 0.15s;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+  gap: 1px;
 }
-.dice-btn:hover {
-  border-color: var(--accent-gold);
-  color: var(--text-gold);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.5);
-}
-.dice-btn:active {
-  transform: translateY(1px);
-}
-.dice-icon {
-  font-size: 0.95rem;
-}
+.dice-btn:hover { border-color: var(--accent-gold); color: var(--text-gold); transform: translateY(-1px); }
 
-/* Dice Formula input */
-.formula-row {
-  display: flex;
-  gap: 5px;
-}
+.formula-row { display: flex; gap: 4px; }
 .formula-input {
   flex: 1;
   background: #0d1017;
   border: 1px solid var(--border-color);
   color: #fff;
-  border-radius: 6px;
-  padding: 6px 8px;
-  font-size: 0.82rem;
+  border-radius: 5px;
+  padding: 5px 7px;
+  font-size: 0.8rem;
   outline: none;
   font-family: monospace;
 }
-.formula-input:focus {
-  border-color: var(--accent-gold);
-}
+.formula-input:focus { border-color: var(--accent-gold); }
 
-.roll-mode-selector {
-  display: flex;
-  gap: 4px;
-}
+.roll-mode-selector { display: flex; gap: 3px; }
 .roll-mode-pill {
-  flex: 1;
-  text-align: center;
-  font-size: 0.7rem;
-  padding: 4px 0;
-  background: #181d28;
-  border: 1px solid var(--border-color);
-  border-radius: 4px;
-  color: var(--text-muted);
-  cursor: pointer;
+  flex: 1; text-align: center; font-size: 0.68rem; padding: 3px 0;
+  background: #181d28; border: 1px solid var(--border-color); border-radius: 3px;
+  color: var(--text-muted); cursor: pointer;
 }
-.roll-mode-pill.active {
-  background: rgba(229,169,60,0.2);
-  border-color: var(--accent-gold);
-  color: var(--text-gold);
-  font-weight: 600;
-}
+.roll-mode-pill.active { background: rgba(229,169,60,0.2); border-color: var(--accent-gold); color: var(--text-gold); font-weight: 600; }
 
-/* 3D Animated Rolling Stage */
 #dice-stage {
-  height: 70px;
+  height: 65px;
   background: radial-gradient(ellipse at center, #1e2638 0%, #0d1017 100%);
   border: 1px dashed var(--border-color);
-  border-radius: 6px;
+  border-radius: 5px;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   overflow: hidden;
 }
-.rolling-dice-anim {
-  font-size: 2rem;
-  animation: rollTumble 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-}
+.rolling-dice-anim { font-size: 1.8rem; animation: rollTumble 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
 @keyframes rollTumble {
   0% { transform: scale(0.2) rotate(-360deg); opacity: 0; }
   50% { transform: scale(1.3) rotate(180deg); }
   100% { transform: scale(1) rotate(0deg); opacity: 1; }
 }
-.dice-final-result {
-  font-size: 1.6rem;
-  font-weight: 800;
-  color: var(--text-gold);
-  text-shadow: 0 0 15px rgba(229,169,60,0.6);
-}
+.dice-final-result { font-size: 1.5rem; font-weight: 800; color: var(--text-gold); }
 
-/* Chat & Log Box */
 .chat-container {
   flex: 1;
   display: flex;
@@ -779,372 +635,178 @@ canvas#vtt-canvas {
   overflow: hidden;
   background: #12151e;
   border: 1px solid var(--border-color);
-  border-radius: 8px;
+  border-radius: 7px;
 }
 .chat-filter-bar {
   display: flex;
   background: #0f121a;
   border-bottom: 1px solid var(--border-color);
-  padding: 4px 6px;
-  gap: 4px;
+  padding: 3px 5px;
+  gap: 3px;
   align-items: center;
 }
 .chat-filter-btn {
-  background: transparent;
-  border: none;
-  color: var(--text-muted);
-  font-size: 0.72rem;
-  padding: 3px 6px;
-  border-radius: 4px;
-  cursor: pointer;
+  background: transparent; border: none; color: var(--text-muted); font-size: 0.7rem; padding: 2px 5px; border-radius: 3px; cursor: pointer;
 }
-.chat-filter-btn.active {
-  background: var(--bg-card);
-  color: var(--text-gold);
-  font-weight: 600;
-}
+.chat-filter-btn.active { background: var(--bg-card); color: var(--text-gold); font-weight: 600; }
 
 .chat-messages {
   flex: 1;
   overflow-y: auto;
-  padding: 8px;
+  padding: 7px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 5px;
 }
-.chat-messages::-webkit-scrollbar { width: 5px; }
+.chat-messages::-webkit-scrollbar { width: 4px; }
 .chat-messages::-webkit-scrollbar-thumb { background: #2a3449; }
 
-/* Chat Message Cards */
 .msg-card {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
-  border-radius: 6px;
-  padding: 6px 8px;
-  font-size: 0.82rem;
+  border-radius: 5px;
+  padding: 6px 7px;
+  font-size: 0.8rem;
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 2px;
   animation: fadeIn 0.2s ease;
 }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
 
-.msg-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.7rem;
-}
-.msg-sender {
-  font-weight: 700;
-  color: var(--text-gold);
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-.msg-time {
-  color: var(--text-muted);
-}
-.msg-body {
-  color: var(--text-main);
-  line-height: 1.4;
-  word-break: break-word;
-}
-.msg-ic {
-  border-left: 3px solid var(--accent-blue);
-  background: rgba(59,130,246,0.06);
-}
-.msg-ooc {
-  border-left: 3px solid var(--text-muted);
-  color: #cbd5e1;
-}
-.msg-whisper {
-  border-left: 3px solid var(--accent-purple);
-  background: rgba(168,85,247,0.08);
-}
-.msg-dice {
-  border-left: 3px solid var(--accent-gold);
-  background: rgba(229,169,60,0.06);
-}
-.msg-narration {
-  border-left: 3px solid #ec4899;
-  background: rgba(236,72,153,0.06);
-  font-family: var(--font-serif);
-}
+.msg-header { display: flex; justify-content: space-between; align-items: center; font-size: 0.68rem; }
+.msg-sender { font-weight: 700; color: var(--text-gold); display: flex; align-items: center; gap: 4px; }
+.msg-time { color: var(--text-muted); }
+.msg-body { color: var(--text-main); line-height: 1.4; word-break: break-word; }
+.msg-ic { border-left: 3px solid var(--accent-blue); background: rgba(59,130,246,0.06); }
+.msg-ooc { border-left: 3px solid var(--text-muted); color: #cbd5e1; }
+.msg-whisper { border-left: 3px solid var(--accent-purple); background: rgba(168,85,247,0.08); }
+.msg-dice { border-left: 3px solid var(--accent-gold); background: rgba(229,169,60,0.06); }
+.msg-narration { border-left: 3px solid #ec4899; background: rgba(236,72,153,0.06); font-family: var(--font-serif); }
 
 .dice-result-badge {
-  font-size: 1rem;
-  font-weight: 800;
-  padding: 2px 6px;
-  border-radius: 4px;
-  display: inline-block;
-  margin-top: 3px;
+  font-size: 0.95rem; font-weight: 800; padding: 2px 6px; border-radius: 4px; display: inline-block; margin-top: 3px;
 }
 .res-crit { background: rgba(34,197,94,0.25); color: #4ade80; border: 1px solid #22c55e; }
 .res-fumble { background: rgba(239,68,68,0.25); color: #f87171; border: 1px solid #ef4444; }
 .res-success { background: rgba(59,130,246,0.2); color: #60a5fa; border: 1px solid #3b82f6; }
-.res-fail { background: rgba(148,163,184,0.2); color: #cbd5e1; border: 1px solid #64748b; }
 
-/* Chat input bar */
 .chat-input-bar {
   background: #0f121a;
   border-top: 1px solid var(--border-color);
-  padding: 6px;
+  padding: 5px;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 4px;
 }
-.chat-input-row {
-  display: flex;
-  gap: 5px;
-}
+.chat-input-row { display: flex; gap: 4px; }
 .chat-input {
-  flex: 1;
-  background: #181d28;
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
-  color: #fff;
-  padding: 6px 8px;
-  font-size: 0.82rem;
-  outline: none;
+  flex: 1; background: #181d28; border: 1px solid var(--border-color); border-radius: 5px;
+  color: #fff; padding: 5px 7px; font-size: 0.8rem; outline: none;
 }
 .chat-input:focus { border-color: var(--accent-gold); }
 
-.macro-bar {
-  display: flex;
-  gap: 4px;
-  overflow-x: auto;
-  padding-bottom: 2px;
-}
-.macro-bar::-webkit-scrollbar { height: 3px; }
+.macro-bar { display: flex; gap: 3px; overflow-x: auto; padding-bottom: 2px; }
+.macro-bar::-webkit-scrollbar { height: 2px; }
 .macro-btn {
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  color: var(--text-muted);
-  font-size: 0.7rem;
-  padding: 3px 6px;
-  border-radius: 4px;
-  white-space: nowrap;
-  cursor: pointer;
+  background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-muted);
+  font-size: 0.68rem; padding: 2px 5px; border-radius: 3px; white-space: nowrap; cursor: pointer;
 }
-.macro-btn:hover {
-  color: var(--text-gold);
-  border-color: var(--border-gold);
+.macro-btn:hover { color: var(--text-gold); border-color: var(--border-gold); }
+
+/* Cutscene Blackout Overlay */
+.cutscene-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh; height: 100dvh;
+  background: rgba(0, 0, 0, 0.94);
+  z-index: 300;
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.cutscene-overlay.active { display: flex; opacity: 1; pointer-events: auto; }
+.cutscene-letterbox { width: 100%; height: 70px; background: #000; }
+.cutscene-text {
+  max-width: 800px; padding: 20px; font-family: var(--font-serif);
+  font-size: 1.4rem; line-height: 1.7; color: var(--text-gold);
+  text-align: center; text-shadow: 0 0 20px rgba(229,169,60,0.8);
 }
 
 /* Modals */
 .modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  height: 100dvh;
-  background: rgba(0,0,0,0.75);
-  backdrop-filter: blur(4px);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 200;
-  padding: 10px;
+  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; height: 100dvh;
+  background: rgba(0,0,0,0.75); backdrop-filter: blur(4px);
+  display: none; align-items: center; justify-content: center; z-index: 200; padding: 10px;
 }
-.modal-overlay.open {
-  display: flex;
-}
+.modal-overlay.open { display: flex; }
 .modal-card {
-  background: var(--bg-dark);
-  border: 1px solid var(--border-gold);
-  border-radius: 10px;
-  width: 100%;
-  max-width: 580px;
-  max-height: 85vh;
-  max-height: 85dvh;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+  background: var(--bg-dark); border: 1px solid var(--border-gold); border-radius: 8px;
+  width: 100%; max-width: 580px; max-height: 85vh; max-height: 85dvh;
+  display: flex; flex-direction: column; box-shadow: 0 10px 40px rgba(0,0,0,0.8);
   animation: modalPop 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 @keyframes modalPop { from { transform: scale(0.92); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
 .modal-header {
-  padding: 12px 14px;
-  border-bottom: 1px solid var(--border-color);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  padding: 10px 12px; border-bottom: 1px solid var(--border-color);
+  display: flex; align-items: center; justify-content: space-between;
 }
-.modal-title {
-  font-family: var(--font-serif);
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: var(--text-gold);
-}
-.modal-close {
-  background: transparent;
-  border: none;
-  color: var(--text-muted);
-  font-size: 1.25rem;
-  cursor: pointer;
-}
-.modal-close:hover { color: #fff; }
+.modal-title { font-family: var(--font-serif); font-size: 1rem; font-weight: 700; color: var(--text-gold); }
+.modal-close { background: transparent; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer; }
+.modal-body { padding: 12px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; font-size: 0.82rem; }
+.modal-footer { padding: 8px 12px; border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end; gap: 6px; }
 
-.modal-body {
-  padding: 14px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  font-size: 0.85rem;
-}
-.modal-footer {
-  padding: 10px 14px;
-  border-top: 1px solid var(--border-color);
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-}
-
-.features-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 6px;
-  font-size: 0.76rem;
-}
+.features-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; font-size: 0.74rem; }
 .feature-badge-item {
-  background: var(--bg-panel);
-  border: 1px solid var(--border-color);
-  padding: 5px 8px;
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
+  background: var(--bg-panel); border: 1px solid var(--border-color); padding: 5px 7px; border-radius: 5px;
+  display: flex; align-items: center; gap: 5px;
 }
-.feature-num {
-  color: var(--accent-gold);
-  font-weight: 700;
-  min-width: 20px;
-}
+.feature-num { color: var(--accent-gold); font-weight: 700; min-width: 24px; font-size: 0.7rem; }
 
-/* ========================================================
-   📱 MOBILE RESPONSIVE UI STYLES (Screen width <= 900px)
-   ======================================================== */
-.mobile-nav-bar {
-  display: none; /* Hidden on desktop */
-}
+/* Mobile Navigation */
+.mobile-nav-bar { display: none; }
 
 @media (max-width: 900px) {
-  /* Header optimizations on mobile */
-  header {
-    height: 48px;
-    min-height: 48px;
-    padding: 0 8px;
-  }
-  .logo-title {
-    font-size: 0.95rem;
-  }
-  .header-actions .btn-header:not(#btn-x-card):not(#btn-room-config) span:not(:first-child) {
-    display: none; /* Show icon only for compact mobile header */
-  }
-  .user-selector select {
-    max-width: 100px;
-  }
+  header { height: 46px; min-height: 46px; padding: 0 6px; }
+  .logo-title { font-size: 0.9rem; }
+  .header-actions .btn-header:not(#btn-x-card):not(#btn-room-config) span:not(:first-child) { display: none; }
+  .user-selector select { max-width: 90px; }
 
-  /* Main Layout: Switch from 3-column grid to Tabbed Single Screen */
   #app-main {
-    display: flex;
-    flex-direction: column;
-    height: calc(100vh - 48px - 54px);
-    height: calc(100dvh - 48px - 54px); /* Subtract header (48px) and mobile nav (54px) */
-    padding-bottom: 0;
+    display: flex; flex-direction: column;
+    height: calc(100vh - 46px - 50px);
+    height: calc(100dvh - 46px - 50px);
   }
 
-  /* Show only the active mobile section */
-  .side-panel.left-panel,
-  #center-workspace,
-  .side-panel.right-panel {
-    display: none !important;
-    width: 100% !important;
-    height: 100% !important;
-    border: none !important;
-    flex: 1;
+  .side-panel.left-panel, #center-workspace, .side-panel.right-panel {
+    display: none !important; width: 100% !important; height: 100% !important; border: none !important; flex: 1;
   }
 
-  /* Classes toggled by mobile nav */
-  body.mobile-view-map #center-workspace {
-    display: flex !important;
-  }
-  body.mobile-view-dice .side-panel.right-panel {
-    display: flex !important;
-  }
-  body.mobile-view-character .side-panel.left-panel {
-    display: flex !important;
-  }
-  body.mobile-view-scenario .side-panel.left-panel {
-    display: flex !important;
-  }
+  body.mobile-view-map #center-workspace { display: flex !important; }
+  body.mobile-view-dice .side-panel.right-panel { display: flex !important; }
+  body.mobile-view-character .side-panel.left-panel { display: flex !important; }
+  body.mobile-view-scenario .side-panel.left-panel { display: flex !important; }
 
-  /* Bottom Mobile Navigation Bar */
   .mobile-nav-bar {
-    display: flex;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 54px;
-    background: #0d1017;
-    border-top: 1px solid var(--border-gold);
-    z-index: 100;
-    box-shadow: 0 -3px 12px rgba(0,0,0,0.6);
+    display: flex; position: fixed; bottom: 0; left: 0; right: 0; height: 50px;
+    background: #0d1017; border-top: 1px solid var(--border-gold); z-index: 100;
   }
-
   .mobile-nav-btn {
-    flex: 1;
-    background: transparent;
-    border: none;
-    color: var(--text-muted);
-    font-size: 0.72rem;
-    font-weight: 600;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 3px;
-    cursor: pointer;
-    transition: all 0.15s;
+    flex: 1; background: transparent; border: none; color: var(--text-muted);
+    font-size: 0.7rem; font-weight: 600; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 2px; cursor: pointer;
   }
-  .mobile-nav-btn.active {
-    color: var(--text-gold);
-    background: rgba(229,169,60,0.12);
-    border-top: 2px solid var(--accent-gold);
-  }
-  .mobile-nav-icon {
-    font-size: 1.15rem;
-  }
+  .mobile-nav-btn.active { color: var(--text-gold); background: rgba(229,169,60,0.12); border-top: 2px solid var(--accent-gold); }
+  .mobile-nav-icon { font-size: 1.1rem; }
 
-  /* Map top bar and toolbars on mobile */
-  .map-top-bar {
-    top: 6px;
-    left: 6px;
-    right: 6px;
-    height: 38px;
-    padding: 0 6px;
-  }
-  .floating-toolbar {
-    top: 50px;
-    left: 6px;
-    padding: 4px;
-    gap: 4px;
-  }
-  .tool-btn {
-    width: 32px;
-    height: 32px;
-    font-size: 0.95rem;
-  }
-
-  /* Features grid single column on mobile */
-  .features-grid {
-    grid-template-columns: 1fr;
-  }
+  .map-top-bar { top: 4px; left: 4px; right: 4px; height: 36px; padding: 0 4px; }
+  .floating-toolbar { top: 46px; left: 4px; padding: 3px; gap: 3px; }
+  .tool-btn { width: 30px; height: 30px; font-size: 0.9rem; }
+  .features-grid { grid-template-columns: 1fr; }
 }
 
   </style>
@@ -1171,9 +833,10 @@ canvas#vtt-canvas {
       <span>🎭</span>
       <select id="user-role-select">
         <option value="gm">👑 GM</option>
-        <option value="p1">⚔️ 아서</option>
-        <option value="p2">🔮 엘레나</option>
-        <option value="p3">🕵️ 존</option>
+        <option value="p_dw">🪕 브란 (DW 바드)</option>
+        <option value="p1">⚔️ 아서 (전사)</option>
+        <option value="p2">🔮 엘레나 (마법사)</option>
+        <option value="p3">🕵️ 존 (탐정)</option>
         <option value="spectator">👁️ 관전</option>
       </select>
     </div>
@@ -1182,8 +845,19 @@ canvas#vtt-canvas {
   </div>
 
   <div class="header-actions">
-    <!-- Day/Night & Lighting -->
-    <div class="user-selector" title="환경 조명 설정">
+    <!-- Weather FX Selector -->
+    <div class="user-selector" title="날씨 파티클">
+      <span>🌧️</span>
+      <select id="weather-select" onchange="setWeather(this.value)">
+        <option value="none">날씨: 맑음</option>
+        <option value="rain">비 (Rain)</option>
+        <option value="snow">눈 (Snow)</option>
+        <option value="dust">모래바람 (Dust)</option>
+      </select>
+    </div>
+
+    <!-- Lighting Selector -->
+    <div class="user-selector" title="환경 조명">
       <span>💡</span>
       <select id="env-lighting-select">
         <option value="light-day">☀️ 주간</option>
@@ -1210,9 +884,9 @@ canvas#vtt-canvas {
       <span>🛑</span> <span>X-CARD</span>
     </button>
 
-    <!-- 50 Features Guide -->
-    <button class="btn-header" id="btn-features-list" title="구현된 50대 전문 TRPG 기능 목록">
-      <span>⭐</span> <span>50대 기능</span>
+    <!-- 100 Features Guide -->
+    <button class="btn-header" id="btn-features-list" title="구현된 100대 전문 TRPG 기능 목록">
+      <span>⭐</span> <span>100대 기능</span>
     </button>
 
     <!-- JSON State Backup -->
@@ -1228,7 +902,7 @@ canvas#vtt-canvas {
     <div class="panel-tabs">
       <div class="panel-tab active" data-tab="tab-scenario">
         <span>📜</span>
-        <span>시나리오 & 룰</span>
+        <span>시나리오</span>
       </div>
       <div class="panel-tab" data-tab="tab-character">
         <span>👤</span>
@@ -1236,11 +910,11 @@ canvas#vtt-canvas {
       </div>
       <div class="panel-tab" data-tab="tab-initiative">
         <span>⚔️</span>
-        <span>전투 순서</span>
+        <span>전투</span>
       </div>
       <div class="panel-tab" data-tab="tab-gm-tools">
-        <span>🧩</span>
-        <span>GM 도구</span>
+        <span>👑</span>
+        <span>GM 권한</span>
       </div>
     </div>
 
@@ -1248,22 +922,22 @@ canvas#vtt-canvas {
     <div class="panel-content" id="tab-scenario">
       <div class="card">
         <div class="card-header">
-          <span class="card-title">📖 시나리오 선택 & 파일 첨부</span>
+          <span class="card-title">📖 시나리오 & 세계관 선택</span>
         </div>
         <div class="scenario-selector-box">
-          <select id="scenario-preset-select" class="chat-input" style="padding: 6px;">
-            <option value="coc_manor">🔍 [크툴루] 블러드스톤 저택의 비밀</option>
-            <option value="dnd_mine">🐉 [D&D 판타지] 잊혀진 광산의 그림자</option>
-            <option value="cyber_heist">🌆 [사이버펑크] 네온 신디케이트 침투작전</option>
-            <option value="custom">📁 커스텀 사용자 시나리오</option>
+          <select id="scenario-preset-select" class="chat-input" style="padding: 5px;">
+            <option value="dw_wyrm">🐉 [던전월드] 검은 숲의 고룡 유적 (Dungeon World / PbtA)</option>
+            <option value="dnd_mine">⚔️ [D&D 5e] 잊혀진 광산의 그림자 (Fantasy)</option>
+            <option value="coc_manor">🔍 [크툴루 CoC 7e] 블러드스톤 저택의 비밀 (Cosmic Horror)</option>
+            <option value="cyber_heist">🌆 [사이버펑크] 네온 신디케이트 침투작전 (Sci-Fi)</option>
+            <option value="custom">📁 커스텀 사용자 시나리오 파일</option>
           </select>
 
           <!-- File Upload Zone -->
           <div class="upload-dropzone" id="scenario-dropzone">
             <span>📂 <strong>시나리오 파일 첨부 (TXT, MD, JSON)</strong></span>
-            <div style="font-size: 0.72rem; margin-top: 4px; color: var(--text-muted);">
-              클릭하여 파일 선택 또는 드래그 앤 드롭<br>
-              (상황별 지문, DC 판정, 비밀 노트 자동 파싱)
+            <div style="font-size: 0.72rem; margin-top: 3px; color: var(--text-muted);">
+              클릭하여 선택 또는 드래그 앤 드롭 (씬, 낭독 지문, 판정, 비밀 자동 파싱)
             </div>
             <input type="file" id="scenario-file-input" accept=".txt,.md,.json" style="display: none;">
           </div>
@@ -1273,11 +947,10 @@ canvas#vtt-canvas {
       <!-- Scene Progression Pills -->
       <div class="card">
         <div class="card-header">
-          <span class="card-title">🗺️ 진행 상황 (씬 / 장소)</span>
+          <span class="card-title">🗺️ 진행 씬 / 장소</span>
           <span class="badge badge-gold" id="current-scene-badge">제1장</span>
         </div>
         <div class="scene-nav-pills" id="scene-pills-container">
-          <!-- Dynamic Scene Buttons -->
         </div>
       </div>
 
@@ -1285,8 +958,8 @@ canvas#vtt-canvas {
       <div class="card" id="context-excerpt-card">
         <div class="card-header">
           <span class="card-title">✨ 실시간 상황 발췌문</span>
-          <button class="btn-small btn-gold" id="btn-broadcast-narration" title="낭독용 지문을 플레이어 채팅창에 방송">
-            📢 채팅창 낭독 전송
+          <button class="btn-small btn-gold" id="btn-broadcast-narration" title="낭독 지문을 플레이어 채팅창에 방송">
+            📢 낭독 전송
           </button>
         </div>
 
@@ -1302,7 +975,7 @@ canvas#vtt-canvas {
         <div class="gm-secret-box" id="excerpt-gm-secret-box">
           <div class="excerpt-label" style="color: #f87171;">
             <span>🔒 GM 전용 비밀 노트 & 함정</span>
-            <button class="btn-small" id="btn-toggle-secret-vis" style="font-size: 0.68rem; padding: 1px 5px;">숨김/표시</button>
+            <button class="btn-small" id="btn-toggle-secret-vis" style="font-size: 0.68rem; padding: 1px 4px;">숨김/표시</button>
           </div>
           <div id="excerpt-gm-notes">
             방 구석의 양탄자 아래에 지하실로 이어지는 쇠창살 문이 숨겨져 있습니다.
@@ -1310,19 +983,29 @@ canvas#vtt-canvas {
         </div>
 
         <!-- Required Checks in current scene -->
-        <div style="display: flex; flex-direction: column; gap: 6px;">
+        <div style="display: flex; flex-direction: column; gap: 5px;">
           <div class="excerpt-label">🎯 상황별 요구 판정 & 기능</div>
-          <div id="excerpt-checks-list" style="display: flex; flex-direction: column; gap: 6px;">
-            <!-- Rendered Checks with quick roll button -->
+          <div id="excerpt-checks-list" style="display: flex; flex-direction: column; gap: 5px;">
           </div>
         </div>
 
         <!-- Clues in current scene -->
-        <div style="display: flex; flex-direction: column; gap: 6px;">
+        <div style="display: flex; flex-direction: column; gap: 5px;">
           <div class="excerpt-label">🔍 획득 가능한 단서 & 정보</div>
-          <div id="excerpt-clues-list" style="display: flex; flex-direction: column; gap: 6px;">
-            <!-- Rendered Clues with reveal button -->
+          <div id="excerpt-clues-list" style="display: flex; flex-direction: column; gap: 5px;">
           </div>
+        </div>
+      </div>
+
+      <!-- DUNGEON WORLD GM MOVES PALETTE -->
+      <div class="card" id="dw-gm-moves-card">
+        <div class="card-header">
+          <span class="card-title">⚡ 던전월드 마스터 액션 (GM Moves)</span>
+        </div>
+        <div style="font-size: 0.72rem; color: var(--text-muted);">
+          플레이어가 6- 실패하거나 기회를 놓쳤을 때 클릭하여 즉각 선언하세요:
+        </div>
+        <div id="dw-gm-moves-container" style="display: flex; flex-direction: column; gap: 4px; max-height: 150px; overflow-y: auto;">
         </div>
       </div>
 
@@ -1332,11 +1015,10 @@ canvas#vtt-canvas {
           <span class="card-title">🔎 룰북 & 시나리오 키워드 검색</span>
         </div>
         <div class="formula-row">
-          <input type="text" id="rule-search-input" class="formula-input" placeholder="예: 기회공격, SAN 체크, 중독, 지하실..." />
+          <input type="text" id="rule-search-input" class="formula-input" placeholder="예: 접근전, 위험 돌파, 기회공격, SAN..." />
           <button class="btn-small btn-gold" id="btn-rule-search">검색</button>
         </div>
-        <div id="rule-search-results" style="display: flex; flex-direction: column; gap: 6px; max-height: 180px; overflow-y: auto;">
-          <!-- Search matches will appear here -->
+        <div id="rule-search-results" style="display: flex; flex-direction: column; gap: 5px; max-height: 160px; overflow-y: auto;">
         </div>
       </div>
     </div>
@@ -1347,27 +1029,47 @@ canvas#vtt-canvas {
         <div class="card-header">
           <span class="card-title">👤 캐릭터 관리</span>
           <select id="char-system-select" class="btn-small">
+            <option value="dungeonworld">던전월드 (Dungeon World / PbtA)</option>
             <option value="dnd5e">D&D 5e</option>
             <option value="coc7e">크툴루의 부름 (CoC 7e)</option>
             <option value="freeform">자유형 (Custom)</option>
           </select>
         </div>
 
-        <div style="display: flex; gap: 10px; align-items: center;">
-          <div id="char-avatar-preview" style="width: 50px; height: 50px; border-radius: 50%; background: #232c3d; border: 2px solid var(--accent-gold); display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
-            ⚔️
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <div id="char-avatar-preview" style="width: 44px; height: 44px; border-radius: 50%; background: #232c3d; border: 2px solid var(--accent-gold); display: flex; align-items: center; justify-content: center; font-size: 1.4rem;">
+            🪕
           </div>
           <div style="flex: 1;">
-            <input type="text" id="char-name-input" class="formula-input" value="아서 펜드래건" style="font-weight: 700;" />
-            <input type="text" id="char-sub-input" class="formula-input" value="레벨 3 전사 / 수호자" style="font-size: 0.75rem; margin-top: 3px; color: var(--text-muted);" />
+            <input type="text" id="char-name-input" class="formula-input" value="브란 (음유시인)" style="font-weight: 700;" />
+            <input type="text" id="char-sub-input" class="formula-input" value="레벨 1 바드 / 방랑자" style="font-size: 0.72rem; margin-top: 2px; color: var(--text-muted);" />
           </div>
         </div>
 
-        <!-- Resource Gauges (HP, MP, SAN, LUCK) -->
+        <!-- DUNGEON WORLD SPECIFIC HUD (XP, Armor, Damage Die) -->
+        <div id="dw-specific-sheet-area" style="display: flex; flex-direction: column; gap: 6px; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 6px; padding: 8px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.76rem;">
+            <span>🛡️ 장갑(Armor): <strong id="dw-armor-val" style="color: var(--accent-gold);">1</strong></span>
+            <span>🗡️ 피해 주사위: <strong id="dw-damage-die" style="color: var(--accent-gold);">d6</strong></span>
+            <span>⭐ 경험치(XP): <strong id="dw-xp-display" style="color: #4ade80;">0 / 8</strong></span>
+          </div>
+
+          <!-- Basic Moves Quick Panel -->
+          <div class="excerpt-label" style="margin-top: 2px;">⚔️ 던전월드 기본 액션 (Basic Moves)</div>
+          <div id="dw-moves-list" style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px; max-height: 140px; overflow-y: auto;">
+          </div>
+
+          <!-- Bonds (인연) -->
+          <div class="excerpt-label" style="margin-top: 4px;">🤝 파티원 인연 (Bonds)</div>
+          <div id="dw-bonds-list" style="display: flex; flex-direction: column; gap: 4px;">
+          </div>
+        </div>
+
+        <!-- Resource Gauges (HP, SAN) -->
         <div class="resource-bar">
           <div class="resource-label-row">
             <span>체력 (HP)</span>
-            <span id="hp-display">28 / 28</span>
+            <span id="hp-display">20 / 20</span>
           </div>
           <div class="gauge-track">
             <div class="gauge-fill gauge-hp" id="hp-bar-fill" style="width: 100%;"></div>
@@ -1380,7 +1082,7 @@ canvas#vtt-canvas {
           </div>
         </div>
 
-        <div class="resource-bar" id="san-resource-container">
+        <div class="resource-bar" id="san-resource-container" style="display: none;">
           <div class="resource-label-row">
             <span>정신력 / 이성 (SAN)</span>
             <span id="san-display">65 / 65</span>
@@ -1391,31 +1093,30 @@ canvas#vtt-canvas {
         </div>
 
         <!-- Stat Grid (Click to roll) -->
-        <div class="excerpt-label" style="margin-top: 4px;">능력치 (클릭 시 자동 판정 굴림)</div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
+          <div class="excerpt-label">능력치 (클릭 시 2d6/d20 판정)</div>
+          <button class="btn-small" onclick="addCustomStatPrompt()">+ 새 능력치 추가</button>
+        </div>
         <div class="stat-grid" id="stats-container">
-          <!-- Dynamically injected stat boxes -->
         </div>
 
         <!-- Skills List -->
-        <div class="excerpt-label" style="margin-top: 6px;">주요 기능 및 스킬 (클릭하여 굴림)</div>
-        <div id="skills-container" style="display: flex; flex-direction: column; gap: 4px; max-height: 140px; overflow-y: auto;">
-          <!-- Dynamically injected skills -->
+        <div class="excerpt-label" style="margin-top: 5px;">기능 및 스킬</div>
+        <div id="skills-container" style="display: flex; flex-direction: column; gap: 4px; max-height: 120px; overflow-y: auto;">
         </div>
 
-        <!-- Active Conditions / Status Effects -->
-        <div class="excerpt-label" style="margin-top: 6px;">상태이상 (Condition Markers)</div>
+        <!-- Active Conditions -->
+        <div class="excerpt-label" style="margin-top: 5px;">상태이상 마커</div>
         <div id="condition-tags-container" style="display: flex; flex-wrap: wrap; gap: 4px;">
-          <!-- Condition badges -->
         </div>
       </div>
 
-      <!-- Monster & NPC Quick Compendium -->
+      <!-- Monster & NPC Compendium -->
       <div class="card">
         <div class="card-header">
-          <span class="card-title">👾 몬스터 & NPC 도감</span>
+          <span class="card-title">👾 몬스터 & 크리처 도감</span>
         </div>
-        <div id="monster-compendium-list" style="display: flex; flex-direction: column; gap: 6px; max-height: 160px; overflow-y: auto;">
-          <!-- Pre-built monster spawn buttons -->
+        <div id="monster-compendium-list" style="display: flex; flex-direction: column; gap: 5px; max-height: 160px; overflow-y: auto;">
         </div>
       </div>
     </div>
@@ -1428,28 +1129,56 @@ canvas#vtt-canvas {
           <span class="badge badge-gold" id="round-counter-badge">라운드 1</span>
         </div>
 
-        <div style="display: flex; gap: 6px;">
+        <div style="display: flex; gap: 5px;">
           <button class="btn-small btn-gold" id="btn-roll-all-init" style="flex: 1;">🎲 전체 굴림</button>
           <button class="btn-small" id="btn-next-turn" style="flex: 1;">⏭️ 다음 턴</button>
           <button class="btn-small" id="btn-reset-combat" style="flex: 0.8;">🔄 초기화</button>
         </div>
 
-        <div id="combatants-list" style="display: flex; flex-direction: column; gap: 6px; margin-top: 6px;">
-          <!-- Combatant items -->
+        <div id="combatants-list" style="display: flex; flex-direction: column; gap: 5px; margin-top: 5px;">
         </div>
       </div>
     </div>
 
-    <!-- TAB 4: GM UTILITIES & CLUE BOARD -->
+    <!-- TAB 4: GM GOD CONTROLS & UTILITIES -->
     <div class="panel-content" id="tab-gm-tools" style="display: none;">
+      <!-- GM God Mode Palette -->
+      <div class="card" style="border-color: #ef4444; background: rgba(30, 20, 25, 0.7);">
+        <div class="card-header">
+          <span class="card-title" style="color: #f87171;">👑 GM 전능 권한 컨트롤 (God Mode)</span>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px;">
+          <button class="btn-small" style="color: #fca5a5;" onclick="promptForceRollRequest()">⚡ 강제 판정 요구</button>
+          <button class="btn-small" style="color: #fca5a5;" id="btn-toggle-move-lock" onclick="togglePlayerMovementLock()">
+            <span id="gm-move-lock-label">토큰 이동 잠금</span>
+          </button>
+          <button class="btn-small" style="color: #fca5a5;" onclick="triggerCutsceneBlackout()">🎬 컷씬 암전 연출</button>
+          <button class="btn-small" style="color: #fca5a5;" onclick="addMapPinPrompt()">📍 맵에 단서 핀</button>
+        </div>
+      </div>
+
+      <!-- Soundboard -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">🔊 사운드보드 효과음 패드</span>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px;">
+          <button class="btn-small" onclick="soundboardPlay('sword')">⚔️ 칼 격돌</button>
+          <button class="btn-small" onclick="soundboardPlay('thunder')">⛈️ 천둥 번개</button>
+          <button class="btn-small" onclick="soundboardPlay('door')">🚪 문 삐걱임</button>
+          <button class="btn-small" onclick="soundboardPlay('alarm')">🚨 경보</button>
+          <button class="btn-small" onclick="soundboardPlay('clue')">✨ 신비한 종</button>
+          <button class="btn-small" onclick="soundboardPlay('fanfare')">🎺 승리 팡파레</button>
+        </div>
+      </div>
+
       <!-- Clue Board -->
       <div class="card">
         <div class="card-header">
           <span class="card-title">🧩 단서 & 핸드아웃 보드</span>
-          <button class="btn-small" id="btn-add-clue">+ 새 단서 등록</button>
+          <button class="btn-small" id="btn-add-clue">+ 단서 등록</button>
         </div>
-        <div id="clue-board-container" style="display: flex; flex-direction: column; gap: 6px; max-height: 180px; overflow-y: auto;">
-          <!-- Clue Cards -->
+        <div id="clue-board-container" style="display: flex; flex-direction: column; gap: 5px; max-height: 160px; overflow-y: auto;">
         </div>
       </div>
 
@@ -1458,24 +1187,23 @@ canvas#vtt-canvas {
         <div class="card-header">
           <span class="card-title">🎲 무작위 생성기 (Random Tables)</span>
         </div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px;">
           <button class="btn-small" onclick="generateRandom('npc')">👤 NPC 이름</button>
           <button class="btn-small" onclick="generateRandom('tavern')">🍺 주점 소문</button>
-          <button class="btn-small" onclick="generateRandom('loot')">💎 전리품 루팅</button>
-          <button class="btn-small" onclick="generateRandom('weather')">⛈️ 날씨/환경</button>
+          <button class="btn-small" onclick="generateRandom('loot')">💎 전리품</button>
+          <button class="btn-small" onclick="generateRandom('weather')">⛈️ 날씨</button>
         </div>
-        <div id="random-gen-result" class="excerpt-box" style="font-size: 0.8rem; margin-top: 4px; display: none;">
-          <!-- Result text -->
+        <div id="random-gen-result" class="excerpt-box" style="font-size: 0.78rem; margin-top: 3px; display: none;">
         </div>
       </div>
 
       <!-- Session Notes -->
       <div class="card">
         <div class="card-header">
-          <span class="card-title">📝 세션 메모 & 일지</span>
+          <span class="card-title">📝 GM 비밀 메모 & 세션 일지</span>
           <button class="btn-small" onclick="downloadSessionNotes()">TXT 저장</button>
         </div>
-        <textarea id="session-notes-area" class="formula-input" style="height: 100px; resize: vertical;" placeholder="플레이 중 발생한 중요한 사건, 획득한 보물, NPC 이름을 자유롭게 기록하세요..."></textarea>
+        <textarea id="session-notes-area" class="formula-input" style="height: 90px; resize: vertical;" placeholder="세션 중 즉흥 설정, 주사위 기록, 비밀 메모..."></textarea>
       </div>
     </div>
   </aside>
@@ -1489,8 +1217,8 @@ canvas#vtt-canvas {
         <span>🗺️</span>
         <select id="map-preset-select" class="map-btn">
           <option value="dungeon">지하감옥</option>
+          <option value="tavern">여관/숲</option>
           <option value="manor">저택</option>
-          <option value="tavern">여관</option>
           <option value="cyber">사이버</option>
           <option value="alien">우주선</option>
         </select>
@@ -1539,7 +1267,7 @@ canvas#vtt-canvas {
         <span>📏</span>
       </button>
 
-      <button class="tool-btn" data-tool="aoe" title="AoE 범위">
+      <button class="tool-btn" data-tool="aoe" title="AoE 마법 범위">
         <span>📐</span>
         <div class="tool-submenu">
           <div onclick="setAoEType('circle')">🔴 원형 (20ft)</div>
@@ -1552,7 +1280,7 @@ canvas#vtt-canvas {
         <span>📍</span>
       </button>
 
-      <button class="tool-btn" data-tool="draw" title="그리기">
+      <button class="tool-btn" data-tool="draw" title="화이트보드 그리기">
         <span>✏️</span>
         <div class="tool-submenu">
           <div onclick="setDrawColor('#ef4444')">🔴 빨간 펜</div>
@@ -1628,7 +1356,7 @@ canvas#vtt-canvas {
 
       <!-- Custom Formula -->
       <div class="formula-row">
-        <input type="text" id="dice-formula-input" class="formula-input" placeholder="수식: 2d6+4, 4d6kh3, 1d100..." />
+        <input type="text" id="dice-formula-input" class="formula-input" placeholder="수식: 2d6+2, 4d6kh3, 1d100..." />
         <button class="btn-small btn-gold" id="btn-roll-formula">굴림</button>
       </div>
 
@@ -1643,7 +1371,7 @@ canvas#vtt-canvas {
       <!-- 3D Rolling Visual Stage -->
       <div id="dice-stage">
         <div id="dice-stage-content">
-          <span style="font-size: 0.78rem; color: var(--text-muted);">주사위를 터치하거나 수식을 입력하세요</span>
+          <span style="font-size: 0.76rem; color: var(--text-muted);">주사위를 터치하거나 수식을 입력하세요</span>
         </div>
       </div>
     </div>
@@ -1656,27 +1384,27 @@ canvas#vtt-canvas {
         <button class="chat-filter-btn" data-filter="dice">주사위</button>
         <button class="chat-filter-btn" data-filter="system">시스템</button>
         <div style="flex: 1;"></div>
-        <select id="chat-mode-toggle" class="btn-small" style="font-size: 0.7rem; padding: 1px 4px;">
-          <option value="ic">🎭 IC</option>
-          <option value="ooc">💬 OOC</option>
+        <button class="btn-small" onclick="exportChatLog()" title="세션 채팅 및 주사위 기록을 마크다운 문서로 내보내기">📥 기록 저장</button>
+        <select id="chat-mode-toggle" class="btn-small" style="font-size: 0.68rem; padding: 1px 3px;">
+          <option value="ic">🎭 IC (인게임 대사)</option>
+          <option value="ooc">💬 OOC (잡담)</option>
         </select>
       </div>
 
       <div class="chat-messages" id="chat-messages-container">
-        <!-- Message Cards injected here -->
       </div>
 
       <div class="chat-input-bar">
         <!-- Macro bar -->
         <div class="macro-bar">
-          <div class="macro-btn" onclick="executeMacro('attack')">⚔️ 공격 (1d20+5)</div>
-          <div class="macro-btn" onclick="executeMacro('dodge')">🛡️ 회피</div>
-          <div class="macro-btn" onclick="executeMacro('spot')">👁️ 관찰력</div>
-          <div class="macro-btn" onclick="executeMacro('san')">🧠 SAN 체크</div>
+          <div class="macro-btn" onclick="executeMacro('attack')">⚔️ 공격 / 접근전</div>
+          <div class="macro-btn" onclick="executeMacro('dodge')">🛡️ 회피 / 위험돌파</div>
+          <div class="macro-btn" onclick="executeMacro('spot')">👁️ 상황파악 / 관찰</div>
+          <div class="macro-btn" onclick="executeMacro('san')">🧠 정신력 체크</div>
         </div>
 
         <div class="chat-input-row">
-          <input type="text" id="chat-input-field" class="chat-input" placeholder="메시지 입력... (/w 대상)" />
+          <input type="text" id="chat-input-field" class="chat-input" placeholder="대사 입력... (/w [대상], /gm 으로 귓속말)" />
           <button class="btn-small btn-gold" id="btn-send-chat">전송</button>
         </div>
       </div>
@@ -1704,6 +1432,15 @@ canvas#vtt-canvas {
   </button>
 </nav>
 
+<!-- CINEMATIC CUTSCENE OVERLAY -->
+<div id="cutscene-overlay" class="cutscene-overlay">
+  <div class="cutscene-letterbox"></div>
+  <div id="cutscene-text" class="cutscene-text">
+    고대 용의 눈동자가 어둠 속에서 번뜩입니다...
+  </div>
+  <div class="cutscene-letterbox"></div>
+</div>
+
 <!-- MODALS -->
 <div class="modal-overlay" id="modal-room-config">
   <div class="modal-card">
@@ -1712,22 +1449,19 @@ canvas#vtt-canvas {
       <button class="modal-close" onclick="closeModal('modal-room-config')">✕</button>
     </div>
     <div class="modal-body">
-      <div style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+      <div style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.5;">
         모바일이나 다른 PC에서 같은 <strong>방 코드</strong>와 <strong>비밀번호</strong>를 입력하면 실시간으로 동기화됩니다.
       </div>
-
-      <div style="display: flex; flex-direction: column; gap: 6px;">
-        <label style="font-size: 0.8rem; font-weight: 600;">방 코드 (Room Code):</label>
+      <div style="display: flex; flex-direction: column; gap: 5px;">
+        <label style="font-size: 0.78rem; font-weight: 600;">방 코드 (Room Code):</label>
         <input type="text" id="modal-input-room-code" class="formula-input" value="DRAGON-2026" />
       </div>
-
-      <div style="display: flex; flex-direction: column; gap: 6px;">
-        <label style="font-size: 0.8rem; font-weight: 600;">방 비밀번호 (Room Password):</label>
+      <div style="display: flex; flex-direction: column; gap: 5px;">
+        <label style="font-size: 0.78rem; font-weight: 600;">방 비밀번호 (Room Password):</label>
         <input type="password" id="modal-input-room-pw" class="formula-input" placeholder="비밀번호" value="1234" />
       </div>
-
-      <div style="display: flex; flex-direction: column; gap: 6px;">
-        <label style="font-size: 0.8rem; font-weight: 600;">접속자 닉네임:</label>
+      <div style="display: flex; flex-direction: column; gap: 5px;">
+        <label style="font-size: 0.78rem; font-weight: 600;">접속자 닉네임:</label>
         <input type="text" id="modal-input-user-name" class="formula-input" value="모바일 플레이어" />
       </div>
     </div>
@@ -1739,9 +1473,9 @@ canvas#vtt-canvas {
 </div>
 
 <div class="modal-overlay" id="modal-features-list">
-  <div class="modal-card" style="max-width: 700px;">
+  <div class="modal-card" style="max-width: 750px;">
     <div class="modal-header">
-      <span class="modal-title">⭐ 50대 전문 TRPG 기능 목록</span>
+      <span class="modal-title">⭐ 100대 전문 TRPG 기능 목록 (50개 기본 + 50개 고급 & 던전월드)</span>
       <button class="modal-close" onclick="closeModal('modal-features-list')">✕</button>
     </div>
     <div class="modal-body" style="max-height: 70vh;">
@@ -1761,27 +1495,27 @@ canvas#vtt-canvas {
       <button class="modal-close" onclick="closeModal('modal-dice-stats')">✕</button>
     </div>
     <div class="modal-body">
-      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; text-align: center;">
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; text-align: center;">
         <div class="stat-box">
           <div class="stat-name">총 굴림</div>
           <div class="stat-val" id="stats-total-rolls">0</div>
         </div>
         <div class="stat-box">
-          <div class="stat-name">대성공</div>
+          <div class="stat-name">대성공 (10+/Nat20)</div>
           <div class="stat-val" id="stats-crit-count" style="color: #4ade80;">0</div>
         </div>
         <div class="stat-box">
-          <div class="stat-name">대실패</div>
+          <div class="stat-name">대실패 (6-/Nat1)</div>
           <div class="stat-val" id="stats-fumble-count" style="color: #f87171;">0</div>
         </div>
       </div>
 
-      <div class="card" style="margin-top: 8px;">
+      <div class="card" style="margin-top: 6px;">
         <div class="card-title">🍀 실시간 행운 지수</div>
-        <div class="gauge-track" style="height: 12px; margin-top: 4px;">
+        <div class="gauge-track" style="height: 10px; margin-top: 4px;">
           <div class="gauge-fill" id="luck-gauge-fill" style="width: 50%; background: linear-gradient(90deg, #ef4444, #e5a93c, #22c55e);"></div>
         </div>
-        <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-muted); margin-top: 3px;">
+        <div style="display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--text-muted); margin-top: 2px;">
           <span>불운 (0%)</span>
           <span id="luck-percent-label">보통 (50%)</span>
           <span>천운 (100%)</span>
@@ -1790,7 +1524,7 @@ canvas#vtt-canvas {
 
       <div class="card">
         <div class="card-title">주사위별 횟수</div>
-        <div id="dice-type-breakdown" style="font-size: 0.8rem; color: var(--text-muted); display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px;">
+        <div id="dice-type-breakdown" style="font-size: 0.78rem; color: var(--text-muted); display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px;">
         </div>
       </div>
     </div>
@@ -1804,35 +1538,46 @@ canvas#vtt-canvas {
 <div class="modal-overlay" id="modal-token-edit">
   <div class="modal-card">
     <div class="modal-header">
-      <span class="modal-title">⚙️ 토큰 속성 편집</span>
+      <span class="modal-title">⚙️ 토큰 속성 및 GM 오버라이트</span>
       <button class="modal-close" onclick="closeModal('modal-token-edit')">✕</button>
     </div>
     <div class="modal-body">
-      <div style="display: flex; flex-direction: column; gap: 5px;">
-        <label style="font-size: 0.8rem;">토큰 이름:</label>
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <label style="font-size: 0.76rem;">토큰 이름:</label>
         <input type="text" id="token-edit-name" class="formula-input" />
       </div>
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px;">
         <div>
-          <label style="font-size: 0.8rem;">현재 HP:</label>
+          <label style="font-size: 0.76rem;">현재 HP:</label>
           <input type="number" id="token-edit-hp" class="formula-input" />
         </div>
         <div>
-          <label style="font-size: 0.8rem;">최대 HP:</label>
+          <label style="font-size: 0.76rem;">최대 HP:</label>
           <input type="number" id="token-edit-maxhp" class="formula-input" />
         </div>
       </div>
-      <div style="display: flex; flex-direction: column; gap: 5px;">
-        <label style="font-size: 0.8rem;">크기:</label>
-        <select id="token-edit-size" class="formula-input">
-          <option value="1">Medium (1칸)</option>
-          <option value="2">Large (2x2칸)</option>
-          <option value="3">Huge (3x3칸)</option>
-        </select>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px;">
+        <div>
+          <label style="font-size: 0.76rem;">크기 (Size):</label>
+          <select id="token-edit-size" class="formula-input">
+            <option value="1">Medium (1칸)</option>
+            <option value="2">Large (2x2칸)</option>
+            <option value="3">Huge (3x3칸)</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size: 0.76rem;">고도(Elevation, ft):</label>
+          <input type="number" id="token-edit-elevation" class="formula-input" placeholder="0" />
+        </div>
       </div>
-      <div style="display: flex; flex-direction: column; gap: 5px;">
-        <label style="font-size: 0.8rem;">아이콘 (이모지):</label>
-        <input type="text" id="token-edit-icon" class="formula-input" placeholder="예: ⚔️, 🧙, 🐉" />
+      <div style="display: flex; gap: 10px; align-items: center; margin-top: 4px;">
+        <label style="font-size: 0.76rem; display: flex; align-items: center; gap: 4px;">
+          <input type="checkbox" id="token-edit-stealth" /> 은신/투명화 (GM에게만 반투명 표시)
+        </label>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <label style="font-size: 0.76rem;">아이콘 (이모지):</label>
+        <input type="text" id="token-edit-icon" class="formula-input" placeholder="예: ⚔️, 🧙, 🐉, 🪕" />
       </div>
     </div>
     <div class="modal-footer">
@@ -1844,69 +1589,252 @@ canvas#vtt-canvas {
 
 
 <script>
+// --- COMPLETE 100 TRPG FEATURES LIST (50 ORIGINAL + 50 ADVANCED NEW) ---
+const TRPG_100_FEATURES = [
+  // --- 1 to 50: Original Core Features ---
+  { id: 1, cat: "네트워크", name: "멀티플레이어 방 코드 시스템", desc: "고유 방 코드를 통한 방 생성 및 입장" },
+  { id: 2, cat: "네트워크", name: "비밀번호 보안 인증", desc: "방 비밀번호 설정을 통한 비공개 세션 보호" },
+  { id: 3, cat: "네트워크", name: "서버리스 WebRTC P2P 동기화", desc: "무료 웹 호스팅에서도 서버 없이 브라우저 간 직접 실시간 동기화" },
+  { id: 4, cat: "권한", name: "역할 기반 권한 분리", desc: "GM(마스터), 플레이어, 관전자 권한 구분 및 전용 인터페이스" },
+  { id: 5, cat: "권한", name: "플레이어/캐릭터 빠른 전환기", desc: "단일 화면에서도 GM과 플레이어 1~3 시점을 즉시 테스트" },
+  { id: 6, cat: "데이터", name: "세션 상태 JSON 백업 및 복원", desc: "맵, 토큰, 캐릭터, 로그 전체를 단일 JSON 파일로 내보내기/불러오기" },
+  { id: 7, cat: "다이스", name: "다면체 다이스 바", desc: "d4, d6, d8, d10, d12, d20, d100, Fate 주사위 원클릭 굴림" },
+  { id: 8, cat: "다이스", name: "복합 수식 파서", desc: "4d6kh3, 2d20kl1, 3d6+5, 1d100 등 고급 TRPG 수식 지원" },
+  { id: 9, cat: "다이스", name: "3D 스타일 시각 주사위 트레이", desc: "역동적인 회전/물리 연출 애니메이션 주사위 스테이지" },
+  { id: 10, cat: "다이스", name: "4단계 다이스 롤 가시성", desc: "공개 롤, GM 비밀 롤, 블라인드 롤, 나만 보기 롤" },
+  { id: 11, cat: "다이스", name: "크리티컬/대실패 자동 판정", desc: "D&D Nat 20/1, CoC 01 대성공/96-100 대실패 자동 감지" },
+  { id: 12, cat: "다이스", name: "폭발 주사위 및 Fate/Fudge 룰", desc: "최댓값 시 추가 굴림(!) 및 운명 주사위(+ - 0) 연산" },
+  { id: 13, cat: "다이스", name: "세션 주사위 통계 & 행운도", desc: "총 굴림 수, 평균값, 주사위 분포도, 실시간 행운 게이지 분석" },
+  { id: 14, cat: "캔버스", name: "버추얼 캔버스 줌 & 패닝", desc: "마우스 휠/터치 핀치 줌, 우클릭/드래그 패닝, 100% 리셋" },
+  { id: 15, cat: "캔버스", name: "다중 그리드 모드", desc: "정사각형 그리드, 육각형(Hex) 그리드, 무격자 모드 및 크기 조절" },
+  { id: 16, cat: "캔버스", name: "동적 전장의 안개 (Fog of War)", desc: "GM용 시야 브러시(밝히기/가리기/전체공개) 및 플레이어 시야 차단" },
+  { id: 17, cat: "토큰", name: "다중 토큰 배치 & 드래그 이동", desc: "플레이어, 몬스터, NPC 토큰 맵 배치 및 실시간 위치 동기화" },
+  { id: 18, cat: "토큰", name: "토큰 실시간 HP HUD 게이지", desc: "토큰 상단에 실시간으로 반영되는 체력 바 및 수치 표시" },
+  { id: 19, cat: "토큰", name: "토큰 상태이상 오버레이 마커", desc: "중독, 기절, 실명, 축복, 사망 등 시각적 상태 아이콘 부착" },
+  { id: 20, cat: "토큰", name: "토큰 크기 조절 (S/M/L/Huge)", desc: "1칸, 2x2칸, 3x3칸 등 크리처 규모에 맞춘 크기 변경" },
+  { id: 21, cat: "전술", name: "전술 거리 측정 자 (Ruler)", desc: "두 지점 간 실제 거리(피트/미터/칸수) 실시간 표시" },
+  { id: 22, cat: "전술", name: "마법/기술 AoE 범위 템플릿", desc: "원형 폭발(20ft), 부채꼴 콘(30ft), 사각형 범위 시각화" },
+  { id: 23, cat: "캔버스", name: "GM 핑 & 관심 지점 비콘", desc: "맵 클릭 시 전원에게 동심원 파동 애니메이션 핑 송신" },
+  { id: 24, cat: "캔버스", name: "화이트보드 자유 드로잉 도구", desc: "색상 펜, 형광펜, 직선, 지우개로 맵 위 즉각 판서" },
+  { id: 25, cat: "캔버스", name: "5종 고화질 맵 프리셋 내장", desc: "고대 지하감옥, 저택, 숲속 여관, 사이버펑크, 우주선" },
+  { id: 26, cat: "캔버스", name: "커스텀 맵 이미지 파일 업로드", desc: "사용자 PC의 지도 파일 드래그 앤 드롭 즉각 캔버스 반영" },
+  { id: 27, cat: "캔버스", name: "맵 레이어 관리 시스템", desc: "배경 맵 레이어, 토큰 레이어, 안개 레이어, 드로잉 레이어 분리" },
+  { id: 28, cat: "시트", name: "다중 룰 시스템 캐릭터 시트", desc: "D&D 5e, 크툴루의 부름 7e, 던전월드, 커스텀 시트 완벽 전환" },
+  { id: 29, cat: "시트", name: "시트 원클릭 판정 굴림", desc: "능력치나 스킬 클릭 시 수정치가 자동 계산되어 다이스 굴림" },
+  { id: 30, cat: "시트", name: "동적 자원 트래커", desc: "HP, 임시 HP, MP, 이성(SAN), 행운(Luck) 게이지 및 증감 버튼" },
+  { id: 31, cat: "시트", name: "인벤토리 및 소지품 관리", desc: "착용 무기, 방어구, 소비 아이템, 소지 한도 관리" },
+  { id: 32, cat: "전투", name: "몬스터 & NPC 원클릭 소환 도감", desc: "고블린, 좀비, 쇼고스, 사이보그 등 즉시 맵 토큰 소환" },
+  { id: 33, cat: "전투", name: "전투 순서 및 이니셔티브 트래커", desc: "민첩 기반 자동 굴림, 순서 정렬, 라운드 카운터 및 턴 넘기기" },
+  { id: 34, cat: "전투", name: "현재 턴 활성 토큰 맵 하이라이트", desc: "현재 차례인 전투원 토큰에 황금빛 회전 링 효과 부여" },
+  { id: 35, cat: "시나리오", name: "3대 장르 내장 시나리오", desc: "크툴루 저택 미스터리, D&D 지하 광산, 사이버펑크 침투작전" },
+  { id: 36, cat: "시나리오", name: "외부 시나리오 파일 업로더", desc: "TXT, MD, JSON 파일 첨부 시 씬, 낭독 지문, DC 판정 자동 파싱" },
+  { id: 37, cat: "시나리오", name: "상황별 스마트 발췌 엔진 (Context Excerpt)", desc: "현재 씬에 맞는 배경 묘사, NPC 대사, 판정을 자동으로 추출" },
+  { id: 38, cat: "시나리오", name: "원클릭 낭독 지문 채팅 방송", desc: "GM이 긴 시나리오 지문을 타이핑 없이 원클릭으로 플레이어 채팅창에 송출" },
+  { id: 39, cat: "시나리오", name: "GM 전용 비밀 노트 및 함정 뷰어", desc: "플레이어에게는 숨겨진 비밀 힌트 및 기믹을 GM 화면에만 표시" },
+  { id: 40, cat: "단서", name: "단서 및 핸드아웃 조사 보드", desc: "발견된 단서 카드 등록, 조사 및 플레이어에게 공개 토글" },
+  { id: 41, cat: "룰북", name: "시나리오 & 룰북 실시간 스마트 검색", desc: "키워드 입력 시 시나리오 본문 및 룰북에서 즉시 검색 및 하이라이트" },
+  { id: 42, cat: "룰북", name: "핵심 룰북 퀵 레퍼런스", desc: "전투 행동 경제학, 기회공격, 난이도 표, CoC 성공 판정표 등 내장" },
+  { id: 43, cat: "오디오", name: "웹 오디오 SFX 합성기", desc: "주사위 구르는 소리, 칼날 격돌, 마법 시전, 대성공 팡파레 효과음" },
+  { id: 44, cat: "오디오", name: "앰비언트 BGM 플레이어", desc: "주점, 공포 저택, 전투, 사이버펑크 앰비언스 사운드스케이프" },
+  { id: 45, cat: "분위기", name: "환경 조명 오버레이", desc: "주간, 황혼, 심야, 던전 횃불, 모닥불, 사이버 네온 조명 필터" },
+  { id: 46, cat: "채팅", name: "인게임(IC) vs 잡담(OOC) 채팅 모드", desc: "캐릭터 대사와 플레이어 대화를 시각적으로 구분하여 롤플레잉 지원" },
+  { id: 47, cat: "채팅", name: "비밀 귓속말 시스템", desc: "/w [플레이어] 또는 /gm 명령어로 특정 대상과만 비밀 소통" },
+  { id: 48, cat: "유틸", name: "세션 타이머 & 월드 시계", desc: "실제 플레이 시간 측정 및 인게임 시간 흐름, 짧은/긴 휴식 관리" },
+  { id: 49, cat: "유틸", name: "무작위 생성기 (Random Tables)", desc: "NPC 이름(판타지/현대/사이버), 주점 소문, 던전 루팅, 날씨 생성" },
+  { id: 50, cat: "세이프티", name: "세이프티 X-Card 시스템", desc: "부적절하거나 불편한 상황 발생 시 즉시 전원에게 익명/실명 일시정지 경보" },
 
-// --- 50 EXPLICIT TRPG FEATURES LIST ---
-const TRPG_50_FEATURES = [
-  { id: 1, name: "멀티플레이어 방 코드 시스템", desc: "고유 방 코드를 통한 방 생성 및 입장" },
-  { id: 2, name: "비밀번호 보안 인증", desc: "방 비밀번호 설정을 통한 비공개 세션 보호" },
-  { id: 3, name: "실시간 멀티탭 동기화", desc: "BroadcastChannel 및 LocalStorage 기반 제로 레이턴시 브라우저 간 동기화" },
-  { id: 4, name: "역할 기반 권한 분리", desc: "GM(마스터), 플레이어, 관전자 권한 구분 및 전용 인터페이스" },
-  { id: 5, name: "플레이어/캐릭터 빠른 전환기", desc: "단일 화면에서도 GM과 플레이어 1~3 시점을 즉시 테스트" },
-  { id: 6, name: "세션 상태 JSON 백업 및 복원", desc: "맵, 토큰, 캐릭터, 로그 전체를 단일 JSON 파일로 내보내기/불러오기" },
-  { id: 7, name: "다면체 다이스 바", desc: "d4, d6, d8, d10, d12, d20, d100, Fate 주사위 원클릭 굴림" },
-  { id: 8, name: "복합 수식 파서", desc: "4d6kh3, 2d20kl1, 3d6+5, 1d100 등 고급 TRPG 수식 지원" },
-  { id: 9, name: "3D 스타일 시각 주사위 트레이", desc: "역동적인 회전/물리 연출 애니메이션 주사위 스테이지" },
-  { id: 10, name: "4단계 다이스 롤 가시성", desc: "공개 롤, GM 비밀 롤, 블라인드 롤, 나만 보기 롤" },
-  { id: 11, name: "크리티컬/대실패 자동 판정", desc: "D&D Nat 20/1, CoC 01 대성공/96-100 대실패 자동 감지" },
-  { id: 12, name: "폭발 주사위 및 Fate/Fudge 룰", desc: "최댓값 시 추가 굴림(!) 및 운명 주사위(+ - 0) 연산" },
-  { id: 13, name: "세션 주사위 통계 & 행운도", desc: "총 굴림 수, 평균값, 주사위 분포도, 실시간 행운 게이지 분석" },
-  { id: 14, name: "버추얼 캔버스 줌 & 패닝", desc: "부드러운 마우스 휠 줌, 스페이스바/우클릭 드래그 패닝, 리셋" },
-  { id: 15, name: "다중 그리드 모드", desc: "정사각형 그리드, 육각형(Hex) 그리드, 무격자 모드 및 크기 조절" },
-  { id: 16, name: "동적 전장의 안개 (Fog of War)", desc: "GM용 시야 브러시(밝히기/가리기/전체공개) 및 플레이어 시야 차단" },
-  { id: 17, name: "다중 토큰 배치 & 드래그 이동", desc: "플레이어, 몬스터, NPC 토큰 맵 배치 및 실시간 위치 동기화" },
-  { id: 18, name: "토큰 실시간 HP HUD 게이지", desc: "토큰 상단에 실시간으로 반영되는 체력 바 및 수치 표시" },
-  { id: 19, name: "토큰 상태이상 오버레이 마커", desc: "중독, 기절, 실명, 축복, 사망 등 시각적 상태 아이콘 부착" },
-  { id: 20, name: "토큰 크기 조절 (S/M/L/Huge)", desc: "1칸, 2x2칸, 3x3칸 등 크리처 규모에 맞춘 크기 변경" },
-  { id: 21, name: "전술 거리 측정 자 (Ruler)", desc: "두 지점 간 실제 거리(피트/미터/칸수) 실시간 표시" },
-  { id: 22, name: "마법/기술 AoE 범위 템플릿", desc: "원형 폭발(20ft), 부채꼴 콘(30ft), 사각형 범위 시각화" },
-  { id: 23, name: "GM 핑 & 관심 지점 비콘", desc: "맵 클릭 시 전원에게 동심원 파동 애니메이션 핑 송신" },
-  { id: 24, name: "화이트보드 자유 드로잉 도구", desc: "색상 펜, 형광펜, 직선, 지우개로 맵 위 즉각 판서" },
-  { id: 25, name: "5종 고화질 맵 프리셋 내장", desc: "고대 지하감옥, 저택, 숲속 여관, 사이버펑크, 우주선" },
-  { id: 26, name: "커스텀 맵 이미지 파일 업로드", desc: "사용자 PC의 지도 파일 드래그 앤 드롭 즉각 캔버스 반영" },
-  { id: 27, name: "맵 레이어 관리 시스템", desc: "배경 맵 레이어, 토큰 레이어, 안개 레이어, 드로잉 레이어 분리" },
-  { id: 28, name: "다중 룰 시스템 캐릭터 시트", desc: "D&D 5e, 크툴루의 부름 7e, 자유형 커스텀 시트 완벽 전환" },
-  { id: 29, name: "시트 원클릭 판정 굴림", desc: "능력치나 스킬 클릭 시 수정치가 자동 계산되어 다이스 굴림" },
-  { id: 30, name: "동적 자원 트래커", desc: "HP, 임시 HP, MP, 이성(SAN), 행운(Luck) 게이지 및 증감 버튼" },
-  { id: 31, name: "인벤토리 및 소지품 관리", desc: "착용 무기, 방어구, 소비 아이템, 소지 한도 관리" },
-  { id: 32, name: "몬스터 & NPC 원클릭 소환 도감", desc: "고블린, 좀비, 쇼고스, 사이보그 등 즉시 맵 토큰 소환" },
-  { id: 33, name: "전투 순서 및 이니셔티브 트래커", desc: "민첩 기반 자동 굴림, 순서 정렬, 라운드 카운터 및 턴 넘기기" },
-  { id: 34, name: "현재 턴 활성 토큰 맵 하이라이트", desc: "현재 차례인 전투원 토큰에 황금빛 회전 링 효과 부여" },
-  { id: 35, name: "3대 장르 내장 시나리오", desc: "크툴루 저택 미스터리, D&D 지하 광산, 사이버펑크 침투작전" },
-  { id: 36, name: "외부 시나리오 파일 업로더", desc: "TXT, MD, JSON 파일 첨부 시 씬, 낭독 지문, DC 판정 자동 파싱" },
-  { id: 37, name: "상황별 스마트 발췌 엔진 (Context Excerpt)", desc: "현재 씬에 맞는 배경 묘사, NPC 대사, 판정을 자동으로 추출" },
-  { id: 38, name: "원클릭 낭독 지문 채팅 방송", desc: "GM이 긴 시나리오 지문을 타이핑 없이 원클릭으로 플레이어 채팅창에 송출" },
-  { id: 39, name: "GM 전용 비밀 노트 및 함정 뷰어", desc: "플레이어에게는 숨겨진 비밀 힌트 및 기믹을 GM 화면에만 표시" },
-  { id: 40, name: "단서 및 핸드아웃 조사 보드", desc: "발견된 단서 카드 등록, 조사 및 플레이어에게 공개 토글" },
-  { id: 41, name: "시나리오 & 룰북 실시간 스마트 검색", desc: "키워드 입력 시 시나리오 본문 및 룰북에서 즉시 검색 및 하이라이트" },
-  { id: 42, name: "핵심 룰북 퀵 레퍼런스", desc: "전투 행동 경제학, 기회공격, 난이도 표, CoC 성공 판정표 등 내장" },
-  { id: 43, name: "웹 오디오 SFX 합성기", desc: "주사위 구르는 소리, 칼날 격돌, 마법 시전, 대성공 팡파레 효과음" },
-  { id: 44, name: "앰비언트 BGM 플레이어", desc: "주점, 공포 저택, 전투, 사이버펑크 앰비언스 사운드스케이프" },
-  { id: 45, name: "환경 조명 오버레이", desc: "주간, 황혼, 심야, 던전 횃불, 모닥불, 사이버 네온 조명 필터" },
-  { id: 46, name: "인게임(IC) vs 잡담(OOC) 채팅 모드", desc: "캐릭터 대사와 플레이어 대화를 시각적으로 구분하여 롤플레잉 지원" },
-  { id: 47, name: "비밀 귓속말 시스템", desc: "/w [플레이어] 또는 /gm 명령어로 특정 대상과만 비밀 소통" },
-  { id: 48, name: "세션 타이머 & 월드 시계", desc: "실제 플레이 시간 측정 및 인게임 시간 흐름, 짧은/긴 휴식 관리" },
-  { id: 49, name: "무작위 생성기 (Random Tables)", desc: "NPC 이름(판타지/현대/사이버), 주점 소문, 던전 루팅, 날씨 생성" },
-  { id: 50, name: "세이프티 X-Card 시스템", desc: "부적절하거나 불편한 상황 발생 시 즉시 전원에게 익명/실명 일시정지 경보" }
+  // --- 51 to 100: 50 Brand-New Advanced & Dungeon World / GM Authority Features ---
+  { id: 51, cat: "던전월드", name: "던전월드 2d6 판정 평가 엔진", desc: "10+ 완전 성공, 7~9 부분 성공(대가/위협), 6- 실패 및 +1 XP 자동 판정" },
+  { id: 52, cat: "던전월드", name: "던전월드 기본 액션(Basic Moves) 퀵 바", desc: "접근전, 사격, 위험 돌파, 지식 개방, 상황 파악, 협상 원클릭 판정 발동" },
+  { id: 53, cat: "던전월드", name: "던전월드 전용 캐릭터 시트", desc: "피해 주사위(d4~d12), 장갑(Armor), 레벨, XP 트래커, 가치관, 인연 완벽 구현" },
+  { id: 54, cat: "던전월드", name: "인연(Bonds) 인터랙티브 매트릭스", desc: "파티원 간의 인연 서술 등록, 세션 종료 시 인연 해결 체크 및 XP 획득" },
+  { id: 55, cat: "던전월드", name: "GM 액션(마스터 무브) 치트 팔레트", desc: "위험의 징조, 피해 입히기, 자원 소모, 무기 파손 등 11개 GM 액션 즉시 참조 및 채팅 출력" },
+  { id: 56, cat: "GM권한", name: "GM 강제 판정 호출 (Force Roll Request)", desc: "GM이 특정 플레이어에게 특정 판정(예: 위험 돌파/민첩) 팝업을 직접 호출하여 굴림 유도" },
+  { id: 57, cat: "GM권한", name: "전지전능 토큰 스탯 인스펙터 & 실시간 오버라이트", desc: "GM이 맵 위의 어떤 토큰이든 즉각 열어 체력/스탯/이름/상태를 강제 덮어쓰기" },
+  { id: 58, cat: "유연성", name: "자유형 커스텀 스탯/자원 생성기", desc: "룰북에 없는 어떤 능력치나 게이지(마나, 기력, 운명점 등)도 즉석에서 추가/삭제" },
+  { id: 59, cat: "유연성", name: "커스텀 액션 & 매크로 빌더", desc: "사용자만의 특수 기술, 주문, 아이템 효과를 만들어 원클릭 매크로 버튼으로 등록" },
+  { id: 60, cat: "GM권한", name: "플레이어 화면 암전 컷씬 모드 (Cutscene Blackout)", desc: "GM이 드라마틱한 연출을 위해 전원 화면을 일시 암전시키고 나레이션 자막 연출" },
+  { id: 61, cat: "GM권한", name: "플레이어 토큰 이동 잠금 (Movement Lock)", desc: "전투 개시 전이나 GM 설명 중 플레이어가 토큰을 무단 조작하지 못하도록 락 제어" },
+  { id: 62, cat: "토큰", name: "토큰 고도/높이(Elevation) 시스템", desc: "비행, 복층, 지하 토큰의 고도(ft/m)를 입력하면 토큰 옆에 플로팅 고도 뱃지 표시" },
+  { id: 63, cat: "토큰", name: "토큰 시야각/거리(Line of Sight) 가이드", desc: "토큰이 바라보는 전방 시야 원뿔 및 어둠속 시야 범위를 캔버스에 반투명 가이드 표시" },
+  { id: 64, cat: "토큰", name: "토큰 은신 / 투명화(Invisibility) 모드", desc: "은신한 토큰은 GM 화면에만 반투명하게 보이고, 플레이어 캔버스에서는 완전 은폐" },
+  { id: 65, cat: "토큰", name: "토큰 회전 및 방향(Facing) 인디케이터", desc: "토큰이 바라보는 전방 방향을 회전 핸들로 조정하고 화살표 가이드로 표시" },
+  { id: 66, cat: "연출", name: "이미지 핸드아웃 전체화면 투사 (Projector)", desc: "NPC 일러스트, 지도, 문서 사진을 전원 화면에 강제 전체화면 팝업으로 띄우기" },
+  { id: 67, cat: "오디오", name: "사운드보드 SFX 패드 (Soundboard)", desc: "발걸음 소리, 문 삐걱임, 천둥, 비명, 폭발음 등 Web Audio 절차적 효과음 즉시 재생" },
+  { id: 68, cat: "분위기", name: "실시간 날씨 파티클 FX (Weather Canvas)", desc: "맵 캔버스 위에 실시간 비, 눈, 부유 먼지, 모래바람 입자 애니메이션 오버레이" },
+  { id: 69, cat: "캔버스", name: "외부 맵 그리드 정렬 도구 (Grid Alignment Tool)", desc: "가져온 지도 이미지의 기존 격자선에 VTT 그리드를 마우스 드래그로 완벽 피팅" },
+  { id: 70, cat: "캔버스", name: "다중 맵 씬 스위처 (Multi-Map Quick Switcher)", desc: "여러 장의 지도를 사전 등록해 두고 세션 흐름에 맞춰 탭 누르듯 즉시 전환" },
+  { id: 71, cat: "연출", name: "시네마틱 레터박스 모드 (Cinematic Letterbox)", desc: "화면 상하에 영화 같은 검은 레터박스가 내려오며 극적인 스토리 낭독 분위기 조성" },
+  { id: 72, cat: "GM도구", name: "GM 실시간 비밀 스크래치패드 (Auto-saving Scratchpad)", desc: "세션 진행 중 떠오른 즉흥 설정, 주사위 결과 메모를 자동 저장하는 비공개 패드" },
+  { id: 73, cat: "파티", name: "파티 전체 현황 HUD (Party Overview Bar)", desc: "모든 파티원의 HP, 상태이상, 방어도를 화면 상단 미니 바로 상시 모니터링" },
+  { id: 74, cat: "시트", name: "레벨업 & 스탯 분배 모달", desc: "경험치 충족 시 레벨업 버튼으로 최대 HP 증가 및 추가 능력치/특기 습득" },
+  { id: 75, cat: "유틸", name: "통화 및 화폐 무게 환산기 (Currency Converter)", desc: "골드(GP), 실버(SP), 코퍼(CP), 플래티넘, 크레딧 간 즉시 환산 및 소지 무게 계산" },
+  { id: 76, cat: "시트", name: "주문 슬롯 & 파워 포인트 매트릭스", desc: "1~9레벨 주문 슬롯 체크박스 및 주문 시전 시 슬롯 자동 차감/긴 휴식 리셋" },
+  { id: 77, cat: "전투", name: "죽음 내성 굴림 트래커 (Death Saves Tracker)", desc: "HP 0 도달 시 성공 3회 / 실패 3회 인터랙티브 체크박스 및 자동 안정/사망 판정" },
+  { id: 78, cat: "시트", name: "탄약 & 소비 자원 카운터 (Ammo Tracker)", desc: "화살, 총알, 붕대, 식량 수량 카운터 및 공격 매크로 시 1발 자동 차감" },
+  { id: 79, cat: "토큰", name: "토큰 테두리 네온 & 커스텀 링 스타일러", desc: "토큰별로 테두리 두께, 색상, 네온 펄스 글로우 효과를 커스터마이징" },
+  { id: 80, cat: "유틸", name: "캐릭터 & 몬스터 원클릭 복제기 (Actor Duplicator)", desc: "비슷한 스탯의 적 무리나 동료를 만들 때 1초 만에 완전 복제본 생성" },
+  { id: 81, cat: "전술", name: "협공(Flanking) & 엄폐(Cover) 계산기", desc: "협공 이점 룰 및 반엄폐(+2 AC), 완전엄폐(+5 AC) 신속 판정 가이드" },
+  { id: 82, cat: "전술", name: "험지(Difficult Terrain) 브러시", desc: "이동 비용이 2배로 드는 늪지, 진흙, 파편 지대를 맵에 주황색 해치 영역으로 표시" },
+  { id: 83, cat: "전술", name: "다중 경유지 꺾인 경로 자 (Waypoint Ruler)", desc: "직선뿐 아니라 코너를 돌아가는 장애물 우회 이동 거리를 다각선으로 정밀 측정" },
+  { id: 84, cat: "전술", name: "토큰 간 거리 자동 계측기 (Distance Checker)", desc: "두 토큰을 클릭하면 사거리(피트/칸)를 계산하여 유효 사정거리 내인지 초록/빨강 표시" },
+  { id: 85, cat: "전투", name: "전투 라운드 제한 타이머 (Turn Timer Bar)", desc: "한 턴당 60초/90초 카운트다운 타이머 바 및 시간 초과 시 긴박한 경고음" },
+  { id: 86, cat: "전투", name: "플로팅 전투 숫자 (Floating Combat Text)", desc: "토큰에 데미지나 힐링 적용 시 온라인 RPG처럼 머리 위로 떠오르는 역동적 숫자 연출" },
+  { id: 87, cat: "전투", name: "대량 피해(Massive Damage) & 즉사 경고 배너", desc: "한 번에 최대 체력 이상의 치명타를 입었을 때 화면에 즉사/충격 경고 배너 발동" },
+  { id: 88, cat: "시나리오", name: "던전월드 내장 시나리오: 검은 숲의 고룡 유적", desc: "PbtA 전용 위험 요소, 몬스터 본능 및 태그, 던전 진입 액션이 통합된 전용 시나리오" },
+  { id: 89, cat: "캔버스", name: "맵 인터랙티브 단서 핀 (Interactive Clue Pin)", desc: "맵 위 특정 위치에 단서 핀을 꽂고, 플레이어가 클릭하면 단서 팝업 카드 열람" },
+  { id: 90, cat: "스토리", name: "분기형 스토리 선택지 투표 (Branching Vote)", desc: "갈림길에서 GM이 선택지 2~4개를 제시하고 플레이어들이 실시간 투표로 결정" },
+  { id: 91, cat: "전투", name: "몬스터 본능 & 특수 행동 룰러", desc: "몬스터의 본능, 특수 태그(관통, 기절, 파괴적)와 행동 지침을 원클릭으로 확인" },
+  { id: 92, cat: "전술", name: "맵 인터랙티브 함정 트리거 (Trap Trigger)", desc: "숨겨진 함정 타일을 설정하고, 플레이어 토큰이 닿으면 경보음과 함께 내성 굴림 팝업" },
+  { id: 93, cat: "룰북", name: "룰북 즐겨찾기 북마크 (Rulebook Pin)", desc: "자주 찾아보는 룰북 항목이나 하우스 룰을 상단 즐겨찾기 탭에 핀 고정" },
+  { id: 94, cat: "채팅", name: "토큰 말풍선(Speech Bubble) 시각화", desc: "채팅창에 IC(인게임) 대사 입력 시 해당 토큰 머리 위에 만화 말풍선이 3초간 팝업" },
+  { id: 95, cat: "다이스", name: "주사위 수식 즐겨찾기 프리셋 드롭다운", desc: "자주 굴리는 복합 수식(예: 대검 2d6+4, 은신 1d20+7)을 저장하고 드롭다운 선택" },
+  { id: 96, cat: "로그", name: "전투 액션 히스토리 필터 로그", desc: "채팅 잡담과 분리하여 공격 성공, 입힌 피해, 힐링 등 전투 사건만 모아보는 로그" },
+  { id: 97, cat: "오디오", name: "레트로 텍스트 음성 신스 (Voice Blip Synth)", desc: "채팅 메시지가 올라올 때 캐릭터 역할에 따라 다양한 피치의 레트로 블립음 출력" },
+  { id: 98, cat: "채팅", name: "마크다운 서식 지원 채팅창", desc: "채팅창에서 볼드, 이탤릭, 인용문, 코드 블록 등 마크다운 스타일링 100% 지원" },
+  { id: 99, cat: "파티", name: "파티 휴식 & 회복 브로드캐스트", desc: "짧은 휴식/긴 휴식 시 전원의 체력 회복과 스탯 복원 내역을 시스템 공지로 출력" },
+  { id: 100, cat: "로그", name: "전체 세션 로그 텍스트/HTML 내보내기", desc: "세션 종료 후 전체 채팅, 주사위 기록, 스토리 서사를 예쁜 기록 문서로 다운로드" }
 ];
 
-// --- BUILT-IN SCENARIOS ---
+// --- DUNGEON WORLD (PbtA) BASIC MOVES & GM MOVES ---
+const DW_BASIC_MOVES = [
+  {
+    id: "hack_and_slash",
+    name: "접근전 (Hack and Slash)",
+    stat: "STR",
+    statName: "근력",
+    desc: "근접 전투에서 적을 공격할 때 근력(STR)을 더해 2d6을 굴립니다.",
+    on10: "적에게 피해를 입히고 적의 반격을 피합니다. 원한다면 적의 반격을 받는 대신 피해에 +1d6을 더할 수 있습니다.",
+    on79: "적에게 피해를 입히지만, 적 역시 당신에게 반격을 가합니다.",
+    on6: "실패: GM이 마스터 액션을 가합니다. (+1 XP 획득!)"
+  },
+  {
+    id: "volley",
+    name: "사격 (Volley)",
+    stat: "DEX",
+    statName: "민첩",
+    desc: "원거리 무기로 거리를 두고 적을 조준 사격할 때 민첩(DEX)을 더해 2d6을 굴립니다.",
+    on10: "정확히 명중하여 적에게 피해를 입힙니다.",
+    on79: "피해를 입히지만 하나를 선택합니다: 위험한 위치로 이동, 탄약 1 소모, 또는 피해 -1d6.",
+    on6: "실패: 화살이 빗나가거나 무기가 고장나며 GM이 액션을 가합니다. (+1 XP 획득!)"
+  },
+  {
+    id: "defy_danger",
+    name: "위험 돌파 (Defy Danger)",
+    stat: "ANY",
+    statName: "적절한 능력치",
+    desc: "임박한 위협이나 재난에 맞서 위험을 극복할 때 대처 방식에 맞는 능력치를 더해 2d6을 굴립니다.",
+    on10: "위험을 멋지게 극복하고 원하는 결과를 얻습니다.",
+    on79: "위험을 모면하지만 휘청거리거나, 불리한 거래, 어려운 선택, 혹은 가벼운 대가를 치릅니다.",
+    on6: "실패: 재앙이 닥치며 GM이 가혹한 액션을 가합니다. (+1 XP 획득!)"
+  },
+  {
+    id: "spout_lore",
+    name: "지식 개방 (Spout Lore)",
+    stat: "INT",
+    statName: "지능",
+    desc: "어떤 주제에 대해 알고 있는 바를 기억해낼 때 지능(INT)을 더해 2d6을 굴립니다.",
+    on10: "GM이 그 주제에 대해 유용하고 흥미로운 사실을 알려줍니다.",
+    on79: "GM이 흥미롭지만 불완전하거나 위험이 수반된 사실을 알려줍니다.",
+    on6: "실패: 잘못된 지식이거나 치명적인 오해를 부릅니다. (+1 XP 획득!)"
+  },
+  {
+    id: "discern_realities",
+    name: "상황 파악 (Discern Realities)",
+    stat: "WIS",
+    statName: "지혜",
+    desc: "주변 환경이나 사람을 자세히 관찰하고 조사할 때 지혜(WIS)를 더해 2d6을 굴립니다.",
+    on10: "목록에서 질문 3개를 선택해 GM에게 묻습니다. 답변에 따른 행동 시 다음 굴림에 +1을 받습니다.",
+    on79: "목록에서 질문 1개를 선택해 GM에게 묻습니다. 답변에 따른 행동 시 다음 굴림에 +1을 받습니다.",
+    on6: "실패: 잘못 보았거나 위험을 눈치채지 못합니다. (+1 XP 획득!)"
+  },
+  {
+    id: "parley",
+    name: "협상 (Parley)",
+    stat: "CHA",
+    statName: "매력",
+    desc: "상대가 원하는 것을 가지고 설득하거나 거래하려 할 때 매력(CHA)을 더해 2d6을 굴립니다.",
+    on10: "당신이 제안한 구체적인 약속이나 담보를 제공하면 상대가 원하는 대로 행동합니다.",
+    on79: "상대가 확실한 보증이나 즉각적인 양보를 요구합니다.",
+    on6: "실패: 상대가 격노하거나 협상을 거절합니다. (+1 XP 획득!)"
+  }
+];
+
+const DW_GM_MOVES = [
+  "위험이나 불길한 전조를 드러내기",
+  "괴물이나 위험 요소의 징후를 보여주기",
+  "피해를 입히기 (HP/자원 차감)",
+  "자원(탄약, 식량, 장비)을 소모시키기",
+  "누군가를 궁지에 몰아넣기 (불리한 위치로 몰기)",
+  "기회를 제시하기 (대가나 요구조건과 함께)",
+  "클래스, 종족, 장비의 약점을 파고들기",
+  "그들을 갈라놓기 (파티 분단)",
+  "상황을 더 악화시키는 예상치 못한 반전 제시",
+  "진행 중이던 계획을 방해하거나 파괴하기",
+  "상대방이나 환경이 즉각 반격하도록 만들기"
+];
+
+// --- EXTENDED SCENARIOS ---
 const BUILTIN_SCENARIOS = {
+  dw_wyrm: {
+    id: "dw_wyrm",
+    title: "검은 숲의 고룡 유적 (Dungeon World / PbtA)",
+    genre: "Heroic Fantasy / PbtA Adventure",
+    system: "dungeonworld",
+    description: "짙은 안개와 고대 마법이 얽힌 검은 숲 깊은 곳. 수백 년 전 잠든 녹색 고룡 베르단티스의 묘실에서 봉인이 풀려나기 시작했습니다.",
+    scenes: [
+      {
+        id: "scene_1",
+        name: "씬 1: 부서진 거인 석상과 덩굴 관문",
+        map: "tavern",
+        readAloud: "가시 덩굴이 휘감긴 고대 거인의 거대한 석상이 무너져 계곡 입구를 막고 있습니다. 석상의 벌어진 입 사이로 차가운 유황 바람과 함께 먼 곳에서 거대한 날갯짓 소리가 울려 퍼집니다.",
+        gmNotes: "석상 주변에 독화살 개구리 부족이 매복해 있습니다. 지식 개방이나 위험 돌파(민첩)를 유도하세요. 6- 실패 시 바로 독침 공격을 가하고 위치를 노출시키세요.",
+        checks: [
+          { skill: "위험 돌파 (민첩)", target: "2d6+DEX", effect: "소리 없이 석상 틈새를 기어 넘어가기" },
+          { skill: "지식 개방 (지능)", target: "2d6+INT", effect: "석상에 새겨진 고대 엘프 봉인 문자의 의미 해석" },
+          { skill: "상황 파악 (지혜)", target: "2d6+WIS", effect: "숲속에서 느껴지는 숨은 시선과 덫의 위치 간파" }
+        ],
+        clues: [
+          { id: "dw_c1", title: "용 비늘 룬 파편", text: "고룡의 비늘로 만들어진 녹색 룬 조각. 화염 피해를 반감시키는 고대 마법이 깃들어 있습니다.", found: false }
+        ]
+      },
+      {
+        id: "scene_2",
+        name: "씬 2: 산성 안개의 협곡과 낡은 도르래",
+        map: "dungeon",
+        readAloud: "녹색 산성 증기가 발목까지 차오르는 지하 회랑. 깊은 틈새를 건너기 위한 도르래 쇠사슬은 녹슬어 삐걱거리고, 벽면의 배수구에서는 부식성 액체가 뚝뚝 떨어집니다.",
+        gmNotes: "산성 안개에 오래 노출되면 장비가 부식되거나 장갑(Armor)이 손상됩니다. 위험 돌파(건강) 실패 시 배낭의 보급품이나 무기가 손상되는 액션을 취하세요.",
+        checks: [
+          { skill: "위험 돌파 (근력)", target: "2d6+STR", effect: "녹슨 쇠사슬을 완력으로 당겨 도르래 다리를 건너오게 함" },
+          { skill: "위험 돌파 (건강)", target: "2d6+CON", effect: "유독한 산성 증기를 들이마시지 않고 폐를 보호하며 질주" }
+        ],
+        clues: [
+          { id: "dw_c2", title: "연금술사의 중화제 플라스크", text: "부식성 산을 즉시 거품으로 중화시키는 알칼리 정제 3회분.", found: false }
+        ]
+      },
+      {
+        id: "scene_3",
+        name: "씬 3: 고룡 베르단티스의 묘실",
+        map: "dungeon",
+        readAloud: "천장이 무너져 내린 거대한 원형 돔. 에메랄드빛 비늘을 번뜩이는 거룡 베르단티스가 날카로운 발톱으로 마법 수정관을 깨뜨리며 포효합니다. '천 년 만에 깨어난 나의 식사로군!'",
+        gmNotes: "보스 베르단티스는 HP 24, 장갑 3, 피해 주사위 d10(광역, 파괴적)입니다. 꼬리치기로 파티를 분단시키고, 7~9 접근전 시 거대한 반격을 가하세요.",
+        checks: [
+          { skill: "접근전 (근력)", target: "2d6+STR", effect: "고룡의 약점인 목덜미 비늘 틈새를 무기로 타격" },
+          { skill: "사격 (민첩)", target: "2d6+DEX", effect: "비행하려는 고룡의 날개막을 활이나 투척무기로 관통" },
+          { skill: "협상 (매력)", target: "2d6+CHA", effect: "고룡이 탐낼 만한 진귀한 고대 보물을 제시하여 파멸적 브레스 지연" }
+        ],
+        clues: [
+          { id: "dw_c3", title: "용심장 루비 펜던트", text: "고룡의 흉부에 박혀 있던 붉은 보석. 소유자에게 불굴의 용기와 힘(+1 근력)을 부여합니다.", found: false }
+        ]
+      }
+    ]
+  },
   coc_manor: {
     id: "coc_manor",
     title: "블러드스톤 저택의 비밀 (Call of Cthulhu 7e)",
     genre: "Cosmic Horror / Investigation",
     system: "coc7e",
-    description: "1928년 뉴잉글랜드 외곽의 고풍스러운 블러드스톤 저택. 유명 식물학자 아서 블러드스톤 경의 의문의 실종 사건을 조사하기 위해 탐정단이 파견됩니다.",
+    description: "1928년 뉴잉글랜드 외곽의 저택. 식물학자 아서 경의 의문의 실종 사건을 조사하기 위해 탐정단이 파견됩니다.",
     scenes: [
       {
         id: "scene_1",
@@ -1917,7 +1845,7 @@ const BUILTIN_SCENARIOS = {
         checks: [
           { skill: "관찰력", target: "보통 (50%)", effect: "서재 문틈 사이에 끼어있는 찢어진 연구일지 조각 발견" },
           { skill: "은밀행동", target: "어려움 (25%)", effect: "저택 2층 계단에서 서성이는 하인 윌리엄에게 들키지 않고 접근" },
-          { skill: "SAN 체크", target: "0/1d3", effect: "바닥의 기괴한 기하학적 피 문양을 처음 목격했을 때 정신력 판정" }
+          { skill: "SAN 체크", target: "0/1d3", effect: "바닥의 기괴한 피 문양을 처음 목격했을 때 정신력 판정" }
         ],
         clues: [
           { id: "c1", title: "찢겨진 일지 조각", text: "'그것은 식물이 아니다... 별들이 제자리를 찾을 때 온실의 뿌리가 깨어난다... 10월 14일의 의식을 막아야 한다.'", found: false }
@@ -1930,9 +1858,9 @@ const BUILTIN_SCENARIOS = {
         readAloud: "천장까지 닿는 서가에는 오컬트와 식물학 서적이 빼곡합니다. 책상 위에는 정체불명의 보라색 발광 포자가 담긴 시험관과 반쯤 해독된 고대 양피지가 펼쳐져 있습니다.",
         gmNotes: "벽난로 뒤에 숨겨진 비밀 금고가 있습니다. 벽난로의 사자 머리 조각상을 왼쪽으로 돌리면 지하 연구실로 통하는 석조 계단이 드러납니다.",
         checks: [
-          { skill: "자료조사", target: "보통 (60%)", effect: "아서 경이 남아메리카 심해 분지에서 채집한 심연의 균류에 대한 기록 발견" },
-          { skill: "오컬트", target: "어려움 (30%)", effect: "양피지에 적힌 주문이 슈브 니구라스의 하수인을 소환하는 의식임을 간파" },
-          { skill: "듣기", target: "보통 (50%)", effect: "벽난로 너머 지하에서 들려오는 축축한 꿈틀거림 소리 감지" }
+          { skill: "자료조사", target: "보통 (60%)", effect: "심연의 균류에 대한 기록 발견" },
+          { skill: "오컬트", target: "어려움 (30%)", effect: "슈브 니구라스의 하수인을 소환하는 의식임을 간파" },
+          { skill: "듣기", target: "보통 (50%)", effect: "벽난로 너머 지하에서 들려오는 축축한 소리 감지" }
         ],
         clues: [
           { id: "c2", title: "아서 경의 비밀 메모", text: "'지하 온실의 열쇠는 사자상의 눈에 있다. 황동 열쇠를 꽂고 돌려라.'", found: false }
@@ -1945,9 +1873,8 @@ const BUILTIN_SCENARIOS = {
         readAloud: "지하로 내려서자 숨이 턱 막히는 열기와 함께 인간의 맥박처럼 고동치는 거대한 검은 덩굴들이 벽을 뒤덮고 있습니다. 방 한가운데에는 흉측하게 변이된 아서 경이 기괴한 주문을 읊조리고 있습니다.",
         gmNotes: "아서 경은 이미 절반 이상 괴물로 변이되었습니다. 불과 냉기에 취약합니다. 의식용 향로를 파괴하면 괴물의 힘이 반감됩니다.",
         checks: [
-          { skill: "SAN 체크", target: "1/1d6", effect: "변이된 아서 경과 맥박치는 식물 심장을 목격" },
-          { skill: "사격 / 근접전투", target: "보통", effect: "괴물의 중앙 핵 또는 의식 제단을 타격" },
-          { skill: "민첩", target: "어려움", effect: "바닥에서 솟구치는 덩굴의 휘감기 공격 회피" }
+          { skill: "SAN 체크", target: "1/1d6", effect: "변이된 아서 경 목격" },
+          { skill: "사격 / 근접전투", target: "보통", effect: "괴물의 중앙 핵 타격" }
         ],
         clues: [
           { id: "c3", title: "정화의 비약 레시피", text: "'황과 소금, 은을 녹인 알코올을 식물 심장에 주입하면 침식을 멈출 수 있다.'", found: false }
@@ -1960,7 +1887,7 @@ const BUILTIN_SCENARIOS = {
     title: "잊혀진 광산의 그림자 (D&D 5e 판타지)",
     genre: "Fantasy / Dungeon Crawl",
     system: "dnd5e",
-    description: "판달린 남쪽 크랙록 광산. 수백 년 전 전설적인 마법 유물이 묻힌 폐광을 사악한 고블린 무리와 흑마법사가 점거했습니다.",
+    description: "판달린 남쪽 크랙록 광산. 고대 마법 유물이 묻힌 폐광을 사악한 고블린 무리와 흑마법사가 점거했습니다.",
     scenes: [
       {
         id: "scene_1",
@@ -1983,8 +1910,7 @@ const BUILTIN_SCENARIOS = {
         readAloud: "광산 내부의 거대한 지하 협곡을 가로지르는 낡은 밧줄 다리가 보입니다. 아래로는 끝을 알 수 없는 칠흑 같은 암흑과 물소리가 울려 퍼집니다.",
         gmNotes: "다리 중앙 발판은 썩어있습니다. DC 14 민첩 내성에 실패하면 추락 위험.",
         checks: [
-          { skill: "민첩 내성", target: "DC 14", effect: "부서지는 발판을 딛고 안전하게 반대편으로 도약" },
-          { skill: "근력(운동)", target: "DC 13", effect: "추락하는 동료의 팔을 붙잡아 끌어올림" }
+          { skill: "민첩 내성", target: "DC 14", effect: "부서지는 발판을 딛고 안전하게 반대편으로 도약" }
         ],
         clues: [
           { id: "c5", title: "광부의 녹슨 유골함", text: "마법의 치유 물약 2병과 50 GP 발견", found: false }
@@ -1997,8 +1923,7 @@ const BUILTIN_SCENARIOS = {
         readAloud: "동굴 벽면 가득 푸른빛을 발하는 발광 수정들이 불길하게 공명합니다. 제단 중앙에서 검은 로브를 입은 흑마법사 말로크가 광산의 고대 마법 핵을 추출하고 있습니다.",
         gmNotes: "보스 말로크는 실드 주문(AC+5)과 매직 미사일을 사용합니다. 수정 기둥 4개를 파괴하면 무적 결계가 해제됩니다.",
         checks: [
-          { skill: "지능(아카나)", target: "DC 14", effect: "제단 수정 4개를 파괴하면 보스의 결계가 무너짐을 간파" },
-          { skill: "근력 내성", target: "DC 13", effect: "수정에서 방출되는 충격파에 밀려나지 않고 버팀" }
+          { skill: "지능(아카나)", target: "DC 14", effect: "제단 수정 파괴 방법 간파" }
         ],
         clues: [
           { id: "c6", title: "고대 드워프 마법 룬검", text: "+1 명중/피해 마법 롱소드 '빛의 쐐기'", found: false }
@@ -2011,7 +1936,7 @@ const BUILTIN_SCENARIOS = {
     title: "네온 신디케이트 침투작전 (Cyberpunk)",
     genre: "Sci-Fi / Cyberpunk Heist",
     system: "freeform",
-    description: "2088년 네오 서울. 메가코프 '아라사카 바이오'의 펜트하우스 데이터 코어에서 프로토타입 사이버네틱 AI 코어 칩을 탈취해야 하는 야간 침투 의뢰입니다.",
+    description: "2088년 네오 서울. 메가코프 '아라사카 바이오'의 펜트하우스 데이터 코어에서 프로토타입 AI 칩을 탈취해야 하는 야간 침투 의뢰입니다.",
     scenes: [
       {
         id: "scene_1",
@@ -2020,25 +1945,10 @@ const BUILTIN_SCENARIOS = {
         readAloud: "비 내리는 밤, 홀로그램 광고판의 네온 불빛이 젖은 아스팔트에 번집니다. 의뢰받은 넷러너와 용병 팀은 헬리패드 환기구를 통해 보안 레이저망을 우회해야 합니다.",
         gmNotes: "레이저 경보망은 30초 주기로 패턴이 바뀝니다. 순찰 드론 1기가 옥상을 탐색 중입니다.",
         checks: [
-          { skill: "해킹/전자기기", target: "난이도 15", effect: "옥상 보안 카메라 및 레이저 센서 루프 재생" },
-          { skill: "민첩/곡예", target: "난이도 14", effect: "소음 없이 헬리패드 배수로 진입" }
+          { skill: "해킹/전자기기", target: "난이도 15", effect: "옥상 보안 카메라 및 센서 루프" }
         ],
         clues: [
-          { id: "c7", title: "경비대 보안 키카드 B레벨", text: "3층 연구실 및 서버룸 출입 인가 코드 내장", found: false }
-        ]
-      },
-      {
-        id: "scene_2",
-        name: "씬 2: 메인 데이터 코어 룸",
-        map: "cyber",
-        readAloud: "냉각 가스가 바닥에 낮게 깔린 원형 서버 룸. 푸른 빛의 양자 코어가 유리 챔버 안에서 회전하고 있으며, 중무장한 보안 대장 '빅토르'가 개틀링 암을 장전합니다.",
-        gmNotes: "빅토르는 EMP 수류탄에 1라운드 동안 시스템 마비가 걸립니다. 데이터 다운로드에는 3턴이 소요됩니다.",
-        checks: [
-          { skill: "사격 / 총기전투", target: "난이도 15", effect: "빅토르의 방탄 장갑 취약부 타격" },
-          { skill: "딥 넷 해킹", target: "난이도 16", effect: "방화벽 격파 및 프로토타입 칩 이젝트 성공" }
-        ],
-        clues: [
-          { id: "c8", title: "프로토타입 뉴럴 칩 '오리온'", text: "암시장에서 500,000 크레딧에 거래 가능한 극비 인공지능 칩", found: false }
+          { id: "c7", title: "경비대 보안 키카드 B레벨", text: "3층 연구실 및 서버룸 출입 인가 코드", found: false }
         ]
       }
     ]
@@ -2047,59 +1957,58 @@ const BUILTIN_SCENARIOS = {
 
 // --- CORE RULEBOOK DATABASE ---
 const RULEBOOK_DB = [
-  { category: "전투", title: "전투 행동 경제학 (Action Economy)", content: "캐릭터는 1라운드(약 6초) 동안 [이동], [행동 1회], [보너스 행동 1회(해당 기능이 있을 시)], [자유 상호작용 1회]를 수행할 수 있습니다. 자신의 턴이 아닐 때는 트리거 만족 시 [반응 행동(Reaction) 1회]를 사용합니다." },
-  { category: "전투", title: "기회 공격 (Opportunity Attack)", content: "적대적 생명체가 당신의 근접 공격 사거리 밖으로 벗어날 때 반응 행동을 소모하여 근접 무기 공격 1회를 가합니다. '이탈(Disengage)' 행동을 취하면 기회 공격을 유발하지 않습니다." },
-  { category: "판정", title: "D&D 5e 난이도 기준 (DC)", content: "아주 쉬움: DC 5 / 쉬움: DC 10 / 보통: DC 15 / 어려움: DC 20 / 아주 어려움: DC 25 / 거의 불가능: DC 30. 1d20 + 수정치 >= DC 이면 성공." },
-  { category: "크툴루", title: "CoC 7e 성공 등급 판정표", content: "1d100 기준: 01 = 대성공(Critical) / 기능치의 1/5 이하 = 극단적 성공(Extreme) / 기능치의 1/2 이하 = 어려운 성공(Hard) / 기능치 이하 = 보통 성공(Regular) / 초과 = 실패 / 96-100 = 대실패(Fumble)." },
-  { category: "크툴루", title: "이성(SAN) 체크 및 일시적 광기", content: "공포스러운 대상을 목격하면 SAN 체크. 한 번의 판정으로 5점 이상의 이성을 상실하면 지능 판정을 하여 성공 시 충격적인 진실을 깨닫고 [일시적 광기]에 빠집니다. 하루 동안 전체 이성의 1/5을 잃으면 [장기적 광기] 상태가 됩니다." },
-  { category: "상태이상", title: "주요 상태이상 효과 요약", content: "• 중독(Poisoned): 공격 굴림과 능력 판정에 불리.\n• 실명(Blinded): 시각 판정 실패, 공격 불리, 적의 공격 이점.\n• 기절(Stunned): 행동 및 이동 불가, 힘/민첩 내성 자동 실패, 적의 공격 이점.\n• 쓰러짐(Prone): 이동 시 속도 절반 소모, 근접 공격 불리(자신), 5피트 내 적은 이점으로 공격." },
-  { category: "휴식", title: "짧은 휴식과 긴 휴식", content: "짧은 휴식(Short Rest): 최소 1시간 휴식, 히트 다이스를 굴려 HP 회복.\n긴 휴식(Long Rest): 최소 8시간(취침 6시간 이상), HP 및 소모된 주문 슬롯 전부 회복, 소모된 히트 다이스의 절반 회복." }
+  { category: "던전월드", title: "던전월드 판정 기본 원칙 (2d6 + 수정치)", content: "10+ = 완전 성공 (원하는 바를 이루고 부작용 없음) / 7~9 = 부분 성공 (성공하지만 대가, 어려운 선택, 위험 수반) / 6- = 실패 (GM이 마스터 액션을 발동하여 난관 제시, 플레이어는 경험치 +1 XP 획득)" },
+  { category: "던전월드", title: "던전월드 전투와 데미지 주사위", content: "D&D와 달리 고정된 턴 순서가 없습니다. 서사 흐름에 따라 행동하며, [접근전] 성공 시 자신의 클래스 피해 주사위(전사 d10, 도적 d8, 마법사 d4 등)를 굴려 상대의 장갑(Armor)만큼 차감하고 HP를 깎습니다." },
+  { category: "던전월드", title: "인연(Bonds)과 레벨업", content: "각 캐릭터는 다른 동료와 관련된 인연 문장을 가집니다. 세션 종료 시 인연이 해결되거나 변화했음을 증명하면 +1 XP를 얻고 새로운 인연을 씁니다. 레벨 + 7 이상의 XP를 모으면 캠프 휴식 시 레벨업합니다." },
+  { category: "전투", title: "전투 행동 경제학 (Action Economy)", content: "캐릭터는 1라운드(약 6초) 동안 [이동], [행동 1회], [보너스 행동 1회], [자유 상호작용 1회]를 수행합니다. 자신의 턴이 아닐 때는 [반응 행동 1회]를 사용합니다." },
+  { category: "전투", title: "기회 공격 (Opportunity Attack)", content: "적대적 생명체가 근접 사거리 밖으로 벗어날 때 반응 행동을 소모하여 근접 공격을 가합니다. '이탈(Disengage)' 행동은 기회 공격을 유발하지 않습니다." },
+  { category: "판정", title: "D&D 5e 난이도 기준 (DC)", content: "쉬움: DC 10 / 보통: DC 15 / 어려움: DC 20 / 아주 어려움: DC 25. 1d20 + 수정치 >= DC 이면 성공." },
+  { category: "크툴루", title: "CoC 7e 성공 등급 판정표", content: "1d100 기준: 01 = 대성공 / 1/5 이하 = 극단적 성공 / 1/2 이하 = 어려운 성공 / 수치 이하 = 보통 성공 / 96-100 = 대실패." }
 ];
 
 // --- MONSTER COMPENDIUM ---
 const MONSTER_COMPENDIUM = [
+  { id: "dw_wyrm", name: "녹색 고룡 베르단티스", hp: 24, ac: 3, cr: "DW 보스", icon: "🐉", size: 2, color: "#10b981", atk: "d10 (광역, 부식)", instinct: "자신의 영역을 침범한 자를 부식시키고 보물을 수집하기" },
+  { id: "dw_frogman", name: "독화살 개구리 척후병", hp: 6, ac: 1, cr: "DW 몬스터", icon: "🐸", size: 1, color: "#22c55e", atk: "d6 (독, 원거리)", instinct: "무리 지어 독침으로 마비시키기" },
   { id: "goblin", name: "고블린 정찰병", hp: 7, ac: 15, cr: "1/4", icon: "👺", size: 1, color: "#22c55e", atk: "+4 (1d6+2)" },
   { id: "zombie", name: "부패한 좀비", hp: 22, ac: 8, cr: "1/4", icon: "🧟", size: 1, color: "#64748b", atk: "+3 (1d6+1)" },
   { id: "cultist", name: "광신도 사제", hp: 18, ac: 12, cr: "1/2", icon: "🧙‍♂️", size: 1, color: "#a855f7", atk: "+4 (1d8+2)" },
-  { id: "shoggoth", name: "심연의 쇼고스", hp: 85, ac: 16, cr: "5", icon: "🐙", size: 2, color: "#06b6d4", atk: "+7 (2d10+4)" },
-  { id: "boss_dragon", name: "붉은 새끼 드래곤", hp: 75, ac: 17, cr: "4", icon: "🐉", size: 2, color: "#ef4444", atk: "+6 (2d8+4)" },
-  { id: "cyber_merc", name: "사이버네틱 용병", hp: 45, ac: 16, cr: "2", icon: "🤖", size: 1, color: "#f59e0b", atk: "+5 (2d6+3)" }
+  { id: "shoggoth", name: "심연의 쇼고스", hp: 85, ac: 16, cr: "5", icon: "🐙", size: 2, color: "#06b6d4", atk: "+7 (2d10+4)" }
 ];
 
 // --- RANDOM GENERATOR TABLES ---
 const RANDOM_TABLES = {
   npc: [
-    "아서 펜드래건 (고결한 성기사, 정의감이 강하나 고집이 셈)",
-    "엘레나 레이븐 (비전 마법사, 고대 유물에 광적으로 집착)",
-    "실라스 그림 (전직 도적 현 정보상, 돈만 주면 비밀을 풂)",
-    "마가렛 수녀 (치유사, 겉으로는 온화하나 과거 어둠의 비밀 보유)",
-    "김진우 (네오 서울 넷러너, 언제나 에너지 드링크를 물고 다님)",
+    "브란 길더 (던전월드 음유시인, 고대 영웅의 서사시를 찾아 방랑 중)",
+    "카엘라 (던전월드 성기사, 불꽃의 신전 수호자이자 고집불통)",
+    "아서 펜드래건 (고결한 성기사, 정의감이 강함)",
+    "엘레나 레이븐 (비전 마법사, 고대 유물에 집착)",
+    "존 H. 왓슨 (퇴역 군의관, 사건 현장 감식 전문가)",
     "빅토르 반스 (사이버네틱 용병 대장, 온몸이 티타늄 장갑)"
   ],
   tavern: [
+    "'검은 숲 깊은 곳에서 녹색 연기가 피어오르고 있어. 잠자던 용이 깨어난 게 분명해.'",
     "'북쪽 폐광에서 밤마다 푸른 도깨비불이 목격된다더군.'",
-    "'저택의 아서 경이 실종되기 전날, 묘지에서 흙을 파헤치는 걸 봤다는 이가 있어.'",
-    "'상인 길드가 도적 떼에게 털렸는데, 그 도적들이 인간이 아니라는 소문이야.'",
+    "'저택의 아서 경이 실종되기 전날 밤, 온실에서 괴물 울음소리가 났어.'",
     "'지하 수로에서 거대한 뱀 같은 그림자가 사람을 낚아채 갔대.'"
   ],
   loot: [
-    "치유의 물약 (2d4+2 HP 회복) 2병과 45 GP",
-    "빛의 마법 룬이 새겨진 은장 단검 (+1 명중)",
-    "미지의 고대 상형문자가 적힌 가죽 양피지 두루마리",
-    "어둠을 꿰뚫는 마법의 고글 (암흑시야 60피트 부여)",
-    "암호화된 사이버네틱 크레딧 칩 (5,000 크레딧)"
+    "용의 불꽃을 담은 보석 부적 (화염 내성 부여)",
+    "치유의 영약 (1d8 HP 회복) 2병과 60 GP",
+    "빛의 마법 룬이 새겨진 은장 단검 (+1 피해)",
+    "고대 드워프가 벼려낸 미스릴 체인메일 (장갑 2, 가벼움)"
   ],
   weather: [
-    "짙은 안개와 가랑비 (시야 거리 30피트로 제한, 원거리 공격 불리)",
-    "천둥번개를 동반한 폭우 (청각 판정 불리, 횃불 자동 소화)",
-    "뼛속까지 시린 한파 (매 시간 건강 내성 DC 10 실패 시 피로 누적)",
-    "맑고 서늘한 보름달 밤 (야간 시야 양호, 야생동물 경계심 증가)"
+    "짙은 안개와 가랑비 (원거리 사격 불리, 시야 제한)",
+    "천둥번개를 동반한 폭우 (청각 판정 불리, 횃불 소화)",
+    "뼛속까지 시린 한파 (매 시간 건강 판정 실패 시 피로 누적)",
+    "맑고 서늘한 보름달 밤 (야간 시야 양호, 야생동물 경계)"
   ]
 };
 
 
 
-// --- VTT CANVAS ENGINE ---
+// --- VTT CANVAS ENGINE (ENHANCED WITH COMBAT NUMBERS, SPEECH BUBBLES, WEATHER & GM GOD CONTROLS) ---
 const canvas = document.getElementById('vtt-canvas');
 const ctx = canvas.getContext('2d');
 
@@ -2110,16 +2019,21 @@ let isPanning = false;
 let startPanX = 0;
 let startPanY = 0;
 
-let currentTool = 'select'; // 'select', 'ruler', 'aoe', 'ping', 'draw', 'eraser'
-let aoeType = 'circle'; // 'circle', 'cone', 'square'
+let currentTool = 'select'; // 'select', 'ruler', 'aoe', 'ping', 'draw', 'eraser', 'pin'
+let aoeType = 'circle';
 let drawColor = '#ef4444';
 let drawWidth = 3;
 
 let gridType = 'square';
 let gridSize = 50;
 let showFog = true;
-let fogBrushMode = 'reveal'; // 'reveal', 'hide'
+let fogBrushMode = 'reveal';
 let fogBrushSize = 60;
+
+// GM God Mode Controls
+let playerMovementLocked = false;
+let weatherType = 'none'; // 'none', 'rain', 'snow', 'dust'
+let weatherParticles = [];
 
 // Layers & Canvas Objects
 let customMapImage = null;
@@ -2129,37 +2043,40 @@ let fogCtx = fogCanvas.getContext('2d');
 let drawingCanvas = document.createElement('canvas');
 let drawingCtx = drawingCanvas.getContext('2d');
 
-// Tokens
+// Tokens with advanced attributes (Elevation, Stealth, Facing, Rotation)
 let tokens = [
-  { id: 't_p1', name: '아서 (전사)', x: 300, y: 300, size: 1, hp: 28, maxHp: 28, color: '#3b82f6', icon: '⚔️', conditions: [] },
-  { id: 't_p2', name: '엘레나 (마법사)', x: 250, y: 300, size: 1, hp: 18, maxHp: 18, color: '#8b5cf6', icon: '🔮', conditions: [] },
-  { id: 't_p3', name: '존 (사립탐정)', x: 300, y: 350, size: 1, hp: 22, maxHp: 22, color: '#e5a93c', icon: '🕵️', conditions: [] },
-  { id: 't_m1', name: '고블린 정찰병', x: 550, y: 250, size: 1, hp: 7, maxHp: 7, color: '#ef4444', icon: '👺', conditions: [] },
-  { id: 't_boss', name: '흑마법사 말로크', x: 650, y: 350, size: 2, hp: 45, maxHp: 45, color: '#dc2626', icon: '🧙‍♂️', conditions: ['축복'] }
+  { id: 't_p1', name: '아서 (전사)', x: 300, y: 300, size: 1, hp: 28, maxHp: 28, color: '#3b82f6', icon: '⚔️', elevation: 0, stealth: false, rotation: 0, conditions: [] },
+  { id: 't_p2', name: '엘레나 (마법사)', x: 250, y: 300, size: 1, hp: 18, maxHp: 18, color: '#8b5cf6', icon: '🔮', elevation: 0, stealth: false, rotation: 0, conditions: [] },
+  { id: 't_p3', name: '존 (사립탐정)', x: 300, y: 350, size: 1, hp: 22, maxHp: 22, color: '#e5a93c', icon: '🕵️', elevation: 0, stealth: false, rotation: 0, conditions: [] },
+  { id: 't_dw', name: '브란 (던전월드 바드)', x: 250, y: 350, size: 1, hp: 20, maxHp: 20, color: '#10b981', icon: '🪕', elevation: 0, stealth: false, rotation: 0, conditions: [] },
+  { id: 't_m1', name: '고블린 정찰병', x: 550, y: 250, size: 1, hp: 7, maxHp: 7, color: '#ef4444', icon: '👺', elevation: 0, stealth: false, rotation: 0, conditions: [] },
+  { id: 't_boss', name: '흑마법사 말로크', x: 650, y: 350, size: 2, hp: 45, maxHp: 45, color: '#dc2626', icon: '🧙‍♂️', elevation: 10, stealth: false, rotation: 0, conditions: ['축복'] }
 ];
 
 let selectedToken = null;
 let isDraggingToken = false;
 let dragTokenOffset = { x: 0, y: 0 };
 
-// Ruler state
+// Tactical Tools State
 let isMeasuring = false;
+let rulerPoints = []; // Supports multi-waypoint path ruler
 let rulerStart = { x: 0, y: 0 };
 let rulerEnd = { x: 0, y: 0 };
 
-// AoE state
 let isPlacingAoE = false;
 let aoeCenter = { x: 0, y: 0 };
 let aoeRadius = 100;
 
-// Ping ripples
 let pings = [];
+let floatingTexts = []; // Floating combat numbers (+12, -8)
+let speechBubbles = new Map(); // tokenId -> { text, timer }
+let mapPins = [
+  { id: 'pin_1', x: 450, y: 350, title: '비밀 도르래 장치', text: '벽면에 숨겨진 황동 레버. 아래로 당기면 지하 수로의 철창이 열립니다.' }
+];
 
-// Freehand draw state
 let isDrawing = false;
 let lastDrawPoint = null;
 
-// Initialize Canvases
 function initCanvas() {
   const container = document.getElementById('canvas-container');
   canvas.width = container.clientWidth || 800;
@@ -2170,12 +2087,25 @@ function initCanvas() {
   drawingCanvas.width = 2400;
   drawingCanvas.height = 1800;
 
+  initWeatherParticles();
   resetFog(false);
 
   mapOffsetX = (canvas.width - 1200) / 2;
   mapOffsetY = (canvas.height - 900) / 2;
 
   render();
+}
+
+function initWeatherParticles() {
+  weatherParticles = [];
+  for (let i = 0; i < 70; i++) {
+    weatherParticles.push({
+      x: Math.random() * 2400,
+      y: Math.random() * 1800,
+      speed: 2 + Math.random() * 4,
+      size: 1.5 + Math.random() * 2
+    });
+  }
 }
 
 function resetFog(revealed = false) {
@@ -2196,7 +2126,7 @@ function resetFog(revealed = false) {
   render();
 }
 
-// Procedural Map Backgrounds
+// Procedural Backgrounds
 function drawMapBackground(ctx) {
   if (customMapImage) {
     ctx.drawImage(customMapImage, 0, 0, 2400, 1800);
@@ -2217,20 +2147,13 @@ function drawMapBackground(ctx) {
     ctx.beginPath();
     ctx.arc(450, 400, 120, 0, Math.PI * 2);
     ctx.fill();
-    ctx.fillStyle = 'rgba(239, 68, 68, 0.15)';
-    ctx.beginPath();
-    ctx.arc(650, 350, 180, 0, Math.PI * 2);
-    ctx.fill();
   } else if (currentPresetMap === 'manor') {
     ctx.fillStyle = '#261b15';
     ctx.fillRect(0, 0, 2400, 1800);
     ctx.strokeStyle = '#35251d';
     ctx.lineWidth = 2;
     for (let y = 0; y < 1800; y += 25) {
-      ctx.beginPath();
-      ctx.moveTo(0, y);
-      ctx.lineTo(2400, y);
-      ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(2400, y); ctx.stroke();
     }
     ctx.fillStyle = '#5c141e';
     ctx.fillRect(200, 200, 800, 500);
@@ -2263,11 +2186,6 @@ function drawMapBackground(ctx) {
     for (let y = 0; y < 1800; y += 50) {
       ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(2400, y); ctx.stroke();
     }
-    ctx.strokeStyle = '#ec4899';
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-    ctx.arc(500, 400, 150, 0, Math.PI * 2);
-    ctx.stroke();
   } else if (currentPresetMap === 'alien') {
     ctx.fillStyle = '#0b0f19';
     ctx.fillRect(0, 0, 2400, 1800);
@@ -2278,12 +2196,6 @@ function drawMapBackground(ctx) {
         ctx.strokeRect(x, y, 80, 80);
       }
     }
-    ctx.fillStyle = '#1e293b';
-    ctx.beginPath();
-    ctx.ellipse(500, 450, 200, 100, 0, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.strokeStyle = '#38bdf8';
-    ctx.stroke();
   }
 }
 
@@ -2326,8 +2238,53 @@ function drawHexagon(ctx, x, y, r) {
   ctx.stroke();
 }
 
+// Weather Particle Overlay
+function drawWeather(ctx) {
+  if (weatherType === 'none') return;
+  ctx.save();
+  if (weatherType === 'rain') {
+    ctx.strokeStyle = 'rgba(147, 197, 253, 0.5)';
+    ctx.lineWidth = 1.5;
+    weatherParticles.forEach(p => {
+      ctx.beginPath();
+      ctx.moveTo(p.x, p.y);
+      ctx.lineTo(p.x - 2, p.y + p.speed * 4);
+      ctx.stroke();
+      p.y += p.speed * 3;
+      p.x -= 1;
+      if (p.y > 1800) { p.y = 0; p.x = Math.random() * 2400; }
+    });
+  } else if (weatherType === 'snow') {
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+    weatherParticles.forEach(p => {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fill();
+      p.y += p.speed * 0.8;
+      p.x += Math.sin(p.y * 0.02) * 1;
+      if (p.y > 1800) { p.y = 0; p.x = Math.random() * 2400; }
+    });
+  } else if (weatherType === 'dust') {
+    ctx.fillStyle = 'rgba(229, 169, 60, 0.4)';
+    weatherParticles.forEach(p => {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size * 0.7, 0, Math.PI * 2);
+      ctx.fill();
+      p.x += p.speed * 0.6;
+      p.y += Math.sin(p.x * 0.01) * 0.5;
+      if (p.x > 2400) { p.x = 0; p.y = Math.random() * 1800; }
+    });
+  }
+  ctx.restore();
+}
+
 function drawTokens(ctx) {
+  const isGM = currentUserRole === 'gm';
+
   tokens.forEach(tok => {
+    // If token is in Stealth mode: GM sees it translucent, Players CANNOT see it!
+    if (tok.stealth && !isGM) return;
+
     const rad = (tok.size * gridSize) / 2 - 3;
     const isSelected = selectedToken && selectedToken.id === tok.id;
     const isActiveTurn = combatants.length > 0 && combatants[currentTurnIndex]?.id === tok.id;
@@ -2335,6 +2292,11 @@ function drawTokens(ctx) {
     ctx.save();
     ctx.translate(tok.x, tok.y);
 
+    if (tok.stealth && isGM) {
+      ctx.globalAlpha = 0.45; // Translucent stealth for GM
+    }
+
+    // Active Turn Glow Ring
     if (isActiveTurn) {
       ctx.beginPath();
       ctx.arc(0, 0, rad + 8, 0, Math.PI * 2);
@@ -2346,6 +2308,7 @@ function drawTokens(ctx) {
       ctx.shadowBlur = 0;
     }
 
+    // Selected Ring
     if (isSelected) {
       ctx.beginPath();
       ctx.arc(0, 0, rad + 4, 0, Math.PI * 2);
@@ -2354,6 +2317,7 @@ function drawTokens(ctx) {
       ctx.stroke();
     }
 
+    // Token Body Circle
     ctx.beginPath();
     ctx.arc(0, 0, rad, 0, Math.PI * 2);
     ctx.fillStyle = tok.color || '#3b82f6';
@@ -2362,12 +2326,28 @@ function drawTokens(ctx) {
     ctx.lineWidth = 2;
     ctx.stroke();
 
+    // Facing rotation arrow
+    if (tok.rotation) {
+      ctx.save();
+      ctx.rotate(tok.rotation);
+      ctx.fillStyle = '#e5a93c';
+      ctx.beginPath();
+      ctx.moveTo(rad - 4, -4);
+      ctx.lineTo(rad + 8, 0);
+      ctx.lineTo(rad - 4, 4);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    }
+
+    // Token Icon / Avatar
     ctx.fillStyle = '#ffffff';
     ctx.font = `${rad * 0.9}px sans-serif`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(tok.icon || '👤', 0, 0);
 
+    // HP Bar
     const barW = rad * 2;
     const barH = 5;
     const barX = -rad;
@@ -2382,6 +2362,14 @@ function drawTokens(ctx) {
     ctx.lineWidth = 1;
     ctx.strokeRect(barX, barY, barW, barH);
 
+    // Elevation badge
+    if (tok.elevation) {
+      ctx.fillStyle = '#8b5cf6';
+      ctx.font = 'bold 9px sans-serif';
+      ctx.fillText(`${tok.elevation > 0 ? '+' : ''}${tok.elevation}ft`, rad + 8, -rad);
+    }
+
+    // Name Plate Below Token
     ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
     ctx.font = '10px sans-serif';
     const textW = ctx.measureText(tok.name).width;
@@ -2389,18 +2377,36 @@ function drawTokens(ctx) {
     ctx.fillStyle = '#e2e8f0';
     ctx.fillText(tok.name, 0, rad + 14);
 
-    if (tok.conditions && tok.conditions.length > 0) {
-      let cx = -rad;
-      tok.conditions.forEach(cond => {
-        ctx.fillStyle = '#ef4444';
-        ctx.beginPath();
-        ctx.arc(cx, rad, 6, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.fillStyle = '#fff';
-        ctx.font = '8px sans-serif';
-        ctx.fillText(cond[0], cx, rad + 3);
-        cx += 14;
-      });
+    // Speech Bubble (Cartoon Pop-up)
+    if (speechBubbles.has(tok.id)) {
+      const bubble = speechBubbles.get(tok.id);
+      ctx.save();
+      ctx.font = 'bold 11px sans-serif';
+      const bw = ctx.measureText(bubble.text).width + 16;
+      const bh = 22;
+      const bx = -bw / 2;
+      const by = -rad - 38;
+
+      ctx.fillStyle = '#ffffff';
+      ctx.strokeStyle = '#000000';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.roundRect(bx, by, bw, bh, 6);
+      ctx.fill();
+      ctx.stroke();
+
+      // Bubble pointer
+      ctx.beginPath();
+      ctx.moveTo(0, by + bh);
+      ctx.lineTo(4, by + bh + 6);
+      ctx.lineTo(-4, by + bh);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = '#0f172a';
+      ctx.textAlign = 'center';
+      ctx.fillText(bubble.text, 0, by + 15);
+      ctx.restore();
     }
 
     ctx.restore();
@@ -2408,6 +2414,7 @@ function drawTokens(ctx) {
 }
 
 function drawTacticalTools(ctx) {
+  // Ruler (Supports Waypoints)
   if (isMeasuring) {
     ctx.save();
     ctx.strokeStyle = '#e5a93c';
@@ -2416,6 +2423,7 @@ function drawTacticalTools(ctx) {
 
     ctx.beginPath();
     ctx.moveTo(rulerStart.x, rulerStart.y);
+    rulerPoints.forEach(p => ctx.lineTo(p.x, p.y));
     ctx.lineTo(rulerEnd.x, rulerEnd.y);
     ctx.stroke();
 
@@ -2441,10 +2449,10 @@ function drawTacticalTools(ctx) {
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(label, midX, midY - 2);
-
     ctx.restore();
   }
 
+  // AoE Template
   if (currentTool === 'aoe' && isPlacingAoE) {
     ctx.save();
     ctx.fillStyle = 'rgba(239, 68, 68, 0.25)';
@@ -2470,6 +2478,38 @@ function drawTacticalTools(ctx) {
     ctx.restore();
   }
 
+  // Map Pins
+  mapPins.forEach(pin => {
+    ctx.save();
+    ctx.fillStyle = '#e5a93c';
+    ctx.font = '22px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('📍', pin.x, pin.y);
+
+    ctx.font = 'bold 10px sans-serif';
+    ctx.fillStyle = '#fff';
+    ctx.fillText(pin.title, pin.x, pin.y + 16);
+    ctx.restore();
+  });
+
+  // Floating Combat Numbers (+10, -5)
+  floatingTexts.forEach(ft => {
+    ctx.save();
+    ctx.font = 'bold 16px sans-serif';
+    ctx.fillStyle = ft.color;
+    ctx.strokeStyle = '#000';
+    ctx.lineWidth = 3;
+    ctx.textAlign = 'center';
+    ctx.strokeText(ft.text, ft.x, ft.y);
+    ctx.fillText(ft.text, ft.x, ft.y);
+    ft.y += ft.dy;
+    ft.life--;
+    ctx.restore();
+  });
+  floatingTexts = floatingTexts.filter(ft => ft.life > 0);
+
+  // Pings
   pings.forEach((p) => {
     ctx.save();
     ctx.strokeStyle = p.color || '#e5a93c';
@@ -2510,12 +2550,33 @@ function render() {
     ctx.restore();
   }
 
+  drawWeather(ctx);
   drawTacticalTools(ctx);
   ctx.restore();
 
-  if (pings.length > 0) {
+  if (pings.length > 0 || floatingTexts.length > 0 || weatherType !== 'none') {
     requestAnimationFrame(render);
   }
+}
+
+function spawnCombatNumber(x, y, text, color = '#ef4444') {
+  floatingTexts.push({
+    x, y, text, color,
+    life: 30,
+    dy: -1.5
+  });
+  render();
+}
+
+function showSpeechBubble(tokenId, text) {
+  speechBubbles.set(tokenId, { text, timer: Date.now() + 4000 });
+  setTimeout(() => {
+    if (speechBubbles.has(tokenId) && speechBubbles.get(tokenId).timer <= Date.now()) {
+      speechBubbles.delete(tokenId);
+      render();
+    }
+  }, 4200);
+  render();
 }
 
 function screenToWorld(sx, sy) {
@@ -2525,7 +2586,7 @@ function screenToWorld(sx, sy) {
   };
 }
 
-// Mouse events
+// Mouse Events
 canvas.addEventListener('mousedown', (e) => {
   const rect = canvas.getBoundingClientRect();
   const mouseX = e.clientX - rect.left;
@@ -2541,10 +2602,25 @@ canvas.addEventListener('mousedown', (e) => {
   }
 
   if (e.button === 0) {
+    // Check map pins first
+    for (let pin of mapPins) {
+      if (Math.hypot(pin.x - worldPos.x, pin.y - worldPos.y) <= 20) {
+        alert(`📍 [단서 발견: ${pin.title}]\\n\\n"${pin.text}"`);
+        return;
+      }
+    }
+
     if (currentTool === 'select') {
+      // If movement is locked and user is not GM, prevent token dragging
+      if (playerMovementLocked && currentUserRole !== 'gm') {
+        alert('🔒 GM이 현재 토큰 이동을 잠갔습니다. 마스터의 지시를 기다려주세요.');
+        return;
+      }
+
       selectedToken = null;
       for (let i = tokens.length - 1; i >= 0; i--) {
         const tok = tokens[i];
+        if (tok.stealth && currentUserRole !== 'gm') continue;
         const rad = (tok.size * gridSize) / 2;
         if (Math.hypot(tok.x - worldPos.x, tok.y - worldPos.y) <= rad) {
           selectedToken = tok;
@@ -2653,7 +2729,6 @@ window.addEventListener('mouseup', () => {
   }
 });
 
-// Wheel zoom
 canvas.addEventListener('wheel', (e) => {
   e.preventDefault();
   const zoomFactor = e.deltaY < 0 ? 1.1 : 0.9;
@@ -2671,7 +2746,6 @@ canvas.addEventListener('wheel', (e) => {
   render();
 }, { passive: false });
 
-// Context Menu (Right Click)
 canvas.addEventListener('contextmenu', (e) => {
   e.preventDefault();
   const rect = canvas.getBoundingClientRect();
@@ -2689,7 +2763,7 @@ canvas.addEventListener('contextmenu', (e) => {
   }
 });
 
-// --- TOUCH SCREEN & MOBILE GESTURE SUPPORT ---
+// Touch controls
 let initialPinchDist = null;
 let initialPinchScale = 1.0;
 
@@ -2704,10 +2778,15 @@ canvas.addEventListener('touchstart', (e) => {
     const worldPos = screenToWorld(mouseX, mouseY);
 
     if (currentTool === 'select') {
+      if (playerMovementLocked && currentUserRole !== 'gm') {
+        alert('🔒 GM이 현재 토큰 이동을 잠갔습니다.');
+        return;
+      }
       selectedToken = null;
       for (let i = tokens.length - 1; i >= 0; i--) {
         const tok = tokens[i];
-        const rad = (tok.size * gridSize) / 2 + 12; // Extra padding for finger taps
+        if (tok.stealth && currentUserRole !== 'gm') continue;
+        const rad = (tok.size * gridSize) / 2 + 14;
         if (Math.hypot(tok.x - worldPos.x, tok.y - worldPos.y) <= rad) {
           selectedToken = tok;
           isDraggingToken = true;
@@ -2716,7 +2795,6 @@ canvas.addEventListener('touchstart', (e) => {
         }
       }
       if (!selectedToken) {
-        // Single finger drag pans the map
         isPanning = true;
         startPanX = mouseX - mapOffsetX;
         startPanY = mouseY - mapOffsetY;
@@ -2734,7 +2812,6 @@ canvas.addEventListener('touchstart', (e) => {
       lastDrawPoint = worldPos;
     }
   } else if (e.touches.length === 2) {
-    // Two-finger pinch to zoom
     isDraggingToken = false;
     isPanning = false;
     const t1 = e.touches[0];
@@ -2890,34 +2967,63 @@ let diceStats = {
   history: []
 };
 
-// Polyhedral quick roll
 function quickRoll(sides) {
   const formula = sides === 'F' ? '4dF' : `1d${sides}`;
   rollDiceFormula(formula);
 }
 
+// Roll Dungeon World Move
+function rollDWMoves(moveId) {
+  const move = DW_BASIC_MOVES.find(m => m.id === moveId);
+  if (!move) return;
+
+  let mod = 0;
+  if (move.stat === 'ANY') {
+    mod = Math.floor((currentCharacter.stats['STR'] - 10) / 2) || 0; // Default to highest/STR
+  } else if (currentCharacter.stats[move.stat]) {
+    const val = currentCharacter.stats[move.stat];
+    mod = Math.floor((val - 10) / 2);
+  }
+
+  const formula = `2d6${mod >= 0 ? '+' + mod : mod}`;
+  rollDiceFormula(formula, `던전월드 [${move.name}]`, {
+    isDWMove: true,
+    move: move
+  });
+}
+
 // Main Formula Roller
-function rollDiceFormula(formula, label = '') {
+function rollDiceFormula(formula, label = '', options = {}) {
   formula = formula.trim().toLowerCase();
   if (!formula) return;
 
   playSynthSound('dice');
   showDiceStageAnimation(formula);
 
-  // Parse formula
-  // Supported: NdX (+/- M), NdXkhY (keep highest Y), NdXklY (keep lowest Y), NdX! (exploding), 4dF
-  let result = evaluateDiceFormula(formula);
+  let result = evaluateDiceFormula(formula, options);
 
-  // Record stats
   diceStats.totalRolls++;
   diceStats.history.push(result.total);
   if (result.isCrit) diceStats.crits++;
   if (result.isFumble) diceStats.fumbles++;
 
-  // Update luck meter
   updateLuckMeter();
 
-  // Create chat message
+  // If Dungeon World roll failed (6-), award +1 XP!
+  if (result.dwGrade && result.total <= 6 && currentCharacter.system === 'dungeonworld') {
+    currentCharacter.xp = (currentCharacter.xp || 0) + 1;
+    renderCharacterSheet();
+    setTimeout(() => {
+      appendChatMessage({
+        id: 'xp_' + Date.now(),
+        type: 'chat',
+        sender: '시스템 [던전월드]',
+        time: getCurrentTimeString(),
+        text: `⭐ 실패(6-)로 인해 [${currentCharacter.name}] 캐릭터가 실패로부터 교훈을 얻어 **경험치 +1 XP**를 획득했습니다! (현재 XP: ${currentCharacter.xp}/${(currentCharacter.level || 1) + 7})`
+      });
+    }, 600);
+  }
+
   const msgObj = {
     id: 'roll_' + Date.now(),
     type: 'dice',
@@ -2933,6 +3039,8 @@ function rollDiceFormula(formula, label = '') {
     isCrit: result.isCrit,
     isFumble: result.isFumble,
     cocGrade: result.cocGrade,
+    dwGrade: result.dwGrade,
+    dwMoveOutcome: result.dwMoveOutcome,
     text: result.text
   };
 
@@ -2940,7 +3048,7 @@ function rollDiceFormula(formula, label = '') {
   broadcastRoomEvent({ type: 'dice_roll', data: msgObj });
 }
 
-function evaluateDiceFormula(formula) {
+function evaluateDiceFormula(formula, options = {}) {
   // Fate/Fudge dice (e.g. 4dF)
   if (formula.includes('df')) {
     let rolls = [];
@@ -2962,11 +3070,10 @@ function evaluateDiceFormula(formula) {
   }
 
   // Regex for NdX (kh/kl/!) (+/- M)
-  const match = formula.match(/^(\d+)?d(\d+)(kh\d+|kl\d+|!)?([+-]\d+)?$/);
+  const match = formula.match(/^(\\d+)?d(\\d+)(kh\\d+|kl\\d+|!)?([+-]\\d+)?$/);
   if (!match) {
-    // Simple arithmetic fallback
     try {
-      let evalVal = eval(formula.replace(/[^0-9+\-*/]/g, ''));
+      let evalVal = eval(formula.replace(/[^0-9+*\/-]/g, ""));
       return { rolls: [evalVal], modifier: 0, total: evalVal, text: `${evalVal}` };
     } catch (e) {
       return { rolls: [0], modifier: 0, total: 0, text: '잘못된 주사위 수식' };
@@ -2978,7 +3085,6 @@ function evaluateDiceFormula(formula) {
   let special = match[3] || '';
   let modifier = parseInt(match[4] || '0', 10);
 
-  // Clamp limits for safety
   count = Math.min(count, 50);
 
   let key = 'd' + sides;
@@ -2988,7 +3094,6 @@ function evaluateDiceFormula(formula) {
   for (let i = 0; i < count; i++) {
     let r = Math.floor(Math.random() * sides) + 1;
     rolls.push(r);
-    // Exploding dice: if roll is max, roll again!
     if (special === '!' && r === sides) {
       let extra = Math.floor(Math.random() * sides) + 1;
       rolls.push(extra);
@@ -3008,19 +3113,38 @@ function evaluateDiceFormula(formula) {
 
   let sum = keptRolls.reduce((a, b) => a + b, 0) + modifier;
 
-  // D&D & CoC Critical / Fumble check
   let isCrit = false;
   let isFumble = false;
   let cocGrade = null;
+  let dwGrade = null;
+  let dwMoveOutcome = null;
 
+  // D&D 20-sided check
   if (sides === 20 && count === 1) {
     if (rolls[0] === 20) isCrit = true;
     if (rolls[0] === 1) isFumble = true;
-  } else if (sides === 100 && count === 1) {
+  }
+  // CoC 100-sided check
+  else if (sides === 100 && count === 1) {
     let v = rolls[0];
     if (v === 1) { isCrit = true; cocGrade = '대성공 (Critical 01)'; }
     else if (v >= 96) { isFumble = true; cocGrade = '대실패 (Fumble)'; }
     else { cocGrade = '결과: ' + v; }
+  }
+  // Dungeon World (PbtA) 2d6 evaluation
+  else if (sides === 6 && count === 2 && (currentCharacter.system === 'dungeonworld' || options.isDWMove)) {
+    if (sum >= 10) {
+      isCrit = true;
+      dwGrade = '★ 완전 성공 (10+)';
+      if (options.move) dwMoveOutcome = options.move.on10;
+    } else if (sum >= 7) {
+      dwGrade = '▲ 부분 성공 (7~9 대가/위협)';
+      if (options.move) dwMoveOutcome = options.move.on79;
+    } else {
+      isFumble = true;
+      dwGrade = '💀 실패 (6- GM 액션 / +1 XP)';
+      if (options.move) dwMoveOutcome = options.move.on6;
+    }
   }
 
   return {
@@ -3031,32 +3155,29 @@ function evaluateDiceFormula(formula) {
     isCrit: isCrit,
     isFumble: isFumble,
     cocGrade: cocGrade,
+    dwGrade: dwGrade,
+    dwMoveOutcome: dwMoveOutcome,
     text: `[${rolls.join(', ')}] ${modifier !== 0 ? (modifier > 0 ? '+ ' + modifier : '- ' + Math.abs(modifier)) : ''} = ${sum}`
   };
 }
 
-// 3D Animated Tray Visuals
 function showDiceStageAnimation(formula) {
   const stage = document.getElementById('dice-stage');
   stage.innerHTML = `
     <div class="rolling-dice-anim">🎲</div>
   `;
   setTimeout(() => {
-    // Show quick result in stage
-    const match = formula.match(/d(\d+)/);
-    const sides = match ? match[1] : '20';
     stage.innerHTML = `
       <div style="text-align: center;">
-        <span style="font-size: 0.75rem; color: var(--text-muted);">${formula}</span>
+        <span style="font-size: 0.72rem; color: var(--text-muted);">${formula}</span>
         <div class="dice-final-result">🎲 굴림 완료</div>
       </div>
     `;
-  }, 450);
+  }, 400);
 }
 
 function updateLuckMeter() {
   if (diceStats.totalRolls === 0) return;
-  // Compute luck based on crit vs fumble ratio and high rolls
   let ratio = (diceStats.crits + 1) / (diceStats.fumbles + 1);
   let luckPct = Math.min(100, Math.max(10, Math.round(ratio * 50)));
 
@@ -3095,8 +3216,8 @@ function resetDiceStats() {
 
 
 
-// --- CONTEXTUAL SCENARIO & RULEBOOK EXCERPT ENGINE ---
-let currentScenario = BUILTIN_SCENARIOS.coc_manor;
+// --- CONTEXTUAL SCENARIO & RULEBOOK EXCERPT ENGINE (ENHANCED FOR DUNGEON WORLD & GM MOVES) ---
+let currentScenario = BUILTIN_SCENARIOS.dw_wyrm; // Default to Dungeon World
 let currentSceneIndex = 0;
 let customScenarioData = null;
 
@@ -3109,10 +3230,12 @@ function loadScenario(scenarioKey) {
   currentSceneIndex = 0;
   renderSceneNavigation();
   updateContextualExcerpt();
+  renderGMMovesPalette();
 }
 
 function renderSceneNavigation() {
   const container = document.getElementById('scene-pills-container');
+  if (!container) return;
   container.innerHTML = '';
 
   if (!currentScenario || !currentScenario.scenes) return;
@@ -3125,7 +3248,6 @@ function renderSceneNavigation() {
       currentSceneIndex = idx;
       renderSceneNavigation();
       updateContextualExcerpt();
-      // Auto change map preset if specified
       if (sc.map && BUILTIN_SCENARIOS[currentScenario.id]) {
         currentPresetMap = sc.map;
         document.getElementById('map-preset-select').value = sc.map;
@@ -3139,25 +3261,21 @@ function renderSceneNavigation() {
   document.getElementById('current-scene-badge').innerText = curSc ? curSc.name : '진행 중';
 }
 
-// Update the Contextual Excerpt Card
 function updateContextualExcerpt() {
   const scene = currentScenario?.scenes?.[currentSceneIndex];
   if (!scene) return;
 
-  // 1. Read-Aloud Text
   document.getElementById('excerpt-readaloud-text').innerText = scene.readAloud || '배경 지문이 없습니다.';
 
-  // 2. GM Secret Notes
   const isGM = currentUserRole === 'gm';
   const secretBox = document.getElementById('excerpt-gm-secret-box');
   if (isGM) {
     secretBox.style.display = 'block';
     document.getElementById('excerpt-gm-notes').innerText = scene.gmNotes || '특별한 비밀 사항 없음';
   } else {
-    secretBox.style.display = 'none'; // Players don't see GM secrets!
+    secretBox.style.display = 'none';
   }
 
-  // 3. Required Checks with 1-click roll
   const checksList = document.getElementById('excerpt-checks-list');
   checksList.innerHTML = '';
   if (scene.checks && scene.checks.length > 0) {
@@ -3169,15 +3287,14 @@ function updateContextualExcerpt() {
           <strong>${chk.skill}</strong> <span class="badge badge-gold">${chk.target}</span>
           <div style="font-size: 0.74rem; color: var(--text-muted); margin-top: 2px;">${chk.effect}</div>
         </div>
-        <button class="btn-small" onclick="rollScenarioCheck('${chk.skill}', '${chk.target}')">🎲 판정</button>
+        <button class="btn-small btn-gold" onclick="rollScenarioCheck('${chk.skill}', '${chk.target}')">🎲 판정</button>
       `;
       checksList.appendChild(item);
     });
   } else {
-    checksList.innerHTML = '<div style="font-size: 0.75rem; color: var(--text-muted);">요구되는 판정이 없습니다.</div>';
+    checksList.innerHTML = '<div style="font-size: 0.75rem; color: var(--text-muted);">요구 판정 없음</div>';
   }
 
-  // 4. Clues in current scene
   const cluesList = document.getElementById('excerpt-clues-list');
   cluesList.innerHTML = '';
   if (scene.clues && scene.clues.length > 0) {
@@ -3189,27 +3306,64 @@ function updateContextualExcerpt() {
           <div style="font-weight: 600; color: #60a5fa;">📜 ${clue.title}</div>
           <div style="font-size: 0.74rem; color: #cbd5e1; margin-top: 2px;">${clue.text}</div>
         </div>
-        <button class="btn-small btn-gold" onclick="revealClueToPlayers('${clue.title}', '${clue.text.replace(/'/g, "\\'")}')">
+        <button class="btn-small btn-gold" onclick="revealClueToPlayers('${clue.title}', '${clue.text.replace(/'/g, "\\\\'")}')">
           📢 공개
         </button>
       `;
       cluesList.appendChild(item);
     });
   } else {
-    cluesList.innerHTML = '<div style="font-size: 0.75rem; color: var(--text-muted);">발견할 단서가 없습니다.</div>';
+    cluesList.innerHTML = '<div style="font-size: 0.75rem; color: var(--text-muted);">발견할 단서 없음</div>';
   }
 }
 
-// 1-Click Roll from Excerpt
+// Render Dungeon World GM Moves Cheat Palette
+function renderGMMovesPalette() {
+  const container = document.getElementById('dw-gm-moves-container');
+  if (!container) return;
+  container.innerHTML = '';
+
+  DW_GM_MOVES.forEach((gmMv, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'btn-small';
+    btn.style.textAlign = 'left';
+    btn.style.padding = '4px 6px';
+    btn.innerHTML = `<span style="color: #ef4444;">⚡</span> ${gmMv}`;
+    btn.onclick = () => {
+      appendChatMessage({
+        id: 'gm_mv_' + Date.now(),
+        type: 'chat',
+        sender: '👑 GM 액션 발동',
+        role: 'gm',
+        time: getCurrentTimeString(),
+        text: `⚡ **[GM 액션]** 마스터가 **[${gmMv}]**을(를) 선언했습니다!`
+      });
+      broadcastRoomEvent({
+        type: 'chat_msg',
+        data: {
+          id: 'gm_mv_' + Date.now(),
+          type: 'chat',
+          sender: '👑 GM 액션 발동',
+          role: 'gm',
+          time: getCurrentTimeString(),
+          text: `⚡ **[GM 액션]** 마스터가 **[${gmMv}]**을(를) 선언했습니다!`
+        }
+      });
+    };
+    container.appendChild(btn);
+  });
+}
+
 function rollScenarioCheck(skillName, target) {
-  let formula = '1d20';
-  if (currentScenario.system === 'coc7e' || skillName.includes('SAN') || skillName.includes('관찰력') || skillName.includes('은밀')) {
-    formula = '1d100';
+  if (currentScenario.system === 'dungeonworld' || target.includes('2d6')) {
+    rollDiceFormula('2d6', `${skillName} [${target}]`, { isDWMove: true });
+  } else if (currentScenario.system === 'coc7e' || skillName.includes('SAN') || skillName.includes('관찰력')) {
+    rollDiceFormula('1d100', `${skillName} [${target}]`);
+  } else {
+    rollDiceFormula('1d20', `${skillName} [${target}]`);
   }
-  rollDiceFormula(formula, `${skillName} [${target}]`);
 }
 
-// 1-Click Broadcast Narration to Player Chat
 function broadcastNarrationToChat() {
   const scene = currentScenario?.scenes?.[currentSceneIndex];
   if (!scene || !scene.readAloud) return;
@@ -3220,7 +3374,7 @@ function broadcastNarrationToChat() {
     sender: 'GM 시나리오 낭독',
     role: 'gm',
     time: getCurrentTimeString(),
-    text: `📜 [${scene.name}]\n\n"${scene.readAloud}"`
+    text: `📜 [${scene.name}]\\n\\n"${scene.readAloud}"`
   };
 
   appendChatMessage(msgObj);
@@ -3228,7 +3382,6 @@ function broadcastNarrationToChat() {
   playSynthSound('clue');
 }
 
-// Reveal Clue to Clue Board and Chat
 function revealClueToPlayers(title, text) {
   addClueToBoard(title, text);
   const msgObj = {
@@ -3237,17 +3390,15 @@ function revealClueToPlayers(title, text) {
     sender: '시스템 [단서 발견]',
     role: 'gm',
     time: getCurrentTimeString(),
-    text: `🔍 새로운 단서가 발견되어 단서 보드에 등록되었습니다!\n[${title}]: "${text}"`
+    text: `🔍 새로운 단서가 발견되어 단서 보드에 등록되었습니다!\\n[${title}]: "${text}"`
   };
   appendChatMessage(msgObj);
   broadcastRoomEvent({ type: 'chat_msg', data: msgObj });
   playSynthSound('clue');
 }
 
-// Custom Scenario File Uploader & Intelligent Parser
 function parseUploadedScenarioFile(fileContent, fileName) {
   try {
-    // If it's a JSON file
     if (fileContent.trim().startsWith('{')) {
       const parsed = JSON.parse(fileContent);
       if (parsed.scenes && parsed.scenes.length > 0) {
@@ -3256,13 +3407,9 @@ function parseUploadedScenarioFile(fileContent, fileName) {
         return;
       }
     }
-  } catch (e) {
-    // Fall back to text / markdown parsing
-  }
+  } catch (e) {}
 
-  // Intelligent TXT / Markdown Parser
-  // Detects # or [씬/장], > or [낭독], [판정], [비밀]
-  const lines = fileContent.split('\n');
+  const lines = fileContent.split('\\n');
   const scenes = [];
   let currentSc = null;
 
@@ -3270,12 +3417,11 @@ function parseUploadedScenarioFile(fileContent, fileName) {
     const trimmed = line.trim();
     if (!trimmed) return;
 
-    // Detect Chapter / Scene Header (e.g. # 1장, ## 씬 1, [구역 1])
     if (trimmed.startsWith('#') || trimmed.startsWith('[씬') || trimmed.startsWith('[구역') || trimmed.startsWith('[장')) {
       if (currentSc) scenes.push(currentSc);
       currentSc = {
         id: 'sc_' + (scenes.length + 1),
-        name: trimmed.replace(/^[#\[\]\s]+/, ''),
+        name: trimmed.replace(/^[#\\[\\]\\s]+/, ''),
         readAloud: '',
         gmNotes: '',
         checks: [],
@@ -3295,59 +3441,37 @@ function parseUploadedScenarioFile(fileContent, fileName) {
       };
     }
 
-    // Detect Read-Aloud box (e.g. > ... or [낭독] ...)
     if (trimmed.startsWith('>') || trimmed.startsWith('[낭독]')) {
-      const clean = trimmed.replace(/^[>\[낭독\]\s]+/, '');
+      const clean = trimmed.replace(/^[>\\[낭독\\]\\s]+/, '');
       currentSc.readAloud += (currentSc.readAloud ? ' ' : '') + clean;
-    }
-    // Detect GM Secret (e.g. [비밀], [GM], (비밀))
-    else if (trimmed.startsWith('[비밀]') || trimmed.startsWith('[GM]') || trimmed.startsWith('(비밀)')) {
-      const clean = trimmed.replace(/^[(\[GM비밀)\]\s]+/, '');
+    } else if (trimmed.startsWith('[비밀]') || trimmed.startsWith('[GM]') || trimmed.startsWith('(비밀)')) {
+      const clean = trimmed.replace(/^[(\\[GM비밀)\\]\\s]+/, '');
       currentSc.gmNotes += (currentSc.gmNotes ? ' ' : '') + clean;
-    }
-    // Detect Check (e.g. [판정], [DC], [관찰력])
-    else if (trimmed.includes('판정') || trimmed.includes('DC') || trimmed.includes('체크')) {
+    } else if (trimmed.includes('판정') || trimmed.includes('DC') || trimmed.includes('체크') || trimmed.includes('2d6')) {
       currentSc.checks.push({
-        skill: trimmed.split(':')[0] || '능력 판정',
-        target: '난이도 판정',
+        skill: trimmed.split(':')[0] || '판정',
+        target: '난이도',
         effect: trimmed
       });
-    }
-    // Detect Clues
-    else if (trimmed.includes('단서:') || trimmed.includes('아이템:')) {
+    } else if (trimmed.includes('단서:') || trimmed.includes('아이템:')) {
       currentSc.clues.push({
         title: trimmed.split(':')[0] || '단서',
         text: trimmed.split(':')[1] || trimmed,
         found: false
       });
-    }
-    else {
-      // General narrative text appended to readAloud if empty
-      if (!currentSc.readAloud) {
-        currentSc.readAloud = trimmed;
-      }
+    } else {
+      if (!currentSc.readAloud) currentSc.readAloud = trimmed;
     }
   });
 
   if (currentSc) scenes.push(currentSc);
 
-  if (scenes.length === 0) {
-    scenes.push({
-      id: 'sc_1',
-      name: '첨부 시나리오 본문',
-      readAloud: fileContent.substring(0, 300) + '...',
-      gmNotes: '전체 본문이 파싱되었습니다.',
-      checks: [{ skill: '탐색 판정', target: '보통', effect: '주변 조사' }],
-      clues: []
-    });
-  }
-
   customScenarioData = {
     id: 'custom',
-    title: fileName.replace(/\.[^/.]+$/, ''),
+    title: fileName.replace(/\\.[^/.]+$/, ''),
     genre: 'Custom Scenario',
     system: 'custom',
-    description: `사용자가 첨부한 시나리오 (${fileName})`,
+    description: `사용자 첨부 시나리오 (${fileName})`,
     scenes: scenes
   };
 
@@ -3359,19 +3483,17 @@ function finishCustomScenarioLoad(title) {
   sel.value = 'custom';
   loadScenario('custom');
 
-  const msgObj = {
+  appendChatMessage({
     id: 'sys_' + Date.now(),
     type: 'chat',
     sender: '시스템',
     role: 'gm',
     time: getCurrentTimeString(),
-    text: `📁 사용자 시나리오 [${title}]이 성공적으로 파싱되어 탑재되었습니다! (${customScenarioData.scenes.length}개 씬 분할 완료)`
-  };
-  appendChatMessage(msgObj);
+    text: `📁 사용자 시나리오 [${title}] 탑재 완료! (${customScenarioData.scenes.length}개 씬 분할)`
+  });
   playSynthSound('fanfare');
 }
 
-// Smart Search across Scenario & Rulebook DB
 function searchRulebookAndScenario(query) {
   const q = query.trim().toLowerCase();
   const resultsContainer = document.getElementById('rule-search-results');
@@ -3380,7 +3502,6 @@ function searchRulebookAndScenario(query) {
 
   let matches = [];
 
-  // Search Rulebook DB
   RULEBOOK_DB.forEach(rule => {
     if (rule.title.toLowerCase().includes(q) || rule.content.toLowerCase().includes(q) || rule.category.toLowerCase().includes(q)) {
       matches.push({
@@ -3391,7 +3512,6 @@ function searchRulebookAndScenario(query) {
     }
   });
 
-  // Search current Scenario
   currentScenario?.scenes?.forEach(sc => {
     if (sc.name.toLowerCase().includes(q) || sc.readAloud?.toLowerCase().includes(q) || sc.gmNotes?.toLowerCase().includes(q)) {
       matches.push({
@@ -3436,27 +3556,24 @@ function highlightMatch(text, term) {
 // --- MULTIPLAYER ROOM & TRIPLE-ENGINE SYNC (WebRTC P2P + WebSocket + BroadcastChannel) ---
 let currentRoomCode = 'DRAGON-2026';
 let currentRoomPassword = '1234';
-let currentUserRole = 'gm'; // 'gm', 'p1', 'p2', 'p3', 'spectator'
+let currentUserRole = 'gm';
 let currentUserName = '마스터 GM';
 
 let broadcastChannel = null;
 let wsClient = null;
 let p2pPeer = null;
-let hostConn = null; // For clients connecting to host
-let peerConnections = new Map(); // For host managing clients: peerId -> conn
+let hostConn = null;
+let peerConnections = new Map();
 let isP2PHost = false;
 
-// Initialize Networking: Automatic best-engine selection
 function initNetworking() {
   cleanupNetworking();
 
-  // 1. Local Tab Sync via BroadcastChannel (Always on for local multi-tab zero latency)
   try {
     broadcastChannel = new BroadcastChannel('trpg_vtt_room_' + currentRoomCode);
     broadcastChannel.onmessage = handleRemoteEvent;
   } catch (e) {}
 
-  // 2. Cross-Tab storage fallback
   window.addEventListener('storage', (e) => {
     if (e.key === 'trpg_event_' + currentRoomCode && e.newValue) {
       try {
@@ -3466,9 +3583,7 @@ function initNetworking() {
     }
   });
 
-  // 3. Try Dedicated WebSocket server if running via node server.js
   if (window.location.protocol === 'http:' || window.location.protocol === 'https:') {
-    // Check if host has custom port or same host
     const wsProto = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
     const wsUrl = `${wsProto}//${window.location.host}`;
     try {
@@ -3498,18 +3613,15 @@ function initNetworking() {
         } catch (err) {}
       };
       wsClient.onerror = () => {
-        // Fall back to WebRTC P2P
         initWebRTCP2P();
       };
     } catch (e) {
       initWebRTCP2P();
     }
   } else {
-    // If opened as file://, also try WebRTC P2P if online
     initWebRTCP2P();
   }
 
-  // Announce local presence
   broadcastRoomEvent({
     type: 'presence',
     user: currentUserName,
@@ -3535,10 +3647,9 @@ function cleanupNetworking() {
   isP2PHost = false;
 }
 
-// WebRTC Serverless P2P using PeerJS Cloud (Free, Zero Server Maintenance)
 function initWebRTCP2P() {
   if (typeof Peer === 'undefined') {
-    console.log('[P2P] PeerJS not loaded, operating in offline BroadcastChannel mode');
+    console.log('[P2P] PeerJS not loaded, operating in local BroadcastChannel mode');
     return;
   }
 
@@ -3546,7 +3657,6 @@ function initWebRTCP2P() {
   const hostPeerId = `mythos-vtt-${cleanRoom}`;
 
   if (currentUserRole === 'gm') {
-    // GM acts as WebRTC Host
     try {
       p2pPeer = new Peer(hostPeerId, {
         debug: 1,
@@ -3566,7 +3676,6 @@ function initWebRTCP2P() {
 
       p2pPeer.on('connection', (conn) => {
         conn.on('open', () => {
-          // Verify Password
           const meta = conn.metadata || {};
           if (currentRoomPassword && meta.password !== currentRoomPassword) {
             conn.send({ type: 'error', message: '비밀번호가 올바르지 않습니다.' });
@@ -3575,10 +3684,8 @@ function initWebRTCP2P() {
           }
 
           peerConnections.set(conn.peer, conn);
-          console.log(`[P2P Host] Player connected: ${meta.userName || conn.peer} (Total: ${peerConnections.size + 1})`);
           updateOnlineBadge(`🟢 ${peerConnections.size + 1}명 온라인 (P2P)`);
 
-          // Send current game state to newly joined player
           conn.send({
             type: 'p2p_welcome',
             roomCode: currentRoomCode,
@@ -3587,10 +3694,10 @@ function initWebRTCP2P() {
             currentRound: currentRound,
             currentTurnIndex: currentTurnIndex,
             clueBoard: clueBoard,
-            notes: document.getElementById('session-notes-area')?.value || ''
+            playerMovementLocked: playerMovementLocked,
+            weatherType: weatherType
           });
 
-          // Broadcast player presence to all
           broadcastRoomEvent({
             type: 'chat_msg',
             data: {
@@ -3604,13 +3711,11 @@ function initWebRTCP2P() {
         });
 
         conn.on('data', (data) => {
-          // Re-broadcast from client to other clients
           peerConnections.forEach((otherConn, pid) => {
             if (pid !== conn.peer && otherConn.open) {
               otherConn.send(data);
             }
           });
-          // Process locally on host
           handleRemoteEvent({ data: data });
         });
 
@@ -3622,8 +3727,6 @@ function initWebRTCP2P() {
 
       p2pPeer.on('error', (err) => {
         if (err.type === 'unavailable-id') {
-          // Another GM already hosts this room; join as client
-          console.log('[P2P] Host ID already taken, joining as secondary client');
           connectAsP2PClient(hostPeerId);
         } else {
           console.warn('[P2P Error]', err);
@@ -3633,7 +3736,6 @@ function initWebRTCP2P() {
       console.warn('[P2P] Host init error:', e);
     }
   } else {
-    // Non-GM connects as client to Host
     connectAsP2PClient(hostPeerId);
   }
 }
@@ -3651,7 +3753,6 @@ function connectAsP2PClient(hostPeerId) {
     });
 
     p2pPeer.on('open', (myId) => {
-      console.log('[P2P Client] Opened client peer ID:', myId);
       updateOnlineBadge(`🟡 호스트 연결 시도 중...`);
 
       hostConn = p2pPeer.connect(hostPeerId, {
@@ -3663,14 +3764,13 @@ function connectAsP2PClient(hostPeerId) {
       });
 
       hostConn.on('open', () => {
-        console.log('[P2P Client] Connected to host!');
         updateOnlineBadge(`🟢 P2P 연결 완료`);
         appendChatMessage({
           id: 'sys_' + Date.now(),
           type: 'chat',
           sender: '시스템 [P2P]',
           time: getCurrentTimeString(),
-          text: `🔗 호스트(${currentRoomCode})에 WebRTC P2P로 직접 연결되었습니다!`
+          text: `🔗 호스트(${currentRoomCode})에 WebRTC P2P로 연결되었습니다!`
         });
       });
 
@@ -3681,6 +3781,8 @@ function connectAsP2PClient(hostPeerId) {
           if (data.currentRound) currentRound = data.currentRound;
           if (data.currentTurnIndex !== undefined) currentTurnIndex = data.currentTurnIndex;
           if (data.clueBoard) clueBoard = data.clueBoard;
+          if (data.playerMovementLocked !== undefined) playerMovementLocked = data.playerMovementLocked;
+          if (data.weatherType) setWeather(data.weatherType);
           renderCombatantsList();
           renderClueBoard();
           render();
@@ -3715,14 +3817,12 @@ function broadcastRoomEvent(payload) {
   payload.senderRole = currentUserRole;
   payload.timestamp = Date.now();
 
-  // 1. WebSocket Server if active
   if (wsClient && wsClient.readyState === WebSocket.OPEN) {
     try {
       wsClient.send(JSON.stringify({ action: 'broadcast', payload: payload }));
     } catch (e) {}
   }
 
-  // 2. WebRTC P2P: If Host, broadcast to all peers; if Client, send to Host
   if (isP2PHost) {
     peerConnections.forEach(conn => {
       if (conn.open) {
@@ -3735,14 +3835,12 @@ function broadcastRoomEvent(payload) {
     } catch (e) {}
   }
 
-  // 3. Local BroadcastChannel for same-machine tabs
   if (broadcastChannel) {
     try {
       broadcastChannel.postMessage(payload);
     } catch (e) {}
   }
 
-  // 4. LocalStorage Event trigger
   try {
     localStorage.setItem('trpg_event_' + currentRoomCode, JSON.stringify(payload));
   } catch (e) {}
@@ -3752,7 +3850,6 @@ function handleRemoteEvent(e) {
   const data = e.data;
   if (!data) return;
 
-  // Ignore self-broadcasts
   if (data.senderName === currentUserName && data.type !== 'presence') return;
 
   switch (data.type) {
@@ -3809,6 +3906,10 @@ function handleRemoteEvent(e) {
       appendChatMessage(msgObj);
       break;
 
+    case 'speech_bubble':
+      showSpeechBubble(data.tokenId, data.text);
+      break;
+
     case 'ping':
       pings.push({
         x: data.x,
@@ -3830,22 +3931,40 @@ function handleRemoteEvent(e) {
       render();
       break;
 
+    case 'lock_movement':
+      playerMovementLocked = data.locked;
+      break;
+
+    case 'cutscene':
+      showCutsceneOverlay(data.text);
+      break;
+
+    case 'sync_weather':
+      weatherType = data.weather;
+      initWeatherParticles();
+      render();
+      break;
+
+    case 'soundboard':
+      playSynthSound(data.sfx);
+      break;
+
     case 'x_card':
       playSynthSound('alarm');
-      alert(`🛑 [X-CARD 경보] ${data.user} 님이 세션 일시정지를 요청했습니다!\n불편하거나 민감한 콘텐츠가 발생하였으니 잠시 멈추고 대화를 나눠주세요.`);
+      alert(`🛑 [X-CARD 경보] ${data.user} 님이 세션 일시정지를 요청했습니다!\\n잠시 멈추고 대화를 나눠주세요.`);
       break;
 
     case 'presence':
-      // Flash presence indicator
       break;
   }
 }
 
-// User / Role Switcher
 function switchUserRole(newRole) {
   currentUserRole = newRole;
   if (newRole === 'gm') {
     currentUserName = '마스터 GM';
+  } else if (newRole === 'p_dw') {
+    currentUserName = '브란 (바드)';
   } else if (newRole === 'p1') {
     currentUserName = '아서 (전사)';
   } else if (newRole === 'p2') {
@@ -3856,41 +3975,57 @@ function switchUserRole(newRole) {
     currentUserName = '관전자';
   }
 
-  // Update Character Sheet View to match selected role
-  if (newRole === 'p1') {
-    loadCharacterProfile('p1');
-  } else if (newRole === 'p2') {
-    loadCharacterProfile('p2');
-  } else if (newRole === 'p3') {
-    loadCharacterProfile('p3');
+  loadCharacterProfile(newRole);
+
+  // Update GM God menu visibility
+  const gmMenu = document.getElementById('gm-god-mode-panel');
+  if (gmMenu) {
+    gmMenu.style.display = (currentUserRole === 'gm') ? 'block' : 'none';
   }
 
-  // Re-initialize P2P if role switched (GM hosts, players connect)
   initNetworking();
-
   updateContextualExcerpt();
   render();
 
-  const msgObj = {
+  appendChatMessage({
     id: 'sys_' + Date.now(),
     type: 'chat',
     sender: '시스템',
     role: 'gm',
     time: getCurrentTimeString(),
     text: `🎭 역할이 [${currentUserName}] (으)로 변경되었습니다.`
-  };
-  appendChatMessage(msgObj);
+  });
 }
 
 
 
-// --- MAIN APPLICATION CONTROLLER & SYNTHESIZER ---
+// --- MAIN APPLICATION CONTROLLER, GM GOD MODE & SYNTHESIZER ---
 let audioCtx = null;
 let bgmOscillators = [];
 let isBgmPlaying = false;
 
-// Characters DB
+// Extended Characters Database (Now includes Dungeon World)
 let charactersDB = {
+  p_dw: {
+    id: 'p_dw',
+    name: '브란 (음유시인)',
+    system: 'dungeonworld',
+    sub: '레벨 1 바드 / 방랑자',
+    avatar: '🪕',
+    hp: 20, maxHp: 20,
+    armor: 1,
+    damageDie: 'd6',
+    level: 1,
+    xp: 0,
+    alignment: '선 (선행을 베풀고 위험에 처한 자를 돕기)',
+    stats: { 'STR': 12, 'DEX': 15, 'CON': 13, 'INT': 14, 'WIS': 9, 'CHA': 17 },
+    bonds: [
+      { target: '아서', text: '나는 아서가 전장에서 너무 무모하다고 생각하여 늘 주의를 기울인다.', resolved: false },
+      { target: '엘레나', text: '엘레나에게 고대 제국의 잃어버린 서사시를 들려주기로 약속했다.', resolved: false }
+    ],
+    customStats: {},
+    conditions: []
+  },
   p1: {
     id: 'p1',
     name: '아서 펜드래건',
@@ -3904,9 +4039,9 @@ let charactersDB = {
     skills: [
       { name: '운동 (Athletics)', stat: 'STR', mod: '+5' },
       { name: '위협 (Intimidation)', stat: 'CHA', mod: '+3' },
-      { name: '인식 (Perception)', stat: 'WIS', mod: '+3' },
-      { name: '생존 (Survival)', stat: 'WIS', mod: '+3' }
+      { name: '인식 (Perception)', stat: 'WIS', mod: '+3' }
     ],
+    customStats: {},
     conditions: []
   },
   p2: {
@@ -3921,9 +4056,9 @@ let charactersDB = {
     stats: { 'STR': 8, 'DEX': 14, 'CON': 12, 'INT': 17, 'WIS': 13, 'CHA': 10 },
     skills: [
       { name: '비전 (Arcana)', stat: 'INT', mod: '+5' },
-      { name: '역사 (History)', stat: 'INT', mod: '+5' },
-      { name: '조사 (Investigation)', stat: 'INT', mod: '+5' }
+      { name: '역사 (History)', stat: 'INT', mod: '+5' }
     ],
+    customStats: {},
     conditions: []
   },
   p3: {
@@ -3938,40 +4073,36 @@ let charactersDB = {
     stats: { 'STR': 60, 'CON': 65, 'SIZ': 70, 'DEX': 50, 'APP': 65, 'INT': 75, 'POW': 70, 'EDU': 80 },
     skills: [
       { name: '관찰력 (Spot Hidden)', stat: 'INT', val: '65%' },
-      { name: '듣기 (Listen)', stat: 'INT', val: '50%' },
       { name: '심리학 (Psychology)', stat: 'POW', val: '60%' },
-      { name: '의학 (First Aid)', stat: 'EDU', val: '75%' },
-      { name: '권총 사격 (Handgun)', stat: 'DEX', val: '55%' }
+      { name: '의학 (First Aid)', stat: 'EDU', val: '75%' }
     ],
+    customStats: {},
     conditions: []
   }
 };
 
-let currentCharacter = charactersDB.p1;
+let currentCharacter = charactersDB.p_dw; // Default to Dungeon World
 
 // Combat & Initiative
 let combatants = [
   { id: 't_p1', name: '아서 (전사)', init: 18, hp: 28, maxHp: 28, avatar: '⚔️' },
   { id: 't_boss', name: '흑마법사 말로크', init: 15, hp: 45, maxHp: 45, avatar: '🧙‍♂️' },
-  { id: 't_p2', name: '엘레나 (마법사)', init: 14, hp: 18, maxHp: 18, avatar: '🔮' },
-  { id: 't_m1', name: '고블린 정찰병', init: 11, hp: 7, maxHp: 7, avatar: '👺' },
-  { id: 't_p3', name: '존 (사립탐정)', init: 8, hp: 22, maxHp: 22, avatar: '🕵️' }
+  { id: 't_dw', name: '브란 (바드)', init: 14, hp: 20, maxHp: 20, avatar: '🪕' },
+  { id: 't_p2', name: '엘레나 (마법사)', init: 12, hp: 18, maxHp: 18, avatar: '🔮' },
+  { id: 't_m1', name: '고블린 정찰병', init: 11, hp: 7, maxHp: 7, avatar: '👺' }
 ];
 let currentTurnIndex = 0;
 let currentRound = 1;
 
-// Clue Handouts
 let clueBoard = [
-  { id: 'clue_1', title: '고대 저택의 평면도', text: '1890년대 양식의 저택 청사진. 서재 뒤편에 지하 납골당으로 이어지는 숨은 통로가 표기되어 있습니다.', revealed: true },
+  { id: 'clue_1', title: '고대 저택의 평면도', text: '1890년대 저택 청사진. 서재 뒤편에 비밀 지하 납골당으로 이어지는 숨은 통로 표기.', revealed: true },
   { id: 'clue_2', title: '의식용 황동 단검', text: '기이한 심연의 룬 문자가 새겨진 단검. 핏자국이 희미하게 남아있습니다.', revealed: false }
 ];
 
-// World Clock & Timer
 let inGameHours = 14;
-let inGameMinutes = 0;
 let sessionSeconds = 0;
 
-// --- WEB AUDIO PROCEDURAL SYNTHESIZER ---
+// Web Audio Context
 function getAudioContext() {
   if (!audioCtx) {
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -3982,13 +4113,13 @@ function getAudioContext() {
   return audioCtx;
 }
 
+// Procedural Sound Effects & Soundboard
 function playSynthSound(type) {
   try {
     const ctx = getAudioContext();
     const now = ctx.currentTime;
 
     if (type === 'dice') {
-      // Dice rattle: multiple short clicks + low rumble
       for (let i = 0; i < 4; i++) {
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
@@ -4002,7 +4133,6 @@ function playSynthSound(type) {
         osc.stop(now + i * 0.08 + 0.08);
       }
     } else if (type === 'sword') {
-      // Metallic clash
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       osc.type = 'sawtooth';
@@ -4015,7 +4145,6 @@ function playSynthSound(type) {
       osc.start(now);
       osc.stop(now + 0.25);
     } else if (type === 'fanfare') {
-      // Critical triumph major triad chord
       [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
@@ -4028,21 +4157,33 @@ function playSynthSound(type) {
         osc.start(now + idx * 0.06);
         osc.stop(now + idx * 0.06 + 0.45);
       });
-    } else if (type === 'clue') {
-      // High mystery chime
+    } else if (type === 'thunder') {
+      // Deep thunder rumble
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(880, now);
-      osc.frequency.exponentialRampToValueAtTime(1760, now + 0.35);
-      gain.gain.setValueAtTime(0.18, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(60, now);
+      osc.frequency.exponentialRampToValueAtTime(30, now + 1.2);
+      gain.gain.setValueAtTime(0.4, now);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 1.2);
       osc.connect(gain);
       gain.connect(ctx.destination);
       osc.start(now);
-      osc.stop(now + 0.36);
+      osc.stop(now + 1.2);
+    } else if (type === 'door') {
+      // Creaky door sound
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(300, now);
+      osc.frequency.linearRampToValueAtTime(550, now + 0.4);
+      gain.gain.setValueAtTime(0.2, now);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.4);
     } else if (type === 'ping') {
-      // Sonar beep
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       osc.type = 'sine';
@@ -4054,7 +4195,6 @@ function playSynthSound(type) {
       osc.start(now);
       osc.stop(now + 0.3);
     } else if (type === 'alarm') {
-      // Low buzzer
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       osc.type = 'square';
@@ -4067,11 +4207,11 @@ function playSynthSound(type) {
       osc.stop(now + 0.5);
     }
   } catch (e) {
-    console.warn('Audio play error:', e);
+    console.warn('Audio error:', e);
   }
 }
 
-// Ambient BGM Synthesizer (Procedural Dark Fantasy Drone)
+// BGM Drone
 function toggleAmbientBGM() {
   const ctx = getAudioContext();
   const label = document.getElementById('bgm-label');
@@ -4083,25 +4223,22 @@ function toggleAmbientBGM() {
     });
     bgmOscillators = [];
     isBgmPlaying = false;
-    label.innerText = 'BGM: 꺼짐';
+    label.innerText = 'BGM';
     icon.innerText = '🎵';
   } else {
     try {
-      // Build an atmospheric 3-oscillator drone
-      const freqs = [65.41, 98.00, 130.81]; // C2, G2, C3
+      const freqs = [65.41, 98.00, 130.81];
       bgmOscillators = [];
-
       freqs.forEach(freq => {
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = 'sine';
         osc.frequency.setValueAtTime(freq, ctx.currentTime);
-        gain.gain.setValueAtTime(0.04, ctx.currentTime);
+        gain.gain.setValueAtTime(0.035, ctx.currentTime);
 
-        // Lowpass filter for warm dark atmosphere
         const filter = ctx.createBiquadFilter();
         filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(350, ctx.currentTime);
+        filter.frequency.setValueAtTime(320, ctx.currentTime);
 
         osc.connect(filter);
         filter.connect(gain);
@@ -4111,7 +4248,7 @@ function toggleAmbientBGM() {
       });
 
       isBgmPlaying = true;
-      label.innerText = 'BGM: 켜짐';
+      label.innerText = 'BGM 켜짐';
       icon.innerText = '🎶';
     } catch (e) {
       console.warn('BGM error:', e);
@@ -4119,7 +4256,7 @@ function toggleAmbientBGM() {
   }
 }
 
-// --- CHARACTER SHEET RENDERING ---
+// Character Sheet Renderer
 function loadCharacterProfile(charKey) {
   if (charactersDB[charKey]) {
     currentCharacter = charactersDB[charKey];
@@ -4138,7 +4275,21 @@ function renderCharacterSheet() {
   const hpPct = Math.max(0, Math.min(100, (currentCharacter.hp / currentCharacter.maxHp) * 100));
   document.getElementById('hp-bar-fill').style.width = hpPct + '%';
 
-  // SAN (for CoC)
+  // Dungeon World Elements (XP, Damage Die, Armor, Basic Moves)
+  const dwArea = document.getElementById('dw-specific-sheet-area');
+  if (currentCharacter.system === 'dungeonworld') {
+    dwArea.style.display = 'flex';
+    document.getElementById('dw-armor-val').innerText = currentCharacter.armor || 0;
+    document.getElementById('dw-damage-die').innerText = currentCharacter.damageDie || 'd6';
+    document.getElementById('dw-xp-display').innerText = `${currentCharacter.xp || 0} / ${(currentCharacter.level || 1) + 7}`;
+
+    renderDWBasicMoves();
+    renderDWBonds();
+  } else {
+    dwArea.style.display = 'none';
+  }
+
+  // CoC SAN container
   const sanContainer = document.getElementById('san-resource-container');
   if (currentCharacter.system === 'coc7e') {
     sanContainer.style.display = 'flex';
@@ -4156,27 +4307,49 @@ function renderCharacterSheet() {
     const box = document.createElement('div');
     box.className = 'stat-box';
     let modStr = '';
-    if (currentCharacter.system === 'dnd5e') {
+
+    if (currentCharacter.system === 'dnd5e' || currentCharacter.system === 'dungeonworld') {
       const mod = Math.floor((val - 10) / 2);
       modStr = mod >= 0 ? `+${mod}` : `${mod}`;
     } else {
       modStr = `1/2: ${Math.floor(val/2)} | 1/5: ${Math.floor(val/5)}`;
     }
+
     box.innerHTML = `
       <div class="stat-name">${st}</div>
       <div class="stat-val">${val}</div>
       <div class="stat-mod">${modStr}</div>
     `;
+
     box.onclick = () => {
-      if (currentCharacter.system === 'dnd5e') {
+      if (currentCharacter.system === 'dungeonworld') {
         const mod = Math.floor((val - 10) / 2);
-        const formula = `1d20${mod >= 0 ? '+' + mod : mod}`;
-        rollDiceFormula(formula, `${currentCharacter.name} - ${st} 판정`);
+        rollDiceFormula(`2d6${mod >= 0 ? '+' + mod : mod}`, `${currentCharacter.name} - ${st} 수정치 판정`);
+      } else if (currentCharacter.system === 'dnd5e') {
+        const mod = Math.floor((val - 10) / 2);
+        rollDiceFormula(`1d20${mod >= 0 ? '+' + mod : mod}`, `${currentCharacter.name} - ${st} 판정`);
       } else {
-        rollDiceFormula('1d100', `${currentCharacter.name} - ${st} 체크 [목표: ${val}]`);
+        rollDiceFormula('1d100', `${currentCharacter.name} - ${st} 판정 [목표: ${val}]`);
       }
     };
     statsContainer.appendChild(box);
+  }
+
+  // Render Custom Stats (Added by user / GM)
+  if (currentCharacter.customStats) {
+    for (let [cName, cVal] of Object.entries(currentCharacter.customStats)) {
+      const box = document.createElement('div');
+      box.className = 'stat-box';
+      box.innerHTML = `
+        <div class="stat-name" style="color: #60a5fa;">${cName}</div>
+        <div class="stat-val">${cVal}</div>
+        <div class="stat-mod">커스텀</div>
+      `;
+      box.onclick = () => {
+        rollDiceFormula('1d20+' + (cVal || 0), `${currentCharacter.name} - ${cName}`);
+      };
+      statsContainer.appendChild(box);
+    }
   }
 
   // Skills List
@@ -4192,8 +4365,7 @@ function renderCharacterSheet() {
       `;
       row.onclick = () => {
         if (currentCharacter.system === 'dnd5e') {
-          const mod = sk.mod || '+0';
-          rollDiceFormula(`1d20${mod}`, `${sk.name} 판정`);
+          rollDiceFormula(`1d20${sk.mod || '+0'}`, `${sk.name} 판정`);
         } else {
           rollDiceFormula('1d100', `${sk.name} 판정 [목표: ${sk.val}]`);
         }
@@ -4224,32 +4396,201 @@ function renderCharacterSheet() {
   });
 }
 
+function renderDWBasicMoves() {
+  const container = document.getElementById('dw-moves-list');
+  if (!container) return;
+  container.innerHTML = '';
+
+  DW_BASIC_MOVES.forEach(mv => {
+    const btn = document.createElement('button');
+    btn.className = 'btn-small';
+    btn.style.textAlign = 'left';
+    btn.style.padding = '6px 8px';
+    btn.innerHTML = `
+      <div style="font-weight: 700; color: var(--text-gold);">⚔️ ${mv.name} [${mv.statName}]</div>
+      <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;">${mv.desc}</div>
+    `;
+    btn.onclick = () => rollDWMoves(mv.id);
+    container.appendChild(btn);
+  });
+}
+
+function renderDWBonds() {
+  const container = document.getElementById('dw-bonds-list');
+  if (!container) return;
+  container.innerHTML = '';
+
+  if (!currentCharacter.bonds) return;
+
+  currentCharacter.bonds.forEach((b, idx) => {
+    const item = document.createElement('div');
+    item.className = 'check-item';
+    item.innerHTML = `
+      <div style="flex: 1; font-size: 0.78rem;">
+        <strong>[인연: ${b.target}]</strong> ${b.text}
+      </div>
+      <button class="btn-small ${b.resolved ? 'btn-gold' : ''}" onclick="resolveBond(${idx})">
+        ${b.resolved ? '해결됨(+1XP)' : '해결'}
+      </button>
+    `;
+    container.appendChild(item);
+  });
+}
+
+function resolveBond(idx) {
+  const b = currentCharacter.bonds[idx];
+  if (!b) return;
+  if (!b.resolved) {
+    b.resolved = true;
+    currentCharacter.xp = (currentCharacter.xp || 0) + 1;
+    renderCharacterSheet();
+    appendChatMessage({
+      id: 'bond_' + Date.now(),
+      type: 'chat',
+      sender: '시스템 [인연 해결]',
+      time: getCurrentTimeString(),
+      text: `🤝 [${currentCharacter.name}] 님의 인연(${b.target})이 해결되었습니다! **+1 XP**를 획득합니다.`
+    });
+  }
+}
+
 function modifyHP(delta) {
   currentCharacter.hp = Math.max(0, Math.min(currentCharacter.maxHp, currentCharacter.hp + delta));
   renderCharacterSheet();
 
-  // Also update corresponding map token if exists
   const tok = tokens.find(t => t.name.includes(currentCharacter.name.split(' ')[0]));
   if (tok) {
     tok.hp = currentCharacter.hp;
+    spawnCombatNumber(tok.x, tok.y - 25, (delta > 0 ? '+' : '') + delta, delta > 0 ? '#22c55e' : '#ef4444');
     render();
     broadcastRoomEvent({ type: 'sync_tokens', data: tokens });
   }
 }
 
-// --- MONSTER COMPENDIUM SPAWN ---
+// --- GM GOD MODE PALETTE & ULTRA-FLEXIBILITY ---
+function promptForceRollRequest() {
+  const target = prompt('판정을 요구할 플레이어 닉네임 (예: 아서, 엘레나):', '아서');
+  if (!target) return;
+  const moveName = prompt('요구할 판정 내용 (예: 위험 돌파(민첩), 접근전, 관찰력):', '위험 돌파 (민첩)');
+  if (!moveName) return;
+
+  const msgObj = {
+    id: 'req_' + Date.now(),
+    type: 'chat',
+    sender: '👑 GM 강제 판정 요구',
+    role: 'gm',
+    time: getCurrentTimeString(),
+    text: `⚡ **[판정 요구]** [${target}] 님, GM이 **[${moveName}]** 판정을 굴릴 것을 요구했습니다! 어서 주사위를 굴려주세요.`
+  };
+  appendChatMessage(msgObj);
+  broadcastRoomEvent({ type: 'chat_msg', data: msgObj });
+  playSynthSound('alarm');
+}
+
+function togglePlayerMovementLock() {
+  playerMovementLocked = !playerMovementLocked;
+  const label = document.getElementById('gm-move-lock-label');
+  if (label) label.innerText = playerMovementLocked ? '토큰 잠금 해제' : '토큰 이동 잠금';
+
+  appendChatMessage({
+    id: 'lock_' + Date.now(),
+    type: 'chat',
+    sender: '👑 GM 권한',
+    role: 'gm',
+    time: getCurrentTimeString(),
+    text: playerMovementLocked ? '🔒 GM이 모든 플레이어의 토큰 이동을 잠갔습니다.' : '🔓 GM이 플레이어 토큰 이동 잠금을 해제했습니다.'
+  });
+  broadcastRoomEvent({ type: 'lock_movement', locked: playerMovementLocked });
+}
+
+function triggerCutsceneBlackout() {
+  const text = prompt('화면에 띄울 연출 나레이션 자막을 입력하세요:', '검은 숲 깊은 곳에서 고룡의 흉흉한 눈동자가 번뜩입니다...');
+  if (!text) return;
+
+  playSynthSound('thunder');
+  showCutsceneOverlay(text);
+  broadcastRoomEvent({ type: 'cutscene', text: text });
+}
+
+function showCutsceneOverlay(text) {
+  const overlay = document.getElementById('cutscene-overlay');
+  const txtBox = document.getElementById('cutscene-text');
+  txtBox.innerText = text;
+  overlay.classList.add('active');
+
+  setTimeout(() => {
+    overlay.classList.remove('active');
+  }, 4500);
+}
+
+function addCustomStatPrompt() {
+  const statName = prompt('추가할 새 능력치나 자원 이름 (예: 마나, 운명점, 카르마):');
+  if (!statName) return;
+  const val = prompt('초기 수치 (숫자):', '10');
+  if (val !== null) {
+    if (!currentCharacter.customStats) currentCharacter.customStats = {};
+    currentCharacter.customStats[statName] = parseInt(val, 10) || 0;
+    renderCharacterSheet();
+  }
+}
+
+// Weather Selector
+function setWeather(type) {
+  weatherType = type;
+  initWeatherParticles();
+  render();
+  broadcastRoomEvent({ type: 'sync_weather', weather: type });
+}
+
+// Soundboard Play
+function soundboardPlay(type) {
+  playSynthSound(type);
+  appendChatMessage({
+    id: 'sfx_' + Date.now(),
+    type: 'chat',
+    sender: '🔊 사운드보드',
+    role: 'gm',
+    time: getCurrentTimeString(),
+    text: `[효과음 재생: ${type}]`
+  });
+  broadcastRoomEvent({ type: 'soundboard', sfx: type });
+}
+
+// Export Chat Log to Markdown/HTML
+function exportChatLog() {
+  const messages = document.querySelectorAll('.msg-card');
+  let md = `# ⚔️ MYTHOS VTT 세션 기록\\n\\n생성일시: ${new Date().toLocaleString()}\\n방 코드: ${currentRoomCode}\\n\\n---\\n\\n`;
+
+  messages.forEach(card => {
+    const sender = card.querySelector('.msg-sender')?.innerText || '';
+    const time = card.querySelector('.msg-time')?.innerText || '';
+    const body = card.querySelector('.msg-body')?.innerText || card.innerText;
+    md += `**[${time}] ${sender}**: ${body}\\n\\n`;
+  });
+
+  const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `TRPG_세션채팅기록_${currentRoomCode}.md`;
+  a.click();
+}
+
+// Monster Spawner
 function renderMonsterCompendium() {
   const container = document.getElementById('monster-compendium-list');
+  if (!container) return;
   container.innerHTML = '';
+
   MONSTER_COMPENDIUM.forEach(mon => {
     const item = document.createElement('div');
     item.className = 'check-item';
     item.innerHTML = `
-      <div style="display: flex; gap: 8px; align-items: center;">
+      <div style="display: flex; gap: 6px; align-items: center;">
         <span style="font-size: 1.2rem;">${mon.icon}</span>
         <div>
-          <strong>${mon.name}</strong> <span class="badge badge-gold">CR ${mon.cr}</span>
-          <div style="font-size: 0.72rem; color: var(--text-muted);">HP ${mon.hp} | AC ${mon.ac} | 공 ${mon.atk}</div>
+          <strong>${mon.name}</strong> <span class="badge badge-gold">${mon.cr}</span>
+          <div style="font-size: 0.72rem; color: var(--text-muted);">HP ${mon.hp} | 장갑/AC ${mon.ac} | 공 ${mon.atk}</div>
+          ${mon.instinct ? `<div style="font-size: 0.68rem; color: #60a5fa;">본능: ${mon.instinct}</div>` : ''}
         </div>
       </div>
       <button class="btn-small btn-gold" onclick="spawnMonsterToken('${mon.id}')">소환</button>
@@ -4272,6 +4613,9 @@ function spawnMonsterToken(monId) {
     maxHp: mon.hp,
     color: mon.color,
     icon: mon.icon,
+    elevation: 0,
+    stealth: false,
+    rotation: 0,
     conditions: []
   };
 
@@ -4291,9 +4635,10 @@ function spawnMonsterToken(monId) {
   playSynthSound('sword');
 }
 
-// --- INITIATIVE & TURN ORDER ---
+// Initiative
 function renderCombatantsList() {
   const container = document.getElementById('combatants-list');
+  if (!container) return;
   container.innerHTML = '';
   document.getElementById('round-counter-badge').innerText = `라운드 ${currentRound}`;
 
@@ -4305,7 +4650,7 @@ function renderCombatantsList() {
       <div class="combatant-info">
         <div class="combatant-avatar">${c.avatar || '👤'}</div>
         <div>
-          <div style="font-weight: 600; font-size: 0.85rem;">${c.name} ${isTurn ? '👑' : ''}</div>
+          <div style="font-weight: 600; font-size: 0.82rem;">${c.name} ${isTurn ? '👑' : ''}</div>
           <div style="font-size: 0.72rem; color: var(--text-muted);">HP ${c.hp}/${c.maxHp}</div>
         </div>
       </div>
@@ -4350,13 +4695,14 @@ function nextTurn() {
   });
 }
 
-// --- CLUE BOARD & HANDOUTS ---
+// Clue Board
 function renderClueBoard() {
   const container = document.getElementById('clue-board-container');
+  if (!container) return;
   container.innerHTML = '';
   clueBoard.forEach(c => {
     const isGM = currentUserRole === 'gm';
-    if (!c.revealed && !isGM) return; // Hidden from players if not revealed
+    if (!c.revealed && !isGM) return;
 
     const item = document.createElement('div');
     item.className = 'check-item';
@@ -4365,9 +4711,9 @@ function renderClueBoard() {
     item.innerHTML = `
       <div style="display: flex; justify-content: space-between; width: 100%;">
         <strong>🔍 ${c.title}</strong>
-        ${isGM ? `<button class="btn-small" onclick="toggleClueReveal('${c.id}')">${c.revealed ? '비공개로' : '플레이어 공개'}</button>` : ''}
+        ${isGM ? `<button class="btn-small" onclick="toggleClueReveal('${c.id}')">${c.revealed ? '비공개' : '공개'}</button>` : ''}
       </div>
-      <div style="font-size: 0.76rem; color: #cbd5e1; margin-top: 4px; line-height: 1.4;">
+      <div style="font-size: 0.75rem; color: #cbd5e1; margin-top: 4px; line-height: 1.4;">
         "${c.text}"
       </div>
     `;
@@ -4394,7 +4740,7 @@ function toggleClueReveal(id) {
   }
 }
 
-// --- RANDOM GENERATOR TABLES ---
+// Random Generator
 function generateRandom(type) {
   const tbl = RANDOM_TABLES[type];
   if (!tbl) return;
@@ -4406,11 +4752,12 @@ function generateRandom(type) {
   playSynthSound('clue');
 }
 
-// --- CHAT SYSTEM & WHISPERS ---
+// Chat System & Speech Bubble
 function appendChatMessage(msg) {
   const container = document.getElementById('chat-messages-container');
-  const card = document.createElement('div');
+  if (!container) return;
 
+  const card = document.createElement('div');
   let typeClass = 'msg-ic';
   if (msg.type === 'dice') typeClass = 'msg-dice';
   else if (msg.type === 'narration') typeClass = 'msg-narration';
@@ -4421,18 +4768,27 @@ function appendChatMessage(msg) {
 
   let bodyContent = '';
   if (msg.type === 'dice') {
-    let critBadge = '';
-    if (msg.isCrit) critBadge = '<span class="dice-result-badge res-crit">★ 크리티컬 대성공!</span>';
-    else if (msg.isFumble) critBadge = '<span class="dice-result-badge res-fumble">💀 펌블 (대실패!)</span>';
-    else if (msg.cocGrade) critBadge = `<span class="badge badge-gold">${msg.cocGrade}</span>`;
+    let outcomeBadge = '';
+    if (msg.dwGrade) {
+      outcomeBadge = `<div class="dice-result-badge ${msg.isCrit ? 'res-crit' : (msg.isFumble ? 'res-fumble' : 'res-success')}">${msg.dwGrade}</div>`;
+      if (msg.dwMoveOutcome) {
+        outcomeBadge += `<div style="font-size: 0.74rem; color: #cbd5e1; margin-top: 4px; line-height: 1.4;">${msg.dwMoveOutcome}</div>`;
+      }
+    } else if (msg.isCrit) {
+      outcomeBadge = '<span class="dice-result-badge res-crit">★ 크리티컬 대성공!</span>';
+    } else if (msg.isFumble) {
+      outcomeBadge = '<span class="dice-result-badge res-fumble">💀 펌블 (대실패!)</span>';
+    } else if (msg.cocGrade) {
+      outcomeBadge = `<span class="badge badge-gold">${msg.cocGrade}</span>`;
+    }
 
     bodyContent = `
       <div style="font-weight: 600; color: var(--text-gold);">${msg.label ? msg.label + ' : ' : ''}<code>${msg.formula}</code></div>
-      <div style="font-size: 0.8rem; color: var(--text-muted);">${msg.text}</div>
-      ${critBadge}
+      <div style="font-size: 0.78rem; color: var(--text-muted);">${msg.text}</div>
+      ${outcomeBadge}
     `;
   } else {
-    bodyContent = `<div class="msg-body">${msg.text.replace(/\n/g, '<br>')}</div>`;
+    bodyContent = `<div class="msg-body">${msg.text.replace(/\\n/g, '<br>')}</div>`;
   }
 
   card.innerHTML = `
@@ -4454,7 +4810,15 @@ function sendChatMessage() {
 
   const mode = document.getElementById('chat-mode-toggle').value;
 
-  // Check for whisper command (/w player message or /gm message)
+  // Trigger speech bubble on token if in-character (IC)
+  if (mode === 'ic') {
+    const myTok = tokens.find(t => t.name.includes(currentUserName.split(' ')[0]));
+    if (myTok) {
+      showSpeechBubble(myTok.id, text.length > 20 ? text.substring(0, 20) + '...' : text);
+      broadcastRoomEvent({ type: 'speech_bubble', tokenId: myTok.id, text: text });
+    }
+  }
+
   if (text.startsWith('/w ') || text.startsWith('/gm ')) {
     let target = 'gm';
     let content = '';
@@ -4499,54 +4863,60 @@ function sendChatMessage() {
 
 function executeMacro(type) {
   if (type === 'attack') {
-    rollDiceFormula('1d20+5', '롱소드 근접 공격');
+    if (currentCharacter.system === 'dungeonworld') {
+      rollDWMoves('hack_and_slash');
+    } else {
+      rollDiceFormula('1d20+5', '근접 무기 공격');
+    }
   } else if (type === 'dodge') {
-    rollDiceFormula('1d20+2', '민첩 회피 판정');
+    if (currentCharacter.system === 'dungeonworld') {
+      rollDWMoves('defy_danger');
+    } else {
+      rollDiceFormula('1d20+2', '민첩 회피 판정');
+    }
   } else if (type === 'spot') {
-    rollDiceFormula('1d100', '관찰력 (Spot Hidden)');
+    if (currentCharacter.system === 'dungeonworld') {
+      rollDWMoves('discern_realities');
+    } else {
+      rollDiceFormula('1d100', '관찰력 체크');
+    }
   } else if (type === 'san') {
-    rollDiceFormula('1d100', '이성 (SAN 체크) [실패 시 1d4 상실]');
+    rollDiceFormula('1d100', '이성 (SAN 체크)');
   }
 }
 
-// --- UTILITY & TIME HELPERS ---
 function getCurrentTimeString() {
   const d = new Date();
   return `${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`;
 }
 
-// World Clock Rest
 function advanceWorldTime(hours) {
   inGameHours = (inGameHours + hours) % 24;
   let period = inGameHours >= 6 && inGameHours < 12 ? '아침' : (inGameHours >= 12 && inGameHours < 18 ? '낮' : (inGameHours >= 18 && inGameHours < 22 ? '저녁' : '심야'));
   document.getElementById('world-time-text').innerText = `${inGameHours}:00 (${period})`;
 
   if (hours >= 8) {
-    // Long Rest: full HP & MP recovery
     currentCharacter.hp = currentCharacter.maxHp;
-    currentCharacter.mp = currentCharacter.maxMp;
     renderCharacterSheet();
     appendChatMessage({
       id: 'sys_' + Date.now(),
       type: 'chat',
-      sender: '시스템 [긴 휴식]',
+      sender: '시스템 [휴식]',
       time: getCurrentTimeString(),
-      text: `🛌 파티가 긴 휴식을 취했습니다 (8시간 경과). 체력과 자원이 완전히 회복되었습니다.`
+      text: `⛺ 파티가 야영 및 휴식을 취했습니다. 체력이 회복되었습니다.`
     });
   }
 }
 
-// Download Session Notes
 function downloadSessionNotes() {
   const text = document.getElementById('session-notes-area').value;
   const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = `TRPG_세션일지_${currentRoomCode}.txt`;
+  a.download = `TRPG_세션메모_${currentRoomCode}.txt`;
   a.click();
 }
 
-// Export Full Session State JSON
 function exportSessionJSON() {
   const state = {
     roomCode: currentRoomCode,
@@ -4564,7 +4934,6 @@ function exportSessionJSON() {
   a.click();
 }
 
-// Modals management
 function openModal(id) {
   document.getElementById(id).classList.add('open');
 }
@@ -4572,17 +4941,19 @@ function closeModal(id) {
   document.getElementById(id).classList.remove('open');
 }
 
-// Populate 50 Features in Modal
-function populate50FeaturesList() {
+// Populate Complete 100 Features in Modal
+function populate100FeaturesList() {
   const container = document.getElementById('features-list-container');
+  if (!container) return;
   container.innerHTML = '';
-  TRPG_50_FEATURES.forEach(f => {
+
+  TRPG_100_FEATURES.forEach(f => {
     const item = document.createElement('div');
     item.className = 'feature-badge-item';
     item.innerHTML = `
       <span class="feature-num">#${f.id}</span>
       <div>
-        <div style="font-weight: 700; color: #f6c879;">${f.name}</div>
+        <div style="font-weight: 700; color: #f6c879;">[${f.cat}] ${f.name}</div>
         <div style="font-size: 0.72rem; color: var(--text-muted);">${f.desc}</div>
       </div>
     `;
@@ -4590,7 +4961,6 @@ function populate50FeaturesList() {
   });
 }
 
-// Token Edit Modal
 function openTokenEditModal(tok) {
   document.getElementById('token-edit-name').value = tok.name;
   document.getElementById('token-edit-hp').value = tok.hp;
@@ -4627,11 +4997,10 @@ function deleteSelectedToken() {
 
 // --- DOM EVENT LISTENERS & INITIALIZATION ---
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. Initialize Canvas & Networking
   initCanvas();
   initNetworking();
 
-  // 2. Tab Navigation (Left Panel)
+  // Tab Navigation (Left Panel)
   document.querySelectorAll('.panel-tab').forEach(tab => {
     tab.addEventListener('click', () => {
       document.querySelectorAll('.panel-tab').forEach(t => t.classList.remove('active'));
@@ -4643,7 +5012,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 3. Mobile Navigation Bottom Bar
+  // Mobile Bottom Navigation
   document.querySelectorAll('.mobile-nav-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.mobile-nav-btn').forEach(b => b.classList.remove('active'));
@@ -4668,7 +5037,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   document.body.classList.add('mobile-view-map');
 
-  // 4. Roll Mode Selector Pills
+  // Roll Mode Pills
   document.querySelectorAll('.roll-mode-pill').forEach(pill => {
     pill.addEventListener('click', () => {
       document.querySelectorAll('.roll-mode-pill').forEach(p => p.classList.remove('active'));
@@ -4677,11 +5046,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 5. Map Tools Switching
+  // Map Tools
   document.querySelectorAll('.tool-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       if (btn.id === 'btn-quick-spawn-token') {
-        spawnMonsterToken('goblin');
+        spawnMonsterToken('dw_frogman');
         return;
       }
       document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
@@ -4690,7 +5059,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 6. Room Setup & Password
+  // Room Setup
   document.getElementById('btn-room-config').addEventListener('click', () => {
     openModal('modal-room-config');
   });
@@ -4718,42 +5087,42 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 7. User Role Selector
+  // Role Selector
   document.getElementById('user-role-select').addEventListener('change', (e) => {
     switchUserRole(e.target.value);
   });
 
-  // 8. Environment Lighting Selector
+  // Lighting
   document.getElementById('env-lighting-select').addEventListener('change', (e) => {
     const overlay = document.getElementById('lighting-overlay');
     overlay.className = e.target.value;
   });
 
-  // 9. BGM Toggle
+  // BGM
   document.getElementById('btn-toggle-bgm').addEventListener('click', toggleAmbientBGM);
 
-  // 10. World Clock & Rest button
+  // Clock
   document.getElementById('btn-world-clock').addEventListener('click', () => {
     advanceWorldTime(1);
   });
 
-  // 11. Safety X-Card
+  // Safety X-Card
   document.getElementById('btn-x-card').addEventListener('click', () => {
     playSynthSound('alarm');
     broadcastRoomEvent({ type: 'x_card', user: currentUserName });
-    alert(`🛑 [X-CARD 발동] ${currentUserName} 님이 세션 일시정지를 요청했습니다.\n잠시 게임을 멈추고 안전하고 편안한 플레이를 위해 논의해 주세요.`);
+    alert(`🛑 [X-CARD 발동] ${currentUserName} 님이 세션 일시정지를 요청했습니다.\\n잠시 게임을 멈추고 안전하고 편안한 플레이를 위해 논의해 주세요.`);
   });
 
-  // 12. 50 Features Guide Modal
+  // 100 Features Guide Modal
   document.getElementById('btn-features-list').addEventListener('click', () => {
-    populate50FeaturesList();
+    populate100FeaturesList();
     openModal('modal-features-list');
   });
 
-  // 13. JSON Backup Export
+  // JSON Export
   document.getElementById('btn-export-json').addEventListener('click', exportSessionJSON);
 
-  // 14. Scenario Selector & Custom Dropzone
+  // Scenario Selector
   document.getElementById('scenario-preset-select').addEventListener('change', (e) => {
     loadScenario(e.target.value);
   });
@@ -4787,16 +5156,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // 15. Broadcast Narration to Chat
+  // Narration to Chat
   document.getElementById('btn-broadcast-narration').addEventListener('click', broadcastNarrationToChat);
 
-  // 16. Toggle Secret Visibility
+  // Toggle Secret
   document.getElementById('btn-toggle-secret-vis').addEventListener('click', () => {
     const el = document.getElementById('excerpt-gm-notes');
     el.style.display = el.style.display === 'none' ? 'block' : 'none';
   });
 
-  // 17. Rulebook & Scenario Search
+  // Search Rulebook & Scenario
   document.getElementById('btn-rule-search').addEventListener('click', () => {
     searchRulebookAndScenario(document.getElementById('rule-search-input').value);
   });
@@ -4804,13 +5173,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'Enter') searchRulebookAndScenario(e.target.value);
   });
 
-  // 18. Character System Selector
+  // Character System Selector
   document.getElementById('char-system-select').addEventListener('change', (e) => {
     currentCharacter.system = e.target.value;
     renderCharacterSheet();
   });
 
-  // 19. Initiative Buttons
+  // Initiative
   document.getElementById('btn-roll-all-init').addEventListener('click', rollAllInitiative);
   document.getElementById('btn-next-turn').addEventListener('click', nextTurn);
   document.getElementById('btn-reset-combat').addEventListener('click', () => {
@@ -4820,7 +5189,7 @@ document.addEventListener('DOMContentLoaded', () => {
     render();
   });
 
-  // 20. Add Clue
+  // Clue
   document.getElementById('btn-add-clue').addEventListener('click', () => {
     const title = prompt('단서의 제목을 입력하세요:');
     if (!title) return;
@@ -4828,7 +5197,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (text) addClueToBoard(title, text);
   });
 
-  // 21. Map Controls
+  // Map Controls
   document.getElementById('map-preset-select').addEventListener('change', (e) => {
     currentPresetMap = e.target.value;
     customMapImage = null;
@@ -4866,7 +5235,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Fog Controls
   document.getElementById('btn-toggle-fog').addEventListener('click', () => {
     showFog = !showFog;
-    document.getElementById('fog-label').innerText = showFog ? '안개 ON' : '안개 OFF';
+    document.getElementById('fog-label').innerText = showFog ? '안개' : '안개해제';
     render();
   });
   document.getElementById('btn-fog-brush-reveal').addEventListener('click', () => {
@@ -4926,28 +5295,52 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Initial Data Populate
-  loadScenario('coc_manor');
+  // Initial Data Populate (Default: Dungeon World)
+  loadScenario('dw_wyrm');
   renderCharacterSheet();
   renderMonsterCompendium();
   renderCombatantsList();
   renderClueBoard();
 
-  // Welcome greeting
+  // Welcome message
   appendChatMessage({
     id: 'welcome_1',
     type: 'chat',
     sender: '⚔️ MYTHOS VTT 가이드',
     role: 'gm',
     time: getCurrentTimeString(),
-    text: '모바일 및 PC 반응형 TRPG 시뮬레이터에 오신 것을 환영합니다! 모바일에서는 하단 탭(🗺️ 맵 / 🎲 주사위·채팅 / 👤 캐릭터 / 📜 시나리오)을 터치하여 쾌적하게 화면을 전환할 수 있습니다.'
+    text: '던전월드(Dungeon World) 및 멀티 세계관 TRPG 시뮬레이터에 오신 것을 환영합니다! 2d6 판정(10+/7~9/6-), 기본 액션 및 GM 전능 권한 기능이 활성화되었습니다. [⭐ 100대 기능]을 눌러 전체 기능 목록을 확인하세요.'
   });
 
-  // Window Resize
   window.addEventListener('resize', () => {
     initCanvas();
   });
 });
+
+function addMapPinPrompt() {
+  const title = prompt('지도 핀 제목 (예: 비밀 문, 함정, 보물상자):', '비밀 장치');
+  if (!title) return;
+  const text = prompt('핀에 남길 설명 메모:', '벽면의 틈새를 조사하면 황동 열쇠를 찾을 수 있습니다.');
+  if (!text) return;
+
+  const centerWorld = screenToWorld(canvas.width / 2, canvas.height / 2);
+  mapPins.push({
+    id: 'pin_' + Date.now(),
+    x: centerWorld.x,
+    y: centerWorld.y,
+    title: title,
+    text: text
+  });
+  render();
+  broadcastRoomEvent({ type: 'chat_msg', data: {
+    id: 'pin_msg_' + Date.now(),
+    type: 'chat',
+    sender: '👑 GM 핀 설치',
+    role: 'gm',
+    time: getCurrentTimeString(),
+    text: `📍 지도 중앙에 새로운 인터랙티브 핀 [${title}]이 설치되었습니다.`
+  }});
+}
 
 </script>
 </body>
