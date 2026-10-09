@@ -7,20 +7,20 @@
   <!-- PeerJS for Free Serverless WebRTC P2P Multiplayer on Web Hosting -->
   <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
   <style>
-/* --- MYTHOS VTT FANTASY-THEMED, CLEAN & INTUITIVE STYLESHEET --- */
+/* --- WORLD-CLASS FANTASY VTT STYLESHEET (GLOBAL BESTSELLER SPEC) --- */
 :root {
-  --bg-darker: #0a0d14;
-  --bg-dark: #101522;
-  --bg-panel: #161c2c;
-  --bg-card: #1c2438;
-  --bg-card-hover: #242e47;
-  --border-color: #2b354f;
+  --bg-darker: #080b12;
+  --bg-dark: #0f1422;
+  --bg-panel: #141b2d;
+  --bg-card: #1b233a;
+  --bg-card-hover: #232d4b;
+  --border-color: #283454;
   --border-gold: #c59b27;
-  --border-gold-glow: rgba(229, 169, 60, 0.4);
-  --text-main: #f1f5f9;
+  --border-gold-glow: rgba(229, 169, 60, 0.45);
+  --text-main: #f8fafc;
   --text-muted: #94a3b8;
   --text-gold: #f6c879;
-  --text-gold-bright: #ffd885;
+  --text-gold-bright: #ffe08a;
   --accent-gold: #e5a93c;
   --accent-gold-hover: #f5bc52;
   --accent-red: #ef4444;
@@ -29,7 +29,7 @@
   --accent-purple: #a855f7;
   --accent-cyan: #06b6d4;
   --font-sans: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-serif: 'Cinzel', 'Noto Serif KR', 'Chosunilbo_myungjo', Georgia, serif;
+  --font-serif: 'Cinzel', 'Noto Serif KR', Georgia, serif;
 }
 
 * {
@@ -52,11 +52,11 @@ body {
   flex-direction: column;
 }
 
-/* --- HEADER BAR (FANTASY LUXURY GOLD ACCENTS) --- */
+/* Header bar */
 header {
   height: 52px;
   min-height: 52px;
-  background: linear-gradient(180deg, #1e2638 0%, #121724 100%);
+  background: linear-gradient(180deg, #1d2538 0%, #111624 100%);
   border-bottom: 2px solid var(--border-gold);
   display: flex;
   align-items: center;
@@ -207,7 +207,7 @@ header::-webkit-scrollbar { display: none; }
   color: #fff;
 }
 
-/* --- APP MAIN LAYOUT (DESKTOP 3-COLUMNS) --- */
+/* App Main Layout: Desktop 3 Columns */
 #app-main {
   flex: 1;
   display: grid;
@@ -370,7 +370,7 @@ header::-webkit-scrollbar { display: none; }
   color: var(--text-gold);
 }
 
-/* --- PERSISTENT FLOATING DRAW TOOLBAR (NO HOVER DISAPPEARANCE BUG) --- */
+/* --- PERSISTENT FLOATING DRAW TOOLBAR (NO HOVER GAP BUG) --- */
 #draw-palette-bar {
   position: absolute;
   bottom: 16px;
@@ -379,7 +379,7 @@ header::-webkit-scrollbar { display: none; }
   border: 1px solid var(--border-gold);
   border-radius: 8px;
   padding: 8px 12px;
-  display: none; /* Shown when draw tool active */
+  display: none;
   align-items: center;
   gap: 10px;
   z-index: 30;
@@ -387,9 +387,7 @@ header::-webkit-scrollbar { display: none; }
   backdrop-filter: blur(8px);
   animation: fadeIn 0.2s ease;
 }
-#draw-palette-bar.open {
-  display: flex;
-}
+#draw-palette-bar.open { display: flex; }
 .color-swatch {
   width: 22px;
   height: 22px;
@@ -404,7 +402,7 @@ header::-webkit-scrollbar { display: none; }
   box-shadow: 0 0 8px rgba(255,255,255,0.6);
 }
 
-/* --- ROLL20 PAGE SHELF & LAYER SELECTOR --- */
+/* Roll20 Page Shelf & Layer Selector */
 .page-shelf {
   position: absolute;
   top: 48px;
@@ -438,14 +436,8 @@ header::-webkit-scrollbar { display: none; }
   flex-shrink: 0;
   transition: all 0.2s;
 }
-.page-card:hover {
-  border-color: var(--accent-gold);
-  transform: translateY(-2px);
-}
-.page-card.active {
-  border-color: var(--accent-gold);
-  box-shadow: 0 0 12px rgba(229,169,60,0.5);
-}
+.page-card:hover { border-color: var(--accent-gold); transform: translateY(-2px); }
+.page-card.active { border-color: var(--accent-gold); box-shadow: 0 0 12px rgba(229,169,60,0.5); }
 .page-thumb-icon { font-size: 1.5rem; }
 .page-title-label { font-size: 0.7rem; color: #cbd5e1; margin-top: 2px; text-align: center; max-width: 85px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .player-ribbon {
@@ -890,6 +882,37 @@ canvas#vtt-canvas { width: 100%; height: 100%; display: block; }
 .modal-body { padding: 14px; overflow-y: auto; display: flex; flex-direction: column; gap: 11px; font-size: 0.84rem; }
 .modal-footer { padding: 9px 14px; border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end; gap: 7px; }
 
+/* Handout Fullscreen Projector Modal */
+.handout-parchment {
+  background: #fef3c7;
+  color: #1e293b;
+  border: 3px double #b45309;
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 10px 35px rgba(0,0,0,0.8);
+  font-family: var(--font-serif);
+  line-height: 1.7;
+}
+
+/* Dungeon World Interactive Question Chip in Chat */
+.dw-question-chip {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid #10b981;
+  color: #a7f3d0;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.76rem;
+  cursor: pointer;
+  display: inline-block;
+  margin: 2px 2px;
+  transition: all 0.15s;
+}
+.dw-question-chip:hover {
+  background: rgba(16, 185, 129, 0.35);
+  color: #fff;
+  transform: translateX(2px);
+}
+
 .features-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 0.76rem; }
 .feature-badge-item {
   background: var(--bg-panel); border: 1px solid var(--border-color); padding: 6px 8px; border-radius: 6px;
@@ -981,13 +1004,12 @@ canvas#vtt-canvas { width: 100%; height: 100%; display: block; }
   #draw-palette-bar { left: 10px; bottom: 60px; }
   .features-grid { grid-template-columns: 1fr; }
 }
-"""
 
   </style>
 </head>
 <body>
 
-<!-- --- MYTHOS VTT HTML STRUCTURE (FANTASY, SIMPLE, INTUITIVE & DW TOGGLE) --- -->
+<!-- --- MYTHOS VTT HTML STRUCTURE (WORLD-CLASS FANTASY VTT) --- -->
 <header>
   <div class="logo-area">
     <div class="logo-title">
@@ -1056,6 +1078,11 @@ canvas#vtt-canvas { width: 100%; height: 100%; display: block; }
     <!-- World Clock & Rest -->
     <button class="btn-header" id="btn-world-clock" title="인게임 시간 및 휴식 관리">
       <span>🕒</span> <span id="world-time-text">14:00</span>
+    </button>
+
+    <!-- Hotkeys Guide -->
+    <button class="btn-header" onclick="openModal('modal-hotkeys')" title="단축키 안내">
+      <span>⌨️</span> <span>단축키</span>
     </button>
 
     <!-- Safety X-Card -->
@@ -1204,6 +1231,17 @@ canvas#vtt-canvas { width: 100%; height: 100%; display: block; }
 
     <!-- TAB 2: CHARACTER SHEET -->
     <div class="panel-content" id="tab-character" style="display: none;">
+      <!-- Quick Character Stat Auto-Roller Bar -->
+      <div class="card" style="background: rgba(229,169,60,0.08); border-color: var(--border-gold);">
+        <div class="card-header">
+          <span class="card-title">🎲 1초 능력치 자동 생성기</span>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px;">
+          <button class="btn-small btn-gold" onclick="autoRollDWStats()">🐉 DW 표준 배열 적용</button>
+          <button class="btn-small" onclick="autoRoll4d6Stats()">⚔️ 4d6 Drop-Lowest 굴림</button>
+        </div>
+      </div>
+
       <div class="card">
         <div class="card-header">
           <span class="card-title">👤 캐릭터 관리</span>
@@ -1455,22 +1493,12 @@ canvas#vtt-canvas { width: 100%; height: 100%; display: block; }
         <input type="file" id="map-file-input" accept="image/*" style="display: none;" />
       </div>
 
-      <!-- Grid Controls -->
-      <div class="map-control-group">
-        <span>📐</span>
-        <select id="grid-type-select" class="map-btn">
-          <option value="square">사각</option>
-          <option value="hex">육각</option>
-          <option value="none">없음</option>
-        </select>
-        <input type="range" id="grid-size-slider" min="30" max="100" value="50" style="width: 50px;" title="그리드 크기" />
-      </div>
-
-      <!-- Fog Controls -->
+      <!-- Dynamic Vision & Fog Tools -->
       <div class="map-control-group">
         <button class="map-btn" id="btn-toggle-fog">
           <span>🌫️</span> <span id="fog-label">안개</span>
         </button>
+        <button class="map-btn" onclick="revealFogAroundTokens(250)" title="현재 플레이어 토큰 주변 30ft 안개 자동 밝히기">🔦 시야개방</button>
         <button class="map-btn" id="btn-fog-brush-reveal" title="시야 밝히기">밝히기</button>
         <button class="map-btn" id="btn-fog-brush-hide" title="시야 가리기">가리기</button>
       </div>
@@ -1498,7 +1526,7 @@ canvas#vtt-canvas { width: 100%; height: 100%; display: block; }
         <span>📐</span>
       </button>
 
-      <button class="tool-btn" data-tool="ping" title="GM 핑 (P)">
+      <button class="tool-btn" data-tool="ping" title="GM 핑 (P) (Shift+클릭 시 전원 화면 중심 이동)">
         <span>📍</span>
       </button>
 
@@ -1616,9 +1644,9 @@ canvas#vtt-canvas { width: 100%; height: 100%; display: block; }
         <button class="chat-filter-btn" data-filter="dice">주사위</button>
         <button class="chat-filter-btn" data-filter="system">시스템</button>
         <div style="flex: 1;"></div>
-        <button class="btn-small" onclick="exportChatLog()" title="세션 채팅 및 주사위 기록을 마크다운 문서로 내보내기">📥 기록 저장</button>
+        <button class="btn-small" onclick="exportChatLog()" title="세션 채팅 및 주사위 기록을 마크다운 문서로 내보내기">📥 저장</button>
         <select id="chat-mode-toggle" class="btn-small" style="font-size: 0.68rem; padding: 1px 3px;">
-          <option value="ic">🎭 IC (인게임 대사)</option>
+          <option value="ic">🎭 IC (대사)</option>
           <option value="ooc">💬 OOC (잡담)</option>
         </select>
       </div>
@@ -1636,7 +1664,7 @@ canvas#vtt-canvas { width: 100%; height: 100%; display: block; }
         </div>
 
         <div class="chat-input-row">
-          <input type="text" id="chat-input-field" class="chat-input" placeholder="대사 입력... (/r [수식], [[1d20+5]] 인라인, /w [대상])" />
+          <input type="text" id="chat-input-field" class="chat-input" placeholder="대사 입력... (/r [수식], [[1d20+5]], /w [대상])" />
           <button class="btn-small btn-gold" id="btn-send-chat">전송</button>
         </div>
       </div>
@@ -1671,6 +1699,47 @@ canvas#vtt-canvas { width: 100%; height: 100%; display: block; }
     고대 용의 눈동자가 어둠 속에서 번뜩입니다...
   </div>
   <div class="cutscene-letterbox"></div>
+</div>
+
+<!-- MODAL: HANDOUT FULLSCREEN PROJECTOR (SHOW TO ALL) -->
+<div class="modal-overlay" id="modal-handout-projector">
+  <div class="modal-card" style="max-width: 650px; background: transparent; border: none; box-shadow: none;">
+    <div class="handout-parchment">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #b45309; padding-bottom: 8px; margin-bottom: 12px;">
+        <h2 id="projector-title" style="font-size: 1.3rem; color: #78350f;">📜 중요한 단서 / 문서</h2>
+        <button class="modal-close" style="color: #78350f;" onclick="closeModal('modal-handout-projector')">✕</button>
+      </div>
+      <div id="projector-body" style="font-size: 1rem; color: #1e293b; line-height: 1.8; white-space: pre-wrap;">
+      </div>
+      <div style="text-align: right; margin-top: 16px;">
+        <button class="btn-small btn-gold" onclick="closeModal('modal-handout-projector')">확인 및 닫기</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: KEYBOARD SHORTCUTS GUIDE -->
+<div class="modal-overlay" id="modal-hotkeys">
+  <div class="modal-card" style="max-width: 480px;">
+    <div class="modal-header">
+      <span class="modal-title">⌨️ TRPG 프로 단축키 안내</span>
+      <button class="modal-close" onclick="closeModal('modal-hotkeys')">✕</button>
+    </div>
+    <div class="modal-body" style="font-size: 0.85rem; line-height: 1.8;">
+      <div><strong>V</strong> : 선택 및 토큰 이동 도구</div>
+      <div><strong>M</strong> : 전술 거리 측정 자</div>
+      <div><strong>D</strong> : 화이트보드 펜 그리기</div>
+      <div><strong>E</strong> : 지우개 도구</div>
+      <div><strong>P</strong> : GM 지도 핑 (Shift+클릭 시 전원 화면 중심 이동)</div>
+      <div><strong>T</strong> : 전투 순서 다음 턴 (Next Turn)</div>
+      <div><strong>R</strong> : 주사위 수식 입력창으로 즉각 포커스</div>
+      <div><strong>스페이스바 + 드래그</strong> : 지도 화면 패닝 (이동)</div>
+      <div><strong>마우스 휠</strong> : 지도 줌 인/아웃</div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-small btn-gold" onclick="closeModal('modal-hotkeys')">확인</button>
+    </div>
+  </div>
 </div>
 
 <!-- MODALS -->
@@ -3019,6 +3088,14 @@ canvas.addEventListener('mousedown', (e) => {
         const tok = tokens[i];
         if (tok.stealth && currentUserRole !== 'gm') continue;
         const rad = (tok.size * gridSize) / 2;
+        // Check if clicked the Green HP Bubble above selected token
+        if (selectedToken && selectedToken.id === tok.id) {
+          const bubbleDist = Math.hypot(tok.x - worldPos.x, (tok.y - rad - 20) - worldPos.y);
+          if (bubbleDist <= 14) {
+            quickTokenHPAdjust(tok);
+            return;
+          }
+        }
         if (Math.hypot(tok.x - worldPos.x, tok.y - worldPos.y) <= rad) {
           selectedToken = tok;
           isDraggingToken = true;
@@ -3152,7 +3229,15 @@ canvas.addEventListener('contextmenu', (e) => {
 
   for (let tok of tokens) {
     const rad = (tok.size * gridSize) / 2;
-    if (Math.hypot(tok.x - worldPos.x, tok.y - worldPos.y) <= rad) {
+    // Check if clicked the Green HP Bubble above selected token
+        if (selectedToken && selectedToken.id === tok.id) {
+          const bubbleDist = Math.hypot(tok.x - worldPos.x, (tok.y - rad - 20) - worldPos.y);
+          if (bubbleDist <= 14) {
+            quickTokenHPAdjust(tok);
+            return;
+          }
+        }
+        if (Math.hypot(tok.x - worldPos.x, tok.y - worldPos.y) <= rad) {
       selectedToken = tok;
       openTokenEditModal(tok);
       return;
@@ -3184,6 +3269,14 @@ canvas.addEventListener('touchstart', (e) => {
         const tok = tokens[i];
         if (tok.stealth && currentUserRole !== 'gm') continue;
         const rad = (tok.size * gridSize) / 2 + 14;
+        // Check if clicked the Green HP Bubble above selected token
+        if (selectedToken && selectedToken.id === tok.id) {
+          const bubbleDist = Math.hypot(tok.x - worldPos.x, (tok.y - rad - 20) - worldPos.y);
+          if (bubbleDist <= 14) {
+            quickTokenHPAdjust(tok);
+            return;
+          }
+        }
         if (Math.hypot(tok.x - worldPos.x, tok.y - worldPos.y) <= rad) {
           selectedToken = tok;
           isDraggingToken = true;
@@ -3448,6 +3541,63 @@ function toggleAoESubmenu() {
     time: getCurrentTimeString(),
     text: `AoE 템플릿 모드: [${aoeType === 'circle' ? '원형 폭발(20ft)' : (aoeType === 'cone' ? '부채꼴 콘(30ft)' : '사각형(20ft)')}]`
   });
+}
+
+
+// --- DYNAMIC TOKEN VISION & FOG REVEAL ---
+function revealFogAroundTokens(radius = 250) {
+  fogCtx.save();
+  fogCtx.globalCompositeOperation = 'destination-out';
+  tokens.forEach(tok => {
+    if (tok.layer === 'gm') return;
+    fogCtx.beginPath();
+    fogCtx.arc(tok.x, tok.y, radius, 0, Math.PI * 2);
+    fogCtx.fill();
+  });
+  fogCtx.restore();
+  render();
+  broadcastRoomEvent({ type: 'sync_fog', data: fogCanvas.toDataURL() });
+  playSynthSound('clue');
+}
+
+// Quick Token HP change from Green Radial Bubble
+function quickTokenHPAdjust(tok) {
+  const input = prompt(`[${tok.name}] HP 변경 (예: -7 또는 +5 또는 새 수치):`, `${tok.hp}`);
+  if (input === null || input.trim() === '') return;
+
+  const trimmed = input.trim();
+  let delta = 0;
+  let newHp = tok.hp;
+
+  if (trimmed.startsWith('+') || trimmed.startsWith('-')) {
+    delta = parseInt(trimmed, 10) || 0;
+    newHp = Math.max(0, Math.min(tok.maxHp, tok.hp + delta));
+  } else {
+    const directVal = parseInt(trimmed, 10);
+    if (!isNaN(directVal)) {
+      delta = directVal - tok.hp;
+      newHp = Math.max(0, Math.min(tok.maxHp, directVal));
+    }
+  }
+
+  tok.hp = newHp;
+  spawnCombatNumber(tok.x, tok.y - 25, (delta > 0 ? '+' : '') + delta, delta > 0 ? '#22c55e' : '#ef4444');
+
+  // Automatic Unconscious / Defeated condition at 0 HP
+  if (tok.hp === 0 && !tok.conditions.includes('기절')) {
+    tok.conditions.push('기절');
+    spawnCombatNumber(tok.x, tok.y - 45, '💀 기절/사망!', '#ef4444');
+    playSynthSound('alarm');
+  }
+
+  // Sync with active character if it's the player's character
+  if (currentCharacter.name.includes(tok.name.split(' ')[0])) {
+    currentCharacter.hp = tok.hp;
+    renderCharacterSheet();
+  }
+
+  render();
+  broadcastRoomEvent({ type: 'sync_tokens', data: tokens });
 }
 
 
@@ -3725,6 +3875,74 @@ function parseInlineDice(text) {
       return '<span class="inline-roll" title="' + tooltip + '">' + res.total + '</span>';
     } catch(e) {
       return match;
+    }
+  });
+}
+
+
+// --- 1-CLICK CHARACTER STAT GENERATORS ---
+function autoRoll4d6Stats() {
+  const stats = ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA'];
+  let logStr = '🎲 [4d6 Drop Lowest 스탯 생성]:\n';
+
+  stats.forEach(st => {
+    let rolls = [];
+    for (let i = 0; i < 4; i++) rolls.push(Math.floor(Math.random() * 6) + 1);
+    rolls.sort((a, b) => a - b);
+    const sum = rolls[1] + rolls[2] + rolls[3];
+    currentCharacter.stats[st] = sum;
+    logStr += `${st}: [${rolls.slice(1).join('+')}] (버림:${rolls[0]}) = ${sum}\n`;
+  });
+
+  renderCharacterSheet();
+  appendChatMessage({
+    id: 'roll_stats_' + Date.now(),
+    type: 'chat',
+    sender: '🎲 스탯 생성기',
+    time: getCurrentTimeString(),
+    text: logStr
+  });
+  playSynthSound('fanfare');
+}
+
+function autoRollDWStats() {
+  const dwArray = [16, 15, 14, 12, 9, 8];
+  const stats = ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA'];
+
+  stats.forEach((st, idx) => {
+    currentCharacter.stats[st] = dwArray[idx];
+  });
+
+  renderCharacterSheet();
+  appendChatMessage({
+    id: 'dw_array_' + Date.now(),
+    type: 'chat',
+    sender: '🐉 던전월드 생성기',
+    time: getCurrentTimeString(),
+    text: `🐉 [던전월드 표준 배열 적용 완료]: STR 16, DEX 15, CON 14, INT 12, WIS 9, CHA 8`
+  });
+  playSynthSound('clue');
+}
+
+// Ask Discern Realities Question in Chat
+function askDWQuestion(qText) {
+  appendChatMessage({
+    id: 'q_' + Date.now(),
+    type: 'chat',
+    chatMode: 'ic',
+    sender: currentUserName,
+    time: getCurrentTimeString(),
+    text: `❓ [상황 파악 질문] "${qText}"`
+  });
+  broadcastRoomEvent({
+    type: 'chat_msg',
+    data: {
+      id: 'q_' + Date.now(),
+      type: 'chat',
+      chatMode: 'ic',
+      sender: currentUserName,
+      time: getCurrentTimeString(),
+      text: `❓ [상황 파악 질문] "${qText}"`
     }
   });
 }
@@ -4460,6 +4678,12 @@ function handleRemoteEvent(e) {
       playerMovementLocked = data.locked;
       break;
 
+        case 'project_handout':
+      if (typeof openHandoutProjectorModal === 'function') {
+        openHandoutProjectorModal(data.title, data.text);
+        playSynthSound('clue');
+      }
+      break;
     case 'cutscene':
       showCutsceneOverlay(data.text);
       break;
@@ -5364,7 +5588,12 @@ function renderClueBoard() {
     item.innerHTML = `
       <div style="display: flex; justify-content: space-between; width: 100%;">
         <strong>🔍 ${c.title}</strong>
-        ${isGM ? `<button class="btn-small" onclick="toggleClueReveal('${c.id}')">${c.revealed ? '비공개' : '공개'}</button>` : ''}
+        ${isGM ? `
+          <div style="display: flex; gap: 4px;">
+            <button class="btn-small" onclick="toggleClueReveal('${c.id}')">${c.revealed ? '비공개' : '공개'}</button>
+            <button class="btn-small btn-gold" onclick="projectHandoutToAll('${c.title.replace(/'/g, "\\'")}', '${c.text.replace(/'/g, "\\'")}')">🖼️ 전원 팝업</button>
+          </div>
+        ` : ''}
       </div>
       <div style="font-size: 0.75rem; color: #cbd5e1; margin-top: 4px; line-height: 1.4;">
         "${c.text}"
@@ -5695,6 +5924,57 @@ function deleteSelectedToken() {
   renderCombatantsList();
   broadcastRoomEvent({ type: 'sync_tokens', data: tokens });
 }
+
+
+// --- FULLSCREEN HANDOUT PROJECTOR (SHOW TO ALL) ---
+function projectHandoutToAll(title, text) {
+  openHandoutProjectorModal(title, text);
+  broadcastRoomEvent({
+    type: 'project_handout',
+    title: title,
+    text: text
+  });
+  playSynthSound('clue');
+}
+
+function openHandoutProjectorModal(title, text) {
+  document.getElementById('projector-title').innerText = '📜 ' + title;
+  document.getElementById('projector-body').innerText = text;
+  openModal('modal-handout-projector');
+}
+
+// Global Keyboard Shortcuts (Pro Gaming Hotkeys)
+window.addEventListener('keydown', (e) => {
+  // If typing in input or textarea, ignore shortcuts
+  const tag = e.target.tagName.toLowerCase();
+  if (tag === 'input' || tag === 'textarea' || tag === 'select') return;
+
+  if (e.key === 'v' || e.key === 'V') {
+    currentTool = 'select';
+    setActiveToolBtn('select');
+    closeDrawPalette();
+  } else if (e.key === 'm' || e.key === 'M') {
+    currentTool = 'ruler';
+    setActiveToolBtn('ruler');
+    closeDrawPalette();
+  } else if (e.key === 'd' || e.key === 'D') {
+    toggleDrawPalette();
+  } else if (e.key === 'e' || e.key === 'E') {
+    currentTool = 'eraser';
+    setActiveToolBtn('eraser');
+  } else if (e.key === 'p' || e.key === 'P') {
+    currentTool = 'ping';
+    setActiveToolBtn('ping');
+  } else if (e.key === 't' || e.key === 'T') {
+    nextTurn();
+  } else if (e.key === 'r' || e.key === 'R') {
+    e.preventDefault();
+    const diceInput = document.getElementById('dice-formula-input');
+    if (diceInput) diceInput.focus();
+  } else if (e.key === 'f' || e.key === 'F') {
+    revealFogAroundTokens(250);
+  }
+});
 
 
 
