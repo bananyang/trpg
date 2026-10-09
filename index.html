@@ -1,0 +1,4703 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MYTHOS VTT — 올인원 TRPG 시뮬레이터 & 멀티플레이어</title>
+  <!-- PeerJS for Free Serverless WebRTC P2P Multiplayer on Web Hosting -->
+  <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+  <style>
+
+:root {
+  --bg-darker: #0a0c10;
+  --bg-dark: #12161f;
+  --bg-panel: #181d28;
+  --bg-card: #202636;
+  --bg-card-hover: #293145;
+  --border-color: #2e374d;
+  --border-gold: #d4a359;
+  --text-main: #e2e8f0;
+  --text-muted: #94a3b8;
+  --text-gold: #f6c879;
+  --accent-gold: #e5a93c;
+  --accent-gold-hover: #f5bc52;
+  --accent-red: #ef4444;
+  --accent-green: #22c55e;
+  --accent-blue: #3b82f6;
+  --accent-purple: #a855f7;
+  --accent-cyan: #06b6d4;
+  --font-sans: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-serif: 'Cinzel', 'Noto Serif KR', Georgia, serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-darker);
+  color: var(--text-main);
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header bar */
+header {
+  height: 52px;
+  background: linear-gradient(180deg, #181e2b 0%, #10141d 100%);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  z-index: 50;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+
+.logo-area {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-title {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--text-gold);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.badge {
+  font-size: 0.7rem;
+  padding: 2px 7px;
+  border-radius: 9999px;
+  font-weight: 600;
+}
+.badge-gold { background: rgba(229,169,60,0.2); color: var(--accent-gold); border: 1px solid rgba(229,169,60,0.4); }
+.badge-blue { background: rgba(59,130,246,0.2); color: var(--accent-blue); border: 1px solid rgba(59,130,246,0.4); }
+.badge-red { background: rgba(239,68,68,0.2); color: var(--accent-red); border: 1px solid rgba(239,68,68,0.4); }
+.badge-green { background: rgba(34,197,94,0.2); color: var(--accent-green); border: 1px solid rgba(34,197,94,0.4); }
+
+.room-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.room-chip {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.room-chip:hover {
+  border-color: var(--border-gold);
+  background: var(--bg-card-hover);
+}
+
+.user-selector {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+.user-selector select {
+  background: transparent;
+  color: var(--text-main);
+  border: none;
+  font-size: 0.85rem;
+  outline: none;
+  cursor: pointer;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-header {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 5px 11px;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+.btn-header:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-gold);
+  color: var(--text-gold);
+}
+.btn-xcard {
+  background: rgba(239,68,68,0.15);
+  border-color: rgba(239,68,68,0.5);
+  color: #fca5a5;
+  font-weight: 700;
+}
+.btn-xcard:hover {
+  background: rgba(239,68,68,0.3);
+  border-color: var(--accent-red);
+  color: #fff;
+}
+
+/* App Main Layout: 3 Columns */
+#app-main {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 360px 1fr 380px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Panels */
+.side-panel {
+  background-color: var(--bg-dark);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 52px);
+  overflow: hidden;
+  z-index: 10;
+}
+.right-panel {
+  border-right: none;
+  border-left: 1px solid var(--border-color);
+}
+
+/* Tabs */
+.panel-tabs {
+  display: flex;
+  background: #11141c;
+  border-bottom: 1px solid var(--border-color);
+}
+.panel-tab {
+  flex: 1;
+  text-align: center;
+  padding: 10px 4px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.panel-tab.active {
+  color: var(--text-gold);
+  border-bottom-color: var(--accent-gold);
+  background: rgba(229,169,60,0.06);
+}
+.panel-tab:hover:not(.active) {
+  color: var(--text-main);
+  background: rgba(255,255,255,0.02);
+}
+
+.panel-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.panel-content::-webkit-scrollbar {
+  width: 6px;
+}
+.panel-content::-webkit-scrollbar-thumb {
+  background: #2a3449;
+  border-radius: 3px;
+}
+
+/* Center VTT Workspace */
+#center-workspace {
+  position: relative;
+  background-color: #0c0e14;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Top Map Controls Bar */
+.map-top-bar {
+  position: absolute;
+  top: 12px;
+  left: 16px;
+  right: 16px;
+  height: 44px;
+  background: rgba(18, 22, 31, 0.88);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  z-index: 20;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+}
+
+.map-control-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.map-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 5px 9px;
+  border-radius: 5px;
+  font-size: 0.78rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.2s;
+}
+.map-btn:hover, .map-btn.active {
+  background: var(--bg-card-hover);
+  border-color: var(--border-gold);
+  color: var(--text-gold);
+}
+
+/* Floating Left Map Toolbar */
+.floating-toolbar {
+  position: absolute;
+  top: 68px;
+  left: 16px;
+  background: rgba(18, 22, 31, 0.92);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  padding: 6px;
+  gap: 6px;
+  z-index: 20;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+
+.tool-btn {
+  width: 38px;
+  height: 38px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  transition: all 0.2s;
+  position: relative;
+}
+.tool-btn:hover {
+  background: var(--bg-card);
+  color: var(--text-main);
+}
+.tool-btn.active {
+  background: rgba(229,169,60,0.2);
+  border-color: var(--accent-gold);
+  color: var(--text-gold);
+}
+
+/* Tool Submenu */
+.tool-submenu {
+  position: absolute;
+  left: 48px;
+  top: 0;
+  background: rgba(18, 22, 31, 0.96);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 8px;
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 140px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.6);
+}
+.tool-btn:hover .tool-submenu, .tool-submenu:hover {
+  display: flex;
+}
+
+/* Canvas Viewport */
+#canvas-container {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  cursor: default;
+}
+canvas#vtt-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Lighting / Atmosphere Overlay */
+#lighting-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+  transition: background 0.8s ease;
+}
+
+/* Environment Light Presets */
+.light-day { background: transparent; }
+.light-dusk { background: rgba(180, 80, 20, 0.15); mix-blend-mode: multiply; }
+.light-night { background: rgba(5, 12, 35, 0.55); mix-blend-mode: multiply; }
+.light-torch { background: radial-gradient(circle at center, rgba(255, 180, 50, 0.1) 0%, rgba(10, 5, 2, 0.65) 75%); mix-blend-mode: multiply; }
+.light-campfire { background: radial-gradient(circle at center, rgba(255, 120, 20, 0.15) 0%, rgba(8, 6, 12, 0.6) 80%); }
+.light-neon { background: linear-gradient(135deg, rgba(236,72,153,0.15) 0%, rgba(6,182,212,0.15) 100%); mix-blend-mode: screen; }
+
+/* Cards & Sections */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  padding-bottom: 8px;
+}
+.card-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-gold);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Scenario & Excerpt Box Styles */
+.scenario-selector-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.scene-nav-pills {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+.scene-nav-pills::-webkit-scrollbar { height: 4px; }
+.scene-pill {
+  padding: 4px 10px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.scene-pill.active {
+  background: rgba(229,169,60,0.2);
+  border-color: var(--accent-gold);
+  color: var(--text-gold);
+  font-weight: 600;
+}
+
+.excerpt-box {
+  background: rgba(14, 18, 27, 0.95);
+  border-left: 3px solid var(--accent-gold);
+  padding: 12px;
+  border-radius: 0 6px 6px 0;
+  font-size: 0.86rem;
+  line-height: 1.55;
+  color: #f1f5f9;
+  position: relative;
+}
+.excerpt-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.gm-secret-box {
+  background: rgba(45, 20, 20, 0.4);
+  border-left: 3px solid #f87171;
+  padding: 10px;
+  border-radius: 0 6px 6px 0;
+  font-size: 0.82rem;
+  color: #fecaca;
+}
+
+.check-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 7px 10px;
+  font-size: 0.82rem;
+}
+
+.btn-small {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-small:hover {
+  border-color: var(--border-gold);
+  color: var(--text-gold);
+  background: var(--bg-card-hover);
+}
+.btn-gold {
+  background: var(--accent-gold);
+  color: #000;
+  border: none;
+  font-weight: 700;
+}
+.btn-gold:hover {
+  background: var(--accent-gold-hover);
+  color: #000;
+}
+
+/* File Upload Zone */
+.upload-dropzone {
+  border: 2px dashed var(--border-color);
+  border-radius: 8px;
+  padding: 14px;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+  background: rgba(0,0,0,0.2);
+}
+.upload-dropzone:hover, .upload-dropzone.dragover {
+  border-color: var(--accent-gold);
+  color: var(--text-gold);
+  background: rgba(229,169,60,0.05);
+}
+
+/* Character Sheet UI */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.stat-box {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 8px 6px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.stat-box:hover {
+  border-color: var(--accent-gold);
+  transform: translateY(-1px);
+}
+.stat-name {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+.stat-val {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-gold);
+}
+.stat-mod {
+  font-size: 0.75rem;
+  color: var(--text-main);
+}
+
+.resource-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.resource-label-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+.gauge-track {
+  height: 8px;
+  background: #0f131a;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+.gauge-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+.gauge-hp { background: linear-gradient(90deg, #ef4444, #f87171); }
+.gauge-mp { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
+.gauge-san { background: linear-gradient(90deg, #8b5cf6, #c084fc); }
+
+/* Initiative Tracker */
+.combatant-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 8px 10px;
+  transition: all 0.2s;
+}
+.combatant-item.active-turn {
+  border-color: var(--accent-gold);
+  background: rgba(229,169,60,0.1);
+  box-shadow: 0 0 12px rgba(229,169,60,0.25);
+}
+.combatant-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.combatant-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #2a3449;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  border: 2px solid var(--border-color);
+}
+.combatant-init {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-gold);
+  min-width: 26px;
+  text-align: right;
+}
+
+/* Right Panel: Dice & Chat */
+.dice-tray-card {
+  background: #11141c;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* 3D-styled animated dice button row */
+.dice-buttons-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+.dice-btn {
+  background: linear-gradient(145deg, #262e40, #1b202d);
+  border: 1px solid #37425c;
+  color: #f1f5f9;
+  padding: 9px 0;
+  border-radius: 6px;
+  font-size: 0.86rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  transition: all 0.15s;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+}
+.dice-btn:hover {
+  border-color: var(--accent-gold);
+  color: var(--text-gold);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(0,0,0,0.5);
+}
+.dice-btn:active {
+  transform: translateY(1px);
+}
+.dice-icon {
+  font-size: 1rem;
+}
+
+/* Dice Formula input */
+.formula-row {
+  display: flex;
+  gap: 6px;
+}
+.formula-input {
+  flex: 1;
+  background: #0d1017;
+  border: 1px solid var(--border-color);
+  color: #fff;
+  border-radius: 6px;
+  padding: 7px 10px;
+  font-size: 0.85rem;
+  outline: none;
+  font-family: monospace;
+}
+.formula-input:focus {
+  border-color: var(--accent-gold);
+}
+
+.roll-mode-selector {
+  display: flex;
+  gap: 4px;
+}
+.roll-mode-pill {
+  flex: 1;
+  text-align: center;
+  font-size: 0.72rem;
+  padding: 4px 0;
+  background: #181d28;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+.roll-mode-pill.active {
+  background: rgba(229,169,60,0.2);
+  border-color: var(--accent-gold);
+  color: var(--text-gold);
+  font-weight: 600;
+}
+
+/* 3D Animated Rolling Stage */
+#dice-stage {
+  height: 80px;
+  background: radial-gradient(ellipse at center, #1e2638 0%, #0d1017 100%);
+  border: 1px dashed var(--border-color);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.rolling-dice-anim {
+  font-size: 2.2rem;
+  animation: rollTumble 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+@keyframes rollTumble {
+  0% { transform: scale(0.2) rotate(-360deg); opacity: 0; }
+  50% { transform: scale(1.3) rotate(180deg); }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+.dice-final-result {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--text-gold);
+  text-shadow: 0 0 15px rgba(229,169,60,0.6);
+}
+
+/* Chat & Log Box */
+.chat-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #12151e;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+}
+.chat-filter-bar {
+  display: flex;
+  background: #0f121a;
+  border-bottom: 1px solid var(--border-color);
+  padding: 4px 6px;
+  gap: 4px;
+}
+.chat-filter-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  padding: 3px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.chat-filter-btn.active {
+  background: var(--bg-card);
+  color: var(--text-gold);
+  font-weight: 600;
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.chat-messages::-webkit-scrollbar { width: 5px; }
+.chat-messages::-webkit-scrollbar-thumb { background: #2a3449; }
+
+/* Chat Message Cards */
+.msg-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 0.84rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  animation: fadeIn 0.2s ease;
+}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+.msg-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.72rem;
+}
+.msg-sender {
+  font-weight: 700;
+  color: var(--text-gold);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.msg-time {
+  color: var(--text-muted);
+}
+.msg-body {
+  color: var(--text-main);
+  line-height: 1.45;
+  word-break: break-word;
+}
+.msg-ic {
+  border-left: 3px solid var(--accent-blue);
+  background: rgba(59,130,246,0.06);
+}
+.msg-ooc {
+  border-left: 3px solid var(--text-muted);
+  color: #cbd5e1;
+}
+.msg-whisper {
+  border-left: 3px solid var(--accent-purple);
+  background: rgba(168,85,247,0.08);
+}
+.msg-dice {
+  border-left: 3px solid var(--accent-gold);
+  background: rgba(229,169,60,0.06);
+}
+.msg-narration {
+  border-left: 3px solid #ec4899;
+  background: rgba(236,72,153,0.06);
+  font-family: var(--font-serif);
+}
+
+.dice-result-badge {
+  font-size: 1.1rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-top: 4px;
+}
+.res-crit { background: rgba(34,197,94,0.25); color: #4ade80; border: 1px solid #22c55e; }
+.res-fumble { background: rgba(239,68,68,0.25); color: #f87171; border: 1px solid #ef4444; }
+.res-success { background: rgba(59,130,246,0.2); color: #60a5fa; border: 1px solid #3b82f6; }
+.res-fail { background: rgba(148,163,184,0.2); color: #cbd5e1; border: 1px solid #64748b; }
+
+/* Chat input bar */
+.chat-input-bar {
+  background: #0f121a;
+  border-top: 1px solid var(--border-color);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.chat-input-row {
+  display: flex;
+  gap: 6px;
+}
+.chat-input {
+  flex: 1;
+  background: #181d28;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  color: #fff;
+  padding: 7px 10px;
+  font-size: 0.85rem;
+  outline: none;
+}
+.chat-input:focus { border-color: var(--accent-gold); }
+
+.macro-bar {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+.macro-bar::-webkit-scrollbar { height: 3px; }
+.macro-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  padding: 3px 7px;
+  border-radius: 4px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.macro-btn:hover {
+  color: var(--text-gold);
+  border-color: var(--border-gold);
+}
+
+/* Modals */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(4px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+.modal-overlay.open {
+  display: flex;
+}
+.modal-card {
+  background: var(--bg-dark);
+  border: 1px solid var(--border-gold);
+  border-radius: 10px;
+  width: 90%;
+  max-width: 580px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+  animation: modalPop 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes modalPop { from { transform: scale(0.92); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+.modal-header {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.modal-title {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-gold);
+}
+.modal-close {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+.modal-close:hover { color: #fff; }
+
+.modal-body {
+  padding: 18px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  font-size: 0.88rem;
+}
+.modal-footer {
+  padding: 12px 18px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* Feature 50 List Modal special styling */
+.features-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  font-size: 0.78rem;
+}
+.feature-badge-item {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  padding: 6px 9px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.feature-num {
+  color: var(--accent-gold);
+  font-weight: 700;
+  min-width: 22px;
+}
+
+  </style>
+</head>
+<body>
+
+
+<header>
+  <div class="logo-area">
+    <div class="logo-title">
+      <span>⚔️</span> MYTHOS VTT
+    </div>
+    <span class="badge badge-gold">TRPG 시뮬레이터</span>
+  </div>
+
+  <div class="room-bar">
+    <div class="room-chip" id="btn-room-config" title="방 설정 및 비밀번호 변경">
+      <span>🔑</span>
+      <span>방 코드: <strong id="header-room-code">DRAGON-2026</strong></span>
+      <span id="header-room-lock">🔒</span>
+    </div>
+
+    <div class="user-selector">
+      <span>🎭 역할:</span>
+      <select id="user-role-select">
+        <option value="gm">👑 GM (게임 마스터)</option>
+        <option value="p1">⚔️ 아서 (전사 / 탐정)</option>
+        <option value="p2">🔮 엘레나 (마법사 / 학자)</option>
+        <option value="p3">🕵️ 존 (성직자 / 사립탐정)</option>
+        <option value="spectator">👁️ 관전자 (Spectator)</option>
+      </select>
+    </div>
+
+    <span class="badge badge-green" id="online-users-badge" title="현재 접속자: GM, 아서, 엘레나">🟢 3명 온라인</span>
+  </div>
+
+  <div class="header-actions">
+    <!-- Day/Night & Lighting -->
+    <div class="user-selector" title="환경 조명 설정">
+      <span>💡</span>
+      <select id="env-lighting-select">
+        <option value="light-day">☀️ 주간 (기본)</option>
+        <option value="light-dusk">🌅 황혼 (노을)</option>
+        <option value="light-night">🌙 야간 (심야)</option>
+        <option value="light-torch">🔥 횃불 (던전)</option>
+        <option value="light-campfire">🏕️ 모닥불 (야영)</option>
+        <option value="light-neon">🌆 사이버 네온</option>
+      </select>
+    </div>
+
+    <!-- BGM Toggle -->
+    <button class="btn-header" id="btn-toggle-bgm" title="앰비언스 BGM 토글">
+      <span id="bgm-icon">🎵</span> <span id="bgm-label">BGM: 꺼짐</span>
+    </button>
+
+    <!-- World Clock & Rest -->
+    <button class="btn-header" id="btn-world-clock" title="인게임 시간 및 휴식 관리">
+      <span>🕒</span> <span id="world-time-text">14:00 (낮)</span>
+    </button>
+
+    <!-- Safety X-Card -->
+    <button class="btn-header btn-xcard" id="btn-x-card" title="X-Card: 불편한 상황이나 트리거 발생 시 즉시 세션을 일시정지합니다.">
+      <span>🛑</span> X-CARD
+    </button>
+
+    <!-- 50 Features Guide -->
+    <button class="btn-header" id="btn-features-list" title="구현된 50대 전문 TRPG 기능 목록">
+      <span>⭐</span> 50대 기능
+    </button>
+
+    <!-- JSON State Backup -->
+    <button class="btn-header" id="btn-export-json" title="세션 데이터 전체 백업 (JSON)">
+      <span>💾</span> 저장
+    </button>
+  </div>
+</header>
+
+<div id="app-main">
+  <!-- LEFT PANEL: Scenario, Character Sheet, Initiative, GM Tools -->
+  <aside class="side-panel left-panel">
+    <div class="panel-tabs">
+      <div class="panel-tab active" data-tab="tab-scenario">
+        <span>📜</span>
+        <span>시나리오 & 룰</span>
+      </div>
+      <div class="panel-tab" data-tab="tab-character">
+        <span>👤</span>
+        <span>캐릭터</span>
+      </div>
+      <div class="panel-tab" data-tab="tab-initiative">
+        <span>⚔️</span>
+        <span>전투 순서</span>
+      </div>
+      <div class="panel-tab" data-tab="tab-gm-tools">
+        <span>🧩</span>
+        <span>GM 도구</span>
+      </div>
+    </div>
+
+    <!-- TAB 1: SCENARIO & RULEBOOK EXCERPT ENGINE -->
+    <div class="panel-content" id="tab-scenario">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">📖 시나리오 선택 & 파일 첨부</span>
+        </div>
+        <div class="scenario-selector-box">
+          <select id="scenario-preset-select" class="chat-input" style="padding: 6px;">
+            <option value="coc_manor">🔍 [크툴루] 블러드스톤 저택의 비밀</option>
+            <option value="dnd_mine">🐉 [D&D 판타지] 잊혀진 광산의 그림자</option>
+            <option value="cyber_heist">🌆 [사이버펑크] 네온 신디케이트 침투작전</option>
+            <option value="custom">📁 커스텀 사용자 시나리오</option>
+          </select>
+
+          <!-- File Upload Zone -->
+          <div class="upload-dropzone" id="scenario-dropzone">
+            <span>📂 <strong>시나리오 파일 첨부 (TXT, MD, JSON)</strong></span>
+            <div style="font-size: 0.72rem; margin-top: 4px; color: var(--text-muted);">
+              클릭하여 파일 선택 또는 드래그 앤 드롭<br>
+              (상황별 지문, DC 판정, 비밀 노트 자동 파싱)
+            </div>
+            <input type="file" id="scenario-file-input" accept=".txt,.md,.json" style="display: none;">
+          </div>
+        </div>
+      </div>
+
+      <!-- Scene Progression Pills -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">🗺️ 진행 상황 (씬 / 장소)</span>
+          <span class="badge badge-gold" id="current-scene-badge">제1장</span>
+        </div>
+        <div class="scene-nav-pills" id="scene-pills-container">
+          <!-- Dynamic Scene Buttons -->
+        </div>
+      </div>
+
+      <!-- CONTEXTUAL EXCERPT ENGINE (발췌 엔진) -->
+      <div class="card" id="context-excerpt-card">
+        <div class="card-header">
+          <span class="card-title">✨ 실시간 상황 발췌문</span>
+          <button class="btn-small btn-gold" id="btn-broadcast-narration" title="낭독용 지문을 플레이어 채팅창에 방송">
+            📢 채팅창 낭독 전송
+          </button>
+        </div>
+
+        <div class="excerpt-box">
+          <div class="excerpt-label">
+            <span>🎭 상황 및 배경 묘사 (Read-Aloud)</span>
+          </div>
+          <div id="excerpt-readaloud-text">
+            문이 열리자 서늘한 냉기와 함께 기괴한 침묵이 흘러나옵니다...
+          </div>
+        </div>
+
+        <div class="gm-secret-box" id="excerpt-gm-secret-box">
+          <div class="excerpt-label" style="color: #f87171;">
+            <span>🔒 GM 전용 비밀 노트 & 함정</span>
+            <button class="btn-small" id="btn-toggle-secret-vis" style="font-size: 0.68rem; padding: 1px 5px;">숨김/표시</button>
+          </div>
+          <div id="excerpt-gm-notes">
+            방 구석의 양탄자 아래에 지하실로 이어지는 쇠창살 문이 숨겨져 있습니다.
+          </div>
+        </div>
+
+        <!-- Required Checks in current scene -->
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <div class="excerpt-label">🎯 상황별 요구 판정 & 기능</div>
+          <div id="excerpt-checks-list" style="display: flex; flex-direction: column; gap: 6px;">
+            <!-- Rendered Checks with quick roll button -->
+          </div>
+        </div>
+
+        <!-- Clues in current scene -->
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <div class="excerpt-label">🔍 획득 가능한 단서 & 정보</div>
+          <div id="excerpt-clues-list" style="display: flex; flex-direction: column; gap: 6px;">
+            <!-- Rendered Clues with reveal button -->
+          </div>
+        </div>
+      </div>
+
+      <!-- SMART SEARCH & RULEBOOK LOOKUP -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">🔎 룰북 & 시나리오 키워드 검색</span>
+        </div>
+        <div class="formula-row">
+          <input type="text" id="rule-search-input" class="formula-input" placeholder="예: 기회공격, SAN 체크, 중독, 지하실..." />
+          <button class="btn-small btn-gold" id="btn-rule-search">검색</button>
+        </div>
+        <div id="rule-search-results" style="display: flex; flex-direction: column; gap: 6px; max-height: 180px; overflow-y: auto;">
+          <!-- Search matches will appear here -->
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: CHARACTER SHEET -->
+    <div class="panel-content" id="tab-character" style="display: none;">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">👤 캐릭터 관리</span>
+          <select id="char-system-select" class="btn-small">
+            <option value="dnd5e">D&D 5e</option>
+            <option value="coc7e">크툴루의 부름 (CoC 7e)</option>
+            <option value="freeform">자유형 (Custom)</option>
+          </select>
+        </div>
+
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <div id="char-avatar-preview" style="width: 50px; height: 50px; border-radius: 50%; background: #232c3d; border: 2px solid var(--accent-gold); display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+            ⚔️
+          </div>
+          <div style="flex: 1;">
+            <input type="text" id="char-name-input" class="formula-input" value="아서 펜드래건" style="font-weight: 700;" />
+            <input type="text" id="char-sub-input" class="formula-input" value="레벨 3 전사 / 수호자" style="font-size: 0.75rem; margin-top: 3px; color: var(--text-muted);" />
+          </div>
+        </div>
+
+        <!-- Resource Gauges (HP, MP, SAN, LUCK) -->
+        <div class="resource-bar">
+          <div class="resource-label-row">
+            <span>체력 (HP)</span>
+            <span id="hp-display">28 / 28</span>
+          </div>
+          <div class="gauge-track">
+            <div class="gauge-fill gauge-hp" id="hp-bar-fill" style="width: 100%;"></div>
+          </div>
+          <div style="display: flex; gap: 4px; margin-top: 2px;">
+            <button class="btn-small" onclick="modifyHP(-5)">-5</button>
+            <button class="btn-small" onclick="modifyHP(-1)">-1</button>
+            <button class="btn-small" onclick="modifyHP(1)">+1</button>
+            <button class="btn-small" onclick="modifyHP(5)">+5</button>
+          </div>
+        </div>
+
+        <div class="resource-bar" id="san-resource-container">
+          <div class="resource-label-row">
+            <span>정신력 / 이성 (SAN)</span>
+            <span id="san-display">65 / 65</span>
+          </div>
+          <div class="gauge-track">
+            <div class="gauge-fill gauge-san" id="san-bar-fill" style="width: 100%;"></div>
+          </div>
+        </div>
+
+        <!-- Stat Grid (Click to roll) -->
+        <div class="excerpt-label" style="margin-top: 4px;">능력치 (클릭 시 자동 판정 굴림)</div>
+        <div class="stat-grid" id="stats-container">
+          <!-- Dynamically injected stat boxes -->
+        </div>
+
+        <!-- Skills List -->
+        <div class="excerpt-label" style="margin-top: 6px;">주요 기능 및 스킬 (클릭하여 굴림)</div>
+        <div id="skills-container" style="display: flex; flex-direction: column; gap: 4px; max-height: 140px; overflow-y: auto;">
+          <!-- Dynamically injected skills -->
+        </div>
+
+        <!-- Active Conditions / Status Effects -->
+        <div class="excerpt-label" style="margin-top: 6px;">상태이상 (Condition Markers)</div>
+        <div id="condition-tags-container" style="display: flex; flex-wrap: wrap; gap: 4px;">
+          <!-- Condition badges -->
+        </div>
+      </div>
+
+      <!-- Monster & NPC Quick Compendium -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">👾 몬스터 & NPC 도감</span>
+        </div>
+        <div id="monster-compendium-list" style="display: flex; flex-direction: column; gap: 6px; max-height: 160px; overflow-y: auto;">
+          <!-- Pre-built monster spawn buttons -->
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: INITIATIVE & COMBAT -->
+    <div class="panel-content" id="tab-initiative" style="display: none;">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">⚔️ 턴 오더 & 이니셔티브</span>
+          <span class="badge badge-gold" id="round-counter-badge">라운드 1</span>
+        </div>
+
+        <div style="display: flex; gap: 6px;">
+          <button class="btn-small btn-gold" id="btn-roll-all-init" style="flex: 1;">🎲 전체 굴림</button>
+          <button class="btn-small" id="btn-next-turn" style="flex: 1;">⏭️ 다음 턴</button>
+          <button class="btn-small" id="btn-reset-combat" style="flex: 0.8;">🔄 초기화</button>
+        </div>
+
+        <div id="combatants-list" style="display: flex; flex-direction: column; gap: 6px; margin-top: 6px;">
+          <!-- Combatant items -->
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: GM UTILITIES & CLUE BOARD -->
+    <div class="panel-content" id="tab-gm-tools" style="display: none;">
+      <!-- Clue Board -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">🧩 단서 & 핸드아웃 보드</span>
+          <button class="btn-small" id="btn-add-clue">+ 새 단서 등록</button>
+        </div>
+        <div id="clue-board-container" style="display: flex; flex-direction: column; gap: 6px; max-height: 180px; overflow-y: auto;">
+          <!-- Clue Cards -->
+        </div>
+      </div>
+
+      <!-- Random Generators -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">🎲 무작위 생성기 (Random Tables)</span>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+          <button class="btn-small" onclick="generateRandom('npc')">👤 NPC 이름</button>
+          <button class="btn-small" onclick="generateRandom('tavern')">🍺 주점 소문</button>
+          <button class="btn-small" onclick="generateRandom('loot')">💎 전리품 루팅</button>
+          <button class="btn-small" onclick="generateRandom('weather')">⛈️ 날씨/환경</button>
+        </div>
+        <div id="random-gen-result" class="excerpt-box" style="font-size: 0.8rem; margin-top: 4px; display: none;">
+          <!-- Result text -->
+        </div>
+      </div>
+
+      <!-- Session Notes -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">📝 세션 메모 & 일지</span>
+          <button class="btn-small" onclick="downloadSessionNotes()">TXT 저장</button>
+        </div>
+        <textarea id="session-notes-area" class="formula-input" style="height: 100px; resize: vertical;" placeholder="플레이 중 발생한 중요한 사건, 획득한 보물, NPC 이름을 자유롭게 기록하세요..."></textarea>
+      </div>
+    </div>
+  </aside>
+
+  <!-- CENTER VTT WORKSPACE -->
+  <main id="center-workspace">
+    <!-- Top Map Control Bar -->
+    <div class="map-top-bar">
+      <!-- Map Selection -->
+      <div class="map-control-group">
+        <span>🗺️</span>
+        <select id="map-preset-select" class="map-btn">
+          <option value="dungeon">고대 지하 감옥 (Dungeon)</option>
+          <option value="manor">빅토리아 저택 (Manor)</option>
+          <option value="tavern">숲속 안식처 여관 (Tavern)</option>
+          <option value="cyber">네온 사이버 클럽 (Cyberpunk)</option>
+          <option value="alien">심우주 탐사선 함교 (Sci-Fi)</option>
+        </select>
+        <button class="map-btn" id="btn-custom-map-upload" title="내 PC의 지도 이미지 파일 업로드">
+          <span>📁</span> 맵 업로드
+        </button>
+        <input type="file" id="map-file-input" accept="image/*" style="display: none;" />
+      </div>
+
+      <!-- Grid Controls -->
+      <div class="map-control-group">
+        <span>📐 그리드:</span>
+        <select id="grid-type-select" class="map-btn">
+          <option value="square">정사각형</option>
+          <option value="hex">육각형</option>
+          <option value="none">없음</option>
+        </select>
+        <input type="range" id="grid-size-slider" min="30" max="100" value="50" style="width: 70px;" title="그리드 크기 조절" />
+      </div>
+
+      <!-- Fog of War Controls -->
+      <div class="map-control-group">
+        <button class="map-btn" id="btn-toggle-fog">
+          <span>🌫️</span> <span id="fog-label">안개 ON</span>
+        </button>
+        <button class="map-btn" id="btn-fog-brush-reveal" title="시야 밝히기 브러시">밝히기</button>
+        <button class="map-btn" id="btn-fog-brush-hide" title="시야 가리기 브러시">가리기</button>
+        <button class="map-btn" id="btn-fog-reveal-all" title="전체 안개 걷어내기">전체공개</button>
+      </div>
+
+      <!-- Zoom & Viewport -->
+      <div class="map-control-group">
+        <button class="map-btn" id="btn-zoom-out" title="축소">-</button>
+        <span id="zoom-level-text" style="font-size: 0.78rem; min-width: 38px; text-align: center;">100%</span>
+        <button class="map-btn" id="btn-zoom-in" title="확대">+</button>
+        <button class="map-btn" id="btn-zoom-reset" title="원래 크기">리셋</button>
+      </div>
+    </div>
+
+    <!-- Floating Map Left Toolbar -->
+    <div class="floating-toolbar">
+      <button class="tool-btn active" data-tool="select" title="선택 및 토큰 이동 (V)">
+        <span>🖐️</span>
+      </button>
+
+      <button class="tool-btn" data-tool="ruler" title="전술 거리 측정 자 (M)">
+        <span>📏</span>
+      </button>
+
+      <button class="tool-btn" data-tool="aoe" title="마법 범위 템플릿 (AoE)">
+        <span>📐</span>
+        <div class="tool-submenu">
+          <div onclick="setAoEType('circle')">🔴 원형 폭발 (20ft)</div>
+          <div onclick="setAoEType('cone')">🔻 부채꼴 콘 (30ft)</div>
+          <div onclick="setAoEType('square')">⬛ 사각형 (20ft)</div>
+        </div>
+      </button>
+
+      <button class="tool-btn" data-tool="ping" title="GM 핑 / 관심 지점 비콘 (P)">
+        <span>📍</span>
+      </button>
+
+      <button class="tool-btn" data-tool="draw" title="화이트보드 그리기 (D)">
+        <span>✏️</span>
+        <div class="tool-submenu">
+          <div onclick="setDrawColor('#ef4444')">🔴 빨간 펜</div>
+          <div onclick="setDrawColor('#3b82f6')">🔵 파란 펜</div>
+          <div onclick="setDrawColor('#22c55e')">🟢 초록 펜</div>
+          <div onclick="setDrawColor('#e5a93c')">🟡 노란 형광펜</div>
+          <div onclick="clearDrawings()">🗑️ 전체 지우기</div>
+        </div>
+      </button>
+
+      <button class="tool-btn" data-tool="eraser" title="지우개 (E)">
+        <span>🧽</span>
+      </button>
+
+      <button class="tool-btn" id="btn-quick-spawn-token" title="빠른 토큰 소환">
+        <span>➕</span>
+      </button>
+    </div>
+
+    <!-- Canvas Container -->
+    <div id="canvas-container">
+      <canvas id="vtt-canvas"></canvas>
+      <div id="lighting-overlay" class="light-day"></div>
+    </div>
+  </main>
+
+  <!-- RIGHT PANEL: Dice Tray, Rolls & Chat -->
+  <aside class="side-panel right-panel">
+    <!-- DICE ROLLER TRAY -->
+    <div class="dice-tray-card">
+      <div class="card-header">
+        <span class="card-title">🎲 3D 시각 주사위 트레이</span>
+        <button class="btn-small" id="btn-open-dice-stats" title="주사위 통계 및 행운도 분석">
+          📊 통계
+        </button>
+      </div>
+
+      <!-- Quick Polyhedral Buttons -->
+      <div class="dice-buttons-grid">
+        <button class="dice-btn" onclick="quickRoll(4)">
+          <span class="dice-icon">▲</span>
+          <span>d4</span>
+        </button>
+        <button class="dice-btn" onclick="quickRoll(6)">
+          <span class="dice-icon">⚄</span>
+          <span>d6</span>
+        </button>
+        <button class="dice-btn" onclick="quickRoll(8)">
+          <span class="dice-icon">◆</span>
+          <span>d8</span>
+        </button>
+        <button class="dice-btn" onclick="quickRoll(10)">
+          <span class="dice-icon">◈</span>
+          <span>d10</span>
+        </button>
+        <button class="dice-btn" onclick="quickRoll(12)">
+          <span class="dice-icon">⬢</span>
+          <span>d12</span>
+        </button>
+        <button class="dice-btn" onclick="quickRoll(20)" style="border-color: var(--border-gold); color: var(--text-gold);">
+          <span class="dice-icon">★</span>
+          <span>d20</span>
+        </button>
+        <button class="dice-btn" onclick="quickRoll(100)">
+          <span class="dice-icon">💯</span>
+          <span>d100</span>
+        </button>
+        <button class="dice-btn" onclick="quickRoll('F')">
+          <span class="dice-icon">☯</span>
+          <span>Fate</span>
+        </button>
+      </div>
+
+      <!-- Custom Formula -->
+      <div class="formula-row">
+        <input type="text" id="dice-formula-input" class="formula-input" placeholder="수식: 2d6+4, 4d6kh3, 1d100..." />
+        <button class="btn-small btn-gold" id="btn-roll-formula">굴림</button>
+      </div>
+
+      <!-- Roll Modes -->
+      <div class="roll-mode-selector">
+        <div class="roll-mode-pill active" data-mode="public" title="모든 플레이어에게 결과 공개">🌍 공개</div>
+        <div class="roll-mode-pill" data-mode="gm" title="GM에게만 비밀 굴림">🔒 GM비밀</div>
+        <div class="roll-mode-pill" data-mode="blind" title="GM만 결과를 알고 본인은 모름">🙈 블라인드</div>
+        <div class="roll-mode-pill" data-mode="self" title="나에게만 표시">👤 개인</div>
+      </div>
+
+      <!-- 3D Rolling Visual Stage -->
+      <div id="dice-stage">
+        <div id="dice-stage-content">
+          <span style="font-size: 0.8rem; color: var(--text-muted);">주사위를 클릭하거나 수식을 입력하세요</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- IN-GAME CHAT & LOG -->
+    <div class="chat-container">
+      <div class="chat-filter-bar">
+        <button class="chat-filter-btn active" data-filter="all">전체</button>
+        <button class="chat-filter-btn" data-filter="chat">대화만</button>
+        <button class="chat-filter-btn" data-filter="dice">주사위</button>
+        <button class="chat-filter-btn" data-filter="system">시스템</button>
+        <div style="flex: 1;"></div>
+        <select id="chat-mode-toggle" class="btn-small" style="font-size: 0.7rem; padding: 1px 4px;">
+          <option value="ic">🎭 인게임 (IC)</option>
+          <option value="ooc">💬 잡담 (OOC)</option>
+        </select>
+      </div>
+
+      <div class="chat-messages" id="chat-messages-container">
+        <!-- Message Cards injected here -->
+      </div>
+
+      <div class="chat-input-bar">
+        <!-- Macro bar -->
+        <div class="macro-bar">
+          <div class="macro-btn" onclick="executeMacro('attack')">⚔️ 근접 공격 (1d20+5)</div>
+          <div class="macro-btn" onclick="executeMacro('dodge')">🛡️ 회피 판정</div>
+          <div class="macro-btn" onclick="executeMacro('spot')">👁️ 관찰력 체크</div>
+          <div class="macro-btn" onclick="executeMacro('san')">🧠 SAN 체크 (1/1d4)</div>
+        </div>
+
+        <div class="chat-input-row">
+          <input type="text" id="chat-input-field" class="chat-input" placeholder="메시지 입력... (/w 대상, /gm 으로 귓속말)" />
+          <button class="btn-small btn-gold" id="btn-send-chat">전송</button>
+        </div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<!-- MODAL: Room Setup & Password Verification -->
+<div class="modal-overlay" id="modal-room-config">
+  <div class="modal-card">
+    <div class="modal-header">
+      <span class="modal-title">🔑 멀티플레이 방 설정 & 입장</span>
+      <button class="modal-close" onclick="closeModal('modal-room-config')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+        멀티 탭 또는 다른 브라우저 창에서 같은 <strong>방 코드</strong>와 <strong>비밀번호</strong>를 입력하면 실시간으로 동기화되어 함께 플레이할 수 있습니다.
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <label style="font-size: 0.8rem; font-weight: 600;">방 코드 (Room Code):</label>
+        <input type="text" id="modal-input-room-code" class="formula-input" value="DRAGON-2026" />
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <label style="font-size: 0.8rem; font-weight: 600;">방 비밀번호 (Room Password):</label>
+        <input type="password" id="modal-input-room-pw" class="formula-input" placeholder="비밀번호를 입력하세요 (선택)" value="1234" />
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <label style="font-size: 0.8rem; font-weight: 600;">접속자 닉네임:</label>
+        <input type="text" id="modal-input-user-name" class="formula-input" value="마스터 GM" />
+      </div>
+
+      <div style="background: rgba(229,169,60,0.1); border: 1px solid var(--accent-gold); padding: 10px; border-radius: 6px; font-size: 0.8rem;">
+        💡 <strong>팁</strong>: 새 창이나 탭을 열고 동일한 방 코드와 비밀번호로 접속하면 토큰 이동, 다이스 굴림, 채팅이 완벽하게 실시간 동기화됩니다!
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-small" onclick="closeModal('modal-room-config')">취소</button>
+      <button class="btn-small btn-gold" id="btn-save-room-config">입장 및 적용</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: 50 Features Checklist -->
+<div class="modal-overlay" id="modal-features-list">
+  <div class="modal-card" style="max-width: 700px;">
+    <div class="modal-header">
+      <span class="modal-title">⭐ 시뮬레이터에 구현된 50대 전문 TRPG 기능</span>
+      <button class="modal-close" onclick="closeModal('modal-features-list')">✕</button>
+    </div>
+    <div class="modal-body" style="max-height: 70vh;">
+      <div style="font-size: 0.84rem; color: var(--text-muted); margin-bottom: 8px;">
+        사용자 요청에 따라 고안 및 구현된 50가지 필수 및 고급 TRPG 기능 목록입니다. 모든 기능이 시뮬레이터 내에 완전하게 내장되어 즉시 작동합니다.
+      </div>
+      <div class="features-grid" id="features-list-container">
+        <!-- 50 features dynamically injected here -->
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-small btn-gold" onclick="closeModal('modal-features-list')">확인</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Dice Statistics & Luck Meter -->
+<div class="modal-overlay" id="modal-dice-stats">
+  <div class="modal-card">
+    <div class="modal-header">
+      <span class="modal-title">📊 세션 주사위 통계 & 행운 분석</span>
+      <button class="modal-close" onclick="closeModal('modal-dice-stats')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; text-align: center;">
+        <div class="stat-box">
+          <div class="stat-name">총 굴림 횟수</div>
+          <div class="stat-val" id="stats-total-rolls">0</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-name">크리티컬 성공</div>
+          <div class="stat-val" id="stats-crit-count" style="color: #4ade80;">0</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-name">대실패 (펌블)</div>
+          <div class="stat-val" id="stats-fumble-count" style="color: #f87171;">0</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top: 10px;">
+        <div class="card-title">🍀 플레이어 행운도 지수</div>
+        <div class="gauge-track" style="height: 12px; margin-top: 6px;">
+          <div class="gauge-fill" id="luck-gauge-fill" style="width: 50%; background: linear-gradient(90deg, #ef4444, #e5a93c, #22c55e);"></div>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">
+          <span>불운 (0%)</span>
+          <span id="luck-percent-label">보통 (50%)</span>
+          <span>천운 (100%)</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">주사위 종류별 굴림 횟수</div>
+        <div id="dice-type-breakdown" style="font-size: 0.82rem; color: var(--text-muted); display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-small" onclick="resetDiceStats()">통계 초기화</button>
+      <button class="btn-small btn-gold" onclick="closeModal('modal-dice-stats')">닫기</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Token Quick Edit -->
+<div class="modal-overlay" id="modal-token-edit">
+  <div class="modal-card">
+    <div class="modal-header">
+      <span class="modal-title">⚙️ 토큰 속성 편집</span>
+      <button class="modal-close" onclick="closeModal('modal-token-edit')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="display: flex; flex-direction: column; gap: 6px;">
+        <label style="font-size: 0.8rem;">토큰 이름:</label>
+        <input type="text" id="token-edit-name" class="formula-input" />
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+        <div>
+          <label style="font-size: 0.8rem;">현재 HP:</label>
+          <input type="number" id="token-edit-hp" class="formula-input" />
+        </div>
+        <div>
+          <label style="font-size: 0.8rem;">최대 HP:</label>
+          <input type="number" id="token-edit-maxhp" class="formula-input" />
+        </div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 6px;">
+        <label style="font-size: 0.8rem;">크기 (Size):</label>
+        <select id="token-edit-size" class="formula-input">
+          <option value="1">Medium (1칸)</option>
+          <option value="2">Large (2x2칸)</option>
+          <option value="3">Huge (3x3칸)</option>
+        </select>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 6px;">
+        <label style="font-size: 0.8rem;">아이콘 / 아바타 (이모지 또는 이미지 URL):</label>
+        <input type="text" id="token-edit-icon" class="formula-input" placeholder="예: ⚔️, 🧙, 🐉 또는 이미지 링크" />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-small" style="color: #ef4444;" onclick="deleteSelectedToken()">토큰 삭제</button>
+      <button class="btn-small btn-gold" onclick="saveTokenEdit()">저장</button>
+    </div>
+  </div>
+</div>
+
+
+<script>
+
+// --- 50 EXPLICIT TRPG FEATURES LIST ---
+const TRPG_50_FEATURES = [
+  { id: 1, name: "멀티플레이어 방 코드 시스템", desc: "고유 방 코드를 통한 방 생성 및 입장" },
+  { id: 2, name: "비밀번호 보안 인증", desc: "방 비밀번호 설정을 통한 비공개 세션 보호" },
+  { id: 3, name: "실시간 멀티탭 동기화", desc: "BroadcastChannel 및 LocalStorage 기반 제로 레이턴시 브라우저 간 동기화" },
+  { id: 4, name: "역할 기반 권한 분리", desc: "GM(마스터), 플레이어, 관전자 권한 구분 및 전용 인터페이스" },
+  { id: 5, name: "플레이어/캐릭터 빠른 전환기", desc: "단일 화면에서도 GM과 플레이어 1~3 시점을 즉시 테스트" },
+  { id: 6, name: "세션 상태 JSON 백업 및 복원", desc: "맵, 토큰, 캐릭터, 로그 전체를 단일 JSON 파일로 내보내기/불러오기" },
+  { id: 7, name: "다면체 다이스 바", desc: "d4, d6, d8, d10, d12, d20, d100, Fate 주사위 원클릭 굴림" },
+  { id: 8, name: "복합 수식 파서", desc: "4d6kh3, 2d20kl1, 3d6+5, 1d100 등 고급 TRPG 수식 지원" },
+  { id: 9, name: "3D 스타일 시각 주사위 트레이", desc: "역동적인 회전/물리 연출 애니메이션 주사위 스테이지" },
+  { id: 10, name: "4단계 다이스 롤 가시성", desc: "공개 롤, GM 비밀 롤, 블라인드 롤, 나만 보기 롤" },
+  { id: 11, name: "크리티컬/대실패 자동 판정", desc: "D&D Nat 20/1, CoC 01 대성공/96-100 대실패 자동 감지" },
+  { id: 12, name: "폭발 주사위 및 Fate/Fudge 룰", desc: "최댓값 시 추가 굴림(!) 및 운명 주사위(+ - 0) 연산" },
+  { id: 13, name: "세션 주사위 통계 & 행운도", desc: "총 굴림 수, 평균값, 주사위 분포도, 실시간 행운 게이지 분석" },
+  { id: 14, name: "버추얼 캔버스 줌 & 패닝", desc: "부드러운 마우스 휠 줌, 스페이스바/우클릭 드래그 패닝, 리셋" },
+  { id: 15, name: "다중 그리드 모드", desc: "정사각형 그리드, 육각형(Hex) 그리드, 무격자 모드 및 크기 조절" },
+  { id: 16, name: "동적 전장의 안개 (Fog of War)", desc: "GM용 시야 브러시(밝히기/가리기/전체공개) 및 플레이어 시야 차단" },
+  { id: 17, name: "다중 토큰 배치 & 드래그 이동", desc: "플레이어, 몬스터, NPC 토큰 맵 배치 및 실시간 위치 동기화" },
+  { id: 18, name: "토큰 실시간 HP HUD 게이지", desc: "토큰 상단에 실시간으로 반영되는 체력 바 및 수치 표시" },
+  { id: 19, name: "토큰 상태이상 오버레이 마커", desc: "중독, 기절, 실명, 축복, 사망 등 시각적 상태 아이콘 부착" },
+  { id: 20, name: "토큰 크기 조절 (S/M/L/Huge)", desc: "1칸, 2x2칸, 3x3칸 등 크리처 규모에 맞춘 크기 변경" },
+  { id: 21, name: "전술 거리 측정 자 (Ruler)", desc: "두 지점 간 실제 거리(피트/미터/칸수) 실시간 표시" },
+  { id: 22, name: "마법/기술 AoE 범위 템플릿", desc: "원형 폭발(20ft), 부채꼴 콘(30ft), 사각형 범위 시각화" },
+  { id: 23, name: "GM 핑 & 관심 지점 비콘", desc: "맵 클릭 시 전원에게 동심원 파동 애니메이션 핑 송신" },
+  { id: 24, name: "화이트보드 자유 드로잉 도구", desc: "색상 펜, 형광펜, 직선, 지우개로 맵 위 즉각 판서" },
+  { id: 25, name: "5종 고화질 맵 프리셋 내장", desc: "고대 지하감옥, 저택, 숲속 여관, 사이버펑크, 우주선" },
+  { id: 26, name: "커스텀 맵 이미지 파일 업로드", desc: "사용자 PC의 지도 파일 드래그 앤 드롭 즉각 캔버스 반영" },
+  { id: 27, name: "맵 레이어 관리 시스템", desc: "배경 맵 레이어, 토큰 레이어, 안개 레이어, 드로잉 레이어 분리" },
+  { id: 28, name: "다중 룰 시스템 캐릭터 시트", desc: "D&D 5e, 크툴루의 부름 7e, 자유형 커스텀 시트 완벽 전환" },
+  { id: 29, name: "시트 원클릭 판정 굴림", desc: "능력치나 스킬 클릭 시 수정치가 자동 계산되어 다이스 굴림" },
+  { id: 30, name: "동적 자원 트래커", desc: "HP, 임시 HP, MP, 이성(SAN), 행운(Luck) 게이지 및 증감 버튼" },
+  { id: 31, name: "인벤토리 및 소지품 관리", desc: "착용 무기, 방어구, 소비 아이템, 소지 한도 관리" },
+  { id: 32, name: "몬스터 & NPC 원클릭 소환 도감", desc: "고블린, 좀비, 쇼고스, 사이보그 등 즉시 맵 토큰 소환" },
+  { id: 33, name: "전투 순서 및 이니셔티브 트래커", desc: "민첩 기반 자동 굴림, 순서 정렬, 라운드 카운터 및 턴 넘기기" },
+  { id: 34, name: "현재 턴 활성 토큰 맵 하이라이트", desc: "현재 차례인 전투원 토큰에 황금빛 회전 링 효과 부여" },
+  { id: 35, name: "3대 장르 내장 시나리오", desc: "크툴루 저택 미스터리, D&D 지하 광산, 사이버펑크 침투작전" },
+  { id: 36, name: "외부 시나리오 파일 업로더", desc: "TXT, MD, JSON 파일 첨부 시 씬, 낭독 지문, DC 판정 자동 파싱" },
+  { id: 37, name: "상황별 스마트 발췌 엔진 (Context Excerpt)", desc: "현재 씬에 맞는 배경 묘사, NPC 대사, 판정을 자동으로 추출" },
+  { id: 38, name: "원클릭 낭독 지문 채팅 방송", desc: "GM이 긴 시나리오 지문을 타이핑 없이 원클릭으로 플레이어 채팅창에 송출" },
+  { id: 39, name: "GM 전용 비밀 노트 및 함정 뷰어", desc: "플레이어에게는 숨겨진 비밀 힌트 및 기믹을 GM 화면에만 표시" },
+  { id: 40, name: "단서 및 핸드아웃 조사 보드", desc: "발견된 단서 카드 등록, 조사 및 플레이어에게 공개 토글" },
+  { id: 41, name: "시나리오 & 룰북 실시간 스마트 검색", desc: "키워드 입력 시 시나리오 본문 및 룰북에서 즉시 검색 및 하이라이트" },
+  { id: 42, name: "핵심 룰북 퀵 레퍼런스", desc: "전투 행동 경제학, 기회공격, 난이도 표, CoC 성공 판정표 등 내장" },
+  { id: 43, name: "웹 오디오 SFX 합성기", desc: "주사위 구르는 소리, 칼날 격돌, 마법 시전, 대성공 팡파레 효과음" },
+  { id: 44, name: "앰비언트 BGM 플레이어", desc: "주점, 공포 저택, 전투, 사이버펑크 앰비언스 사운드스케이프" },
+  { id: 45, name: "환경 조명 오버레이", desc: "주간, 황혼, 심야, 던전 횃불, 모닥불, 사이버 네온 조명 필터" },
+  { id: 46, name: "인게임(IC) vs 잡담(OOC) 채팅 모드", desc: "캐릭터 대사와 플레이어 대화를 시각적으로 구분하여 롤플레잉 지원" },
+  { id: 47, name: "비밀 귓속말 시스템", desc: "/w [플레이어] 또는 /gm 명령어로 특정 대상과만 비밀 소통" },
+  { id: 48, name: "세션 타이머 & 월드 시계", desc: "실제 플레이 시간 측정 및 인게임 시간 흐름, 짧은/긴 휴식 관리" },
+  { id: 49, name: "무작위 생성기 (Random Tables)", desc: "NPC 이름(판타지/현대/사이버), 주점 소문, 던전 루팅, 날씨 생성" },
+  { id: 50, name: "세이프티 X-Card 시스템", desc: "부적절하거나 불편한 상황 발생 시 즉시 전원에게 익명/실명 일시정지 경보" }
+];
+
+// --- BUILT-IN SCENARIOS ---
+const BUILTIN_SCENARIOS = {
+  coc_manor: {
+    id: "coc_manor",
+    title: "블러드스톤 저택의 비밀 (Call of Cthulhu 7e)",
+    genre: "Cosmic Horror / Investigation",
+    system: "coc7e",
+    description: "1928년 뉴잉글랜드 외곽의 고풍스러운 블러드스톤 저택. 유명 식물학자 아서 블러드스톤 경의 의문의 실종 사건을 조사하기 위해 탐정단이 파견됩니다.",
+    scenes: [
+      {
+        id: "scene_1",
+        name: "제1장: 안개 낀 현관 홀",
+        map: "manor",
+        readAloud: "무거운 참나무 문을 열자 퀴퀴한 곰팡이 냄새와 함께 차가운 공기가 밀려옵니다. 천장의 샹들리에는 위태롭게 흔들리고, 대리석 바닥에는 며칠 전 말라붙은 검붉은 액체의 흔적이 서재 방향으로 이어져 있습니다.",
+        gmNotes: "바닥의 얼룩은 인간의 피가 아니라 괴생명체의 체액입니다. 서재 문은 잠겨있지 않으나, 문손잡이에 기분 나쁜 점액이 묻어 있습니다. 2층에서 하인 윌리엄이 떨며 엿보고 있습니다.",
+        checks: [
+          { skill: "관찰력", target: "보통 (50%)", effect: "서재 문틈 사이에 끼어있는 찢어진 연구일지 조각 발견" },
+          { skill: "은밀행동", target: "어려움 (25%)", effect: "저택 2층 계단에서 서성이는 하인 윌리엄에게 들키지 않고 접근" },
+          { skill: "SAN 체크", target: "0/1d3", effect: "바닥의 기괴한 기하학적 피 문양을 처음 목격했을 때 정신력 판정" }
+        ],
+        clues: [
+          { id: "c1", title: "찢겨진 일지 조각", text: "'그것은 식물이 아니다... 별들이 제자리를 찾을 때 온실의 뿌리가 깨어난다... 10월 14일의 의식을 막아야 한다.'", found: false }
+        ]
+      },
+      {
+        id: "scene_2",
+        name: "제2장: 금지된 서재",
+        map: "manor",
+        readAloud: "천장까지 닿는 서가에는 오컬트와 식물학 서적이 빼곡합니다. 책상 위에는 정체불명의 보라색 발광 포자가 담긴 시험관과 반쯤 해독된 고대 양피지가 펼쳐져 있습니다.",
+        gmNotes: "벽난로 뒤에 숨겨진 비밀 금고가 있습니다. 벽난로의 사자 머리 조각상을 왼쪽으로 돌리면 지하 연구실로 통하는 석조 계단이 드러납니다.",
+        checks: [
+          { skill: "자료조사", target: "보통 (60%)", effect: "아서 경이 남아메리카 심해 분지에서 채집한 심연의 균류에 대한 기록 발견" },
+          { skill: "오컬트", target: "어려움 (30%)", effect: "양피지에 적힌 주문이 슈브 니구라스의 하수인을 소환하는 의식임을 간파" },
+          { skill: "듣기", target: "보통 (50%)", effect: "벽난로 너머 지하에서 들려오는 축축한 꿈틀거림 소리 감지" }
+        ],
+        clues: [
+          { id: "c2", title: "아서 경의 비밀 메모", text: "'지하 온실의 열쇠는 사자상의 눈에 있다. 황동 열쇠를 꽂고 돌려라.'", found: false }
+        ]
+      },
+      {
+        id: "scene_3",
+        name: "제3장: 기괴한 지하 온실",
+        map: "dungeon",
+        readAloud: "지하로 내려서자 숨이 턱 막히는 열기와 함께 인간의 맥박처럼 고동치는 거대한 검은 덩굴들이 벽을 뒤덮고 있습니다. 방 한가운데에는 흉측하게 변이된 아서 경이 기괴한 주문을 읊조리고 있습니다.",
+        gmNotes: "아서 경은 이미 절반 이상 괴물로 변이되었습니다. 불과 냉기에 취약합니다. 의식용 향로를 파괴하면 괴물의 힘이 반감됩니다.",
+        checks: [
+          { skill: "SAN 체크", target: "1/1d6", effect: "변이된 아서 경과 맥박치는 식물 심장을 목격" },
+          { skill: "사격 / 근접전투", target: "보통", effect: "괴물의 중앙 핵 또는 의식 제단을 타격" },
+          { skill: "민첩", target: "어려움", effect: "바닥에서 솟구치는 덩굴의 휘감기 공격 회피" }
+        ],
+        clues: [
+          { id: "c3", title: "정화의 비약 레시피", text: "'황과 소금, 은을 녹인 알코올을 식물 심장에 주입하면 침식을 멈출 수 있다.'", found: false }
+        ]
+      }
+    ]
+  },
+  dnd_mine: {
+    id: "dnd_mine",
+    title: "잊혀진 광산의 그림자 (D&D 5e 판타지)",
+    genre: "Fantasy / Dungeon Crawl",
+    system: "dnd5e",
+    description: "판달린 남쪽 크랙록 광산. 수백 년 전 전설적인 마법 유물이 묻힌 폐광을 사악한 고블린 무리와 흑마법사가 점거했습니다.",
+    scenes: [
+      {
+        id: "scene_1",
+        name: "구역 1: 광산 입구의 매복",
+        map: "dungeon",
+        readAloud: "수풀 속에 교묘히 숨겨진 광산 입구는 무너진 목재 기둥으로 간신히 지탱되고 있습니다. 입구 주변 바닥에는 조잡한 고블린 발자국과 늑대의 발톱 자국이 선명합니다.",
+        gmNotes: "입구 덤불 뒤에 고블린 정찰병 2마리가 숨어 있습니다. 지혜(인식) DC 12를 넘지 못하면 기습당합니다.",
+        checks: [
+          { skill: "지혜(인식)", target: "DC 12", effect: "매복 중인 고블린 2마리의 웅얼거림 발견" },
+          { skill: "민첩(은신)", target: "DC 13", effect: "기습 공격 기회 획득" }
+        ],
+        clues: [
+          { id: "c4", title: "고블린 정찰 지도", text: "'안쪽 도르래 함정 주의. 보스는 수정 동굴에 있다.'", found: false }
+        ]
+      },
+      {
+        id: "scene_2",
+        name: "구역 2: 흔들리는 밧줄 다리",
+        map: "dungeon",
+        readAloud: "광산 내부의 거대한 지하 협곡을 가로지르는 낡은 밧줄 다리가 보입니다. 아래로는 끝을 알 수 없는 칠흑 같은 암흑과 물소리가 울려 퍼집니다.",
+        gmNotes: "다리 중앙 발판은 썩어있습니다. DC 14 민첩 내성에 실패하면 추락 위험.",
+        checks: [
+          { skill: "민첩 내성", target: "DC 14", effect: "부서지는 발판을 딛고 안전하게 반대편으로 도약" },
+          { skill: "근력(운동)", target: "DC 13", effect: "추락하는 동료의 팔을 붙잡아 끌어올림" }
+        ],
+        clues: [
+          { id: "c5", title: "광부의 녹슨 유골함", text: "마법의 치유 물약 2병과 50 GP 발견", found: false }
+        ]
+      },
+      {
+        id: "scene_3",
+        name: "구역 3: 흑마법사의 수정 제단",
+        map: "dungeon",
+        readAloud: "동굴 벽면 가득 푸른빛을 발하는 발광 수정들이 불길하게 공명합니다. 제단 중앙에서 검은 로브를 입은 흑마법사 말로크가 광산의 고대 마법 핵을 추출하고 있습니다.",
+        gmNotes: "보스 말로크는 실드 주문(AC+5)과 매직 미사일을 사용합니다. 수정 기둥 4개를 파괴하면 무적 결계가 해제됩니다.",
+        checks: [
+          { skill: "지능(아카나)", target: "DC 14", effect: "제단 수정 4개를 파괴하면 보스의 결계가 무너짐을 간파" },
+          { skill: "근력 내성", target: "DC 13", effect: "수정에서 방출되는 충격파에 밀려나지 않고 버팀" }
+        ],
+        clues: [
+          { id: "c6", title: "고대 드워프 마법 룬검", text: "+1 명중/피해 마법 롱소드 '빛의 쐐기'", found: false }
+        ]
+      }
+    ]
+  },
+  cyber_heist: {
+    id: "cyber_heist",
+    title: "네온 신디케이트 침투작전 (Cyberpunk)",
+    genre: "Sci-Fi / Cyberpunk Heist",
+    system: "freeform",
+    description: "2088년 네오 서울. 메가코프 '아라사카 바이오'의 펜트하우스 데이터 코어에서 프로토타입 사이버네틱 AI 코어 칩을 탈취해야 하는 야간 침투 의뢰입니다.",
+    scenes: [
+      {
+        id: "scene_1",
+        name: "씬 1: 네온 스카이라인 옥상 침투",
+        map: "cyber",
+        readAloud: "비 내리는 밤, 홀로그램 광고판의 네온 불빛이 젖은 아스팔트에 번집니다. 의뢰받은 넷러너와 용병 팀은 헬리패드 환기구를 통해 보안 레이저망을 우회해야 합니다.",
+        gmNotes: "레이저 경보망은 30초 주기로 패턴이 바뀝니다. 순찰 드론 1기가 옥상을 탐색 중입니다.",
+        checks: [
+          { skill: "해킹/전자기기", target: "난이도 15", effect: "옥상 보안 카메라 및 레이저 센서 루프 재생" },
+          { skill: "민첩/곡예", target: "난이도 14", effect: "소음 없이 헬리패드 배수로 진입" }
+        ],
+        clues: [
+          { id: "c7", title: "경비대 보안 키카드 B레벨", text: "3층 연구실 및 서버룸 출입 인가 코드 내장", found: false }
+        ]
+      },
+      {
+        id: "scene_2",
+        name: "씬 2: 메인 데이터 코어 룸",
+        map: "cyber",
+        readAloud: "냉각 가스가 바닥에 낮게 깔린 원형 서버 룸. 푸른 빛의 양자 코어가 유리 챔버 안에서 회전하고 있으며, 중무장한 보안 대장 '빅토르'가 개틀링 암을 장전합니다.",
+        gmNotes: "빅토르는 EMP 수류탄에 1라운드 동안 시스템 마비가 걸립니다. 데이터 다운로드에는 3턴이 소요됩니다.",
+        checks: [
+          { skill: "사격 / 총기전투", target: "난이도 15", effect: "빅토르의 방탄 장갑 취약부 타격" },
+          { skill: "딥 넷 해킹", target: "난이도 16", effect: "방화벽 격파 및 프로토타입 칩 이젝트 성공" }
+        ],
+        clues: [
+          { id: "c8", title: "프로토타입 뉴럴 칩 '오리온'", text: "암시장에서 500,000 크레딧에 거래 가능한 극비 인공지능 칩", found: false }
+        ]
+      }
+    ]
+  }
+};
+
+// --- CORE RULEBOOK DATABASE ---
+const RULEBOOK_DB = [
+  { category: "전투", title: "전투 행동 경제학 (Action Economy)", content: "캐릭터는 1라운드(약 6초) 동안 [이동], [행동 1회], [보너스 행동 1회(해당 기능이 있을 시)], [자유 상호작용 1회]를 수행할 수 있습니다. 자신의 턴이 아닐 때는 트리거 만족 시 [반응 행동(Reaction) 1회]를 사용합니다." },
+  { category: "전투", title: "기회 공격 (Opportunity Attack)", content: "적대적 생명체가 당신의 근접 공격 사거리 밖으로 벗어날 때 반응 행동을 소모하여 근접 무기 공격 1회를 가합니다. '이탈(Disengage)' 행동을 취하면 기회 공격을 유발하지 않습니다." },
+  { category: "판정", title: "D&D 5e 난이도 기준 (DC)", content: "아주 쉬움: DC 5 / 쉬움: DC 10 / 보통: DC 15 / 어려움: DC 20 / 아주 어려움: DC 25 / 거의 불가능: DC 30. 1d20 + 수정치 >= DC 이면 성공." },
+  { category: "크툴루", title: "CoC 7e 성공 등급 판정표", content: "1d100 기준: 01 = 대성공(Critical) / 기능치의 1/5 이하 = 극단적 성공(Extreme) / 기능치의 1/2 이하 = 어려운 성공(Hard) / 기능치 이하 = 보통 성공(Regular) / 초과 = 실패 / 96-100 = 대실패(Fumble)." },
+  { category: "크툴루", title: "이성(SAN) 체크 및 일시적 광기", content: "공포스러운 대상을 목격하면 SAN 체크. 한 번의 판정으로 5점 이상의 이성을 상실하면 지능 판정을 하여 성공 시 충격적인 진실을 깨닫고 [일시적 광기]에 빠집니다. 하루 동안 전체 이성의 1/5을 잃으면 [장기적 광기] 상태가 됩니다." },
+  { category: "상태이상", title: "주요 상태이상 효과 요약", content: "• 중독(Poisoned): 공격 굴림과 능력 판정에 불리.\n• 실명(Blinded): 시각 판정 실패, 공격 불리, 적의 공격 이점.\n• 기절(Stunned): 행동 및 이동 불가, 힘/민첩 내성 자동 실패, 적의 공격 이점.\n• 쓰러짐(Prone): 이동 시 속도 절반 소모, 근접 공격 불리(자신), 5피트 내 적은 이점으로 공격." },
+  { category: "휴식", title: "짧은 휴식과 긴 휴식", content: "짧은 휴식(Short Rest): 최소 1시간 휴식, 히트 다이스를 굴려 HP 회복.\n긴 휴식(Long Rest): 최소 8시간(취침 6시간 이상), HP 및 소모된 주문 슬롯 전부 회복, 소모된 히트 다이스의 절반 회복." }
+];
+
+// --- MONSTER COMPENDIUM ---
+const MONSTER_COMPENDIUM = [
+  { id: "goblin", name: "고블린 정찰병", hp: 7, ac: 15, cr: "1/4", icon: "👺", size: 1, color: "#22c55e", atk: "+4 (1d6+2)" },
+  { id: "zombie", name: "부패한 좀비", hp: 22, ac: 8, cr: "1/4", icon: "🧟", size: 1, color: "#64748b", atk: "+3 (1d6+1)" },
+  { id: "cultist", name: "광신도 사제", hp: 18, ac: 12, cr: "1/2", icon: "🧙‍♂️", size: 1, color: "#a855f7", atk: "+4 (1d8+2)" },
+  { id: "shoggoth", name: "심연의 쇼고스", hp: 85, ac: 16, cr: "5", icon: "🐙", size: 2, color: "#06b6d4", atk: "+7 (2d10+4)" },
+  { id: "boss_dragon", name: "붉은 새끼 드래곤", hp: 75, ac: 17, cr: "4", icon: "🐉", size: 2, color: "#ef4444", atk: "+6 (2d8+4)" },
+  { id: "cyber_merc", name: "사이버네틱 용병", hp: 45, ac: 16, cr: "2", icon: "🤖", size: 1, color: "#f59e0b", atk: "+5 (2d6+3)" }
+];
+
+// --- RANDOM GENERATOR TABLES ---
+const RANDOM_TABLES = {
+  npc: [
+    "아서 펜드래건 (고결한 성기사, 정의감이 강하나 고집이 셈)",
+    "엘레나 레이븐 (비전 마법사, 고대 유물에 광적으로 집착)",
+    "실라스 그림 (전직 도적 현 정보상, 돈만 주면 비밀을 풂)",
+    "마가렛 수녀 (치유사, 겉으로는 온화하나 과거 어둠의 비밀 보유)",
+    "김진우 (네오 서울 넷러너, 언제나 에너지 드링크를 물고 다님)",
+    "빅토르 반스 (사이버네틱 용병 대장, 온몸이 티타늄 장갑)"
+  ],
+  tavern: [
+    "'북쪽 폐광에서 밤마다 푸른 도깨비불이 목격된다더군.'",
+    "'저택의 아서 경이 실종되기 전날, 묘지에서 흙을 파헤치는 걸 봤다는 이가 있어.'",
+    "'상인 길드가 도적 떼에게 털렸는데, 그 도적들이 인간이 아니라는 소문이야.'",
+    "'지하 수로에서 거대한 뱀 같은 그림자가 사람을 낚아채 갔대.'"
+  ],
+  loot: [
+    "치유의 물약 (2d4+2 HP 회복) 2병과 45 GP",
+    "빛의 마법 룬이 새겨진 은장 단검 (+1 명중)",
+    "미지의 고대 상형문자가 적힌 가죽 양피지 두루마리",
+    "어둠을 꿰뚫는 마법의 고글 (암흑시야 60피트 부여)",
+    "암호화된 사이버네틱 크레딧 칩 (5,000 크레딧)"
+  ],
+  weather: [
+    "짙은 안개와 가랑비 (시야 거리 30피트로 제한, 원거리 공격 불리)",
+    "천둥번개를 동반한 폭우 (청각 판정 불리, 횃불 자동 소화)",
+    "뼛속까지 시린 한파 (매 시간 건강 내성 DC 10 실패 시 피로 누적)",
+    "맑고 서늘한 보름달 밤 (야간 시야 양호, 야생동물 경계심 증가)"
+  ]
+};
+
+
+
+// --- VTT CANVAS ENGINE ---
+const canvas = document.getElementById('vtt-canvas');
+const ctx = canvas.getContext('2d');
+
+let mapScale = 1.0;
+let mapOffsetX = 0;
+let mapOffsetY = 0;
+let isPanning = false;
+let startPanX = 0;
+let startPanY = 0;
+
+let currentTool = 'select'; // 'select', 'ruler', 'aoe', 'ping', 'draw', 'eraser'
+let aoeType = 'circle'; // 'circle', 'cone', 'square'
+let drawColor = '#ef4444';
+let drawWidth = 3;
+
+let gridType = 'square';
+let gridSize = 50;
+let showFog = true;
+let fogBrushMode = 'reveal'; // 'reveal', 'hide'
+let fogBrushSize = 60;
+
+// Layers & Canvas Objects
+let customMapImage = null;
+let currentPresetMap = 'dungeon';
+let fogCanvas = document.createElement('canvas');
+let fogCtx = fogCanvas.getContext('2d');
+let drawingCanvas = document.createElement('canvas');
+let drawingCtx = drawingCanvas.getContext('2d');
+
+// Tokens
+let tokens = [
+  { id: 't_p1', name: '아서 (전사)', x: 300, y: 300, size: 1, hp: 28, maxHp: 28, color: '#3b82f6', icon: '⚔️', conditions: [] },
+  { id: 't_p2', name: '엘레나 (마법사)', x: 250, y: 300, size: 1, hp: 18, maxHp: 18, color: '#8b5cf6', icon: '🔮', conditions: [] },
+  { id: 't_p3', name: '존 (사립탐정)', x: 300, y: 350, size: 1, hp: 22, maxHp: 22, color: '#e5a93c', icon: '🕵️', conditions: [] },
+  { id: 't_m1', name: '고블린 정찰병', x: 550, y: 250, size: 1, hp: 7, maxHp: 7, color: '#ef4444', icon: '👺', conditions: [] },
+  { id: 't_boss', name: '흑마법사 말로크', x: 650, y: 350, size: 2, hp: 45, maxHp: 45, color: '#dc2626', icon: '🧙‍♂️', conditions: ['축복'] }
+];
+
+let selectedToken = null;
+let isDraggingToken = false;
+let dragTokenOffset = { x: 0, y: 0 };
+
+// Ruler state
+let isMeasuring = false;
+let rulerStart = { x: 0, y: 0 };
+let rulerEnd = { x: 0, y: 0 };
+
+// AoE state
+let isPlacingAoE = false;
+let aoeCenter = { x: 0, y: 0 };
+let aoeRadius = 100;
+
+// Ping ripples
+let pings = [];
+
+// Freehand draw state
+let isDrawing = false;
+let lastDrawPoint = null;
+
+// Initialize Canvases
+function initCanvas() {
+  const container = document.getElementById('canvas-container');
+  canvas.width = container.clientWidth;
+  canvas.height = container.clientHeight;
+
+  fogCanvas.width = 2400;
+  fogCanvas.height = 1800;
+  drawingCanvas.width = 2400;
+  drawingCanvas.height = 1800;
+
+  // Initialize Fog with black
+  resetFog(false);
+
+  // Center initial view
+  mapOffsetX = (canvas.width - 1200) / 2;
+  mapOffsetY = (canvas.height - 900) / 2;
+
+  render();
+}
+
+function resetFog(revealed = false) {
+  fogCtx.save();
+  if (revealed) {
+    fogCtx.clearRect(0, 0, fogCanvas.width, fogCanvas.height);
+  } else {
+    fogCtx.fillStyle = '#000000';
+    fogCtx.fillRect(0, 0, fogCanvas.width, fogCanvas.height);
+    // Reveal a starting area around players
+    fogCtx.globalCompositeOperation = 'destination-out';
+    fogCtx.beginPath();
+    fogCtx.arc(300, 320, 180, 0, Math.PI * 2);
+    fogCtx.fill();
+    fogCtx.globalCompositeOperation = 'source-over';
+  }
+  fogCtx.restore();
+  broadcastRoomEvent({ type: 'sync_fog', data: fogCanvas.toDataURL() });
+  render();
+}
+
+// Procedural Map Backgrounds
+function drawMapBackground(ctx) {
+  if (customMapImage) {
+    ctx.drawImage(customMapImage, 0, 0, 2400, 1800);
+    return;
+  }
+
+  // Draw rich procedural high-detail background based on preset
+  if (currentPresetMap === 'dungeon') {
+    // Stone dungeon floor
+    ctx.fillStyle = '#171922';
+    ctx.fillRect(0, 0, 2400, 1800);
+    // Large stone flagstones
+    ctx.strokeStyle = '#232738';
+    ctx.lineWidth = 3;
+    for (let x = 0; x < 2400; x += 100) {
+      for (let y = 0; y < 1800; y += 100) {
+        ctx.strokeRect(x, y, 100, 100);
+      }
+    }
+    // Dungeon moss and blood splatters
+    ctx.fillStyle = 'rgba(34, 197, 94, 0.08)';
+    ctx.beginPath();
+    ctx.arc(450, 400, 120, 0, Math.PI * 2);
+    ctx.fill();
+    // Torches
+    ctx.fillStyle = 'rgba(239, 68, 68, 0.15)';
+    ctx.beginPath();
+    ctx.arc(650, 350, 180, 0, Math.PI * 2);
+    ctx.fill();
+  } else if (currentPresetMap === 'manor') {
+    // Victorian wooden floor & luxury red carpet
+    ctx.fillStyle = '#261b15';
+    ctx.fillRect(0, 0, 2400, 1800);
+    // Wood plank lines
+    ctx.strokeStyle = '#35251d';
+    ctx.lineWidth = 2;
+    for (let y = 0; y < 1800; y += 25) {
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(2400, y);
+      ctx.stroke();
+    }
+    // Grand velvet carpet
+    ctx.fillStyle = '#5c141e';
+    ctx.fillRect(200, 200, 800, 500);
+    ctx.strokeStyle = '#d4a359';
+    ctx.lineWidth = 4;
+    ctx.strokeRect(200, 200, 800, 500);
+  } else if (currentPresetMap === 'tavern') {
+    // Forest tavern
+    ctx.fillStyle = '#2e2017';
+    ctx.fillRect(0, 0, 2400, 1800);
+    // Tavern bar counter
+    ctx.fillStyle = '#4a3525';
+    ctx.fillRect(150, 100, 700, 60);
+    // Tables
+    ctx.fillStyle = '#3d2b1f';
+    for (let tx = 250; tx <= 750; tx += 200) {
+      for (let ty = 300; ty <= 600; ty += 180) {
+        ctx.beginPath();
+        ctx.arc(tx, ty, 45, 0, Math.PI*2);
+        ctx.fill();
+        ctx.strokeStyle = '#5a3f2d';
+        ctx.stroke();
+      }
+    }
+  } else if (currentPresetMap === 'cyber') {
+    // Cyberpunk neon club
+    ctx.fillStyle = '#080a12';
+    ctx.fillRect(0, 0, 2400, 1800);
+    // Neon grid floor
+    ctx.strokeStyle = 'rgba(6, 182, 212, 0.2)';
+    ctx.lineWidth = 1;
+    for (let x = 0; x < 2400; x += 50) {
+      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, 1800); ctx.stroke();
+    }
+    for (let y = 0; y < 1800; y += 50) {
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(2400, y); ctx.stroke();
+    }
+    // Cyberpunk glow circles
+    ctx.strokeStyle = '#ec4899';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.arc(500, 400, 150, 0, Math.PI * 2);
+    ctx.stroke();
+  } else if (currentPresetMap === 'alien') {
+    // Starship bridge
+    ctx.fillStyle = '#0b0f19';
+    ctx.fillRect(0, 0, 2400, 1800);
+    ctx.strokeStyle = '#20293d';
+    ctx.lineWidth = 2;
+    for (let x = 0; x < 2400; x += 80) {
+      for (let y = 0; y < 1800; y += 80) {
+        ctx.strokeRect(x, y, 80, 80);
+      }
+    }
+    // Command console
+    ctx.fillStyle = '#1e293b';
+    ctx.beginPath();
+    ctx.ellipse(500, 450, 200, 100, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#38bdf8';
+    ctx.stroke();
+  }
+}
+
+// Grid Renderer
+function drawGrid(ctx) {
+  if (gridType === 'none') return;
+
+  ctx.save();
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+  ctx.lineWidth = 1;
+
+  if (gridType === 'square') {
+    for (let x = 0; x <= 2400; x += gridSize) {
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, 1800);
+      ctx.stroke();
+    }
+    for (let y = 0; y <= 1800; y += gridSize) {
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(2400, y);
+      ctx.stroke();
+    }
+  } else if (gridType === 'hex') {
+    const r = gridSize / 2;
+    const h = r * Math.sin(Math.PI / 3);
+    for (let y = 0; y < 1800; y += h * 2) {
+      for (let x = 0; x < 2400; x += r * 3) {
+        drawHexagon(ctx, x, y, r);
+        drawHexagon(ctx, x + r * 1.5, y + h, r);
+      }
+    }
+  }
+  ctx.restore();
+}
+
+function drawHexagon(ctx, x, y, r) {
+  ctx.beginPath();
+  for (let i = 0; i < 6; i++) {
+    const angle = (Math.PI / 3) * i;
+    const hx = x + r * Math.cos(angle);
+    const hy = y + r * Math.sin(angle);
+    if (i === 0) ctx.moveTo(hx, hy);
+    else ctx.lineTo(hx, hy);
+  }
+  ctx.closePath();
+  ctx.stroke();
+}
+
+// Token Renderer
+function drawTokens(ctx) {
+  tokens.forEach(tok => {
+    const rad = (tok.size * gridSize) / 2 - 3;
+    const isSelected = selectedToken && selectedToken.id === tok.id;
+    const isActiveTurn = combatants.length > 0 && combatants[currentTurnIndex]?.id === tok.id;
+
+    ctx.save();
+    ctx.translate(tok.x, tok.y);
+
+    // Active Turn Glow Ring
+    if (isActiveTurn) {
+      ctx.beginPath();
+      ctx.arc(0, 0, rad + 8, 0, Math.PI * 2);
+      ctx.strokeStyle = '#e5a93c';
+      ctx.lineWidth = 3;
+      ctx.shadowColor = '#e5a93c';
+      ctx.shadowBlur = 15;
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+    }
+
+    // Selected Ring
+    if (isSelected) {
+      ctx.beginPath();
+      ctx.arc(0, 0, rad + 4, 0, Math.PI * 2);
+      ctx.strokeStyle = '#60a5fa';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    }
+
+    // Token Body Circle
+    ctx.beginPath();
+    ctx.arc(0, 0, rad, 0, Math.PI * 2);
+    ctx.fillStyle = tok.color || '#3b82f6';
+    ctx.fill();
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Token Icon / Avatar
+    ctx.fillStyle = '#ffffff';
+    ctx.font = `${rad * 0.9}px sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(tok.icon || '👤', 0, 0);
+
+    // HP Bar on Top of Token
+    const barW = rad * 2;
+    const barH = 5;
+    const barX = -rad;
+    const barY = -rad - 10;
+    const hpRatio = Math.max(0, Math.min(1, tok.hp / tok.maxHp));
+
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+    ctx.fillRect(barX, barY, barW, barH);
+    ctx.fillStyle = hpRatio > 0.5 ? '#22c55e' : (hpRatio > 0.25 ? '#e5a93c' : '#ef4444');
+    ctx.fillRect(barX, barY, barW * hpRatio, barH);
+    ctx.strokeStyle = 'rgba(255,255,255,0.4)';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(barX, barY, barW, barH);
+
+    // Name Plate Below Token
+    ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
+    ctx.font = '10px sans-serif';
+    const textW = ctx.measureText(tok.name).width;
+    ctx.fillRect(-textW / 2 - 4, rad + 4, textW + 8, 14);
+    ctx.fillStyle = '#e2e8f0';
+    ctx.fillText(tok.name, 0, rad + 14);
+
+    // Conditions Icons
+    if (tok.conditions && tok.conditions.length > 0) {
+      let cx = -rad;
+      tok.conditions.forEach(cond => {
+        ctx.fillStyle = '#ef4444';
+        ctx.beginPath();
+        ctx.arc(cx, rad, 6, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#fff';
+        ctx.font = '8px sans-serif';
+        ctx.fillText(cond[0], cx, rad + 3);
+        cx += 14;
+      });
+    }
+
+    ctx.restore();
+  });
+}
+
+// Tactical Ruler & AoE Templates
+function drawTacticalTools(ctx) {
+  // Ruler
+  if (isMeasuring) {
+    ctx.save();
+    ctx.strokeStyle = '#e5a93c';
+    ctx.lineWidth = 3;
+    ctx.setLineDash([6, 6]);
+
+    ctx.beginPath();
+    ctx.moveTo(rulerStart.x, rulerStart.y);
+    ctx.lineTo(rulerEnd.x, rulerEnd.y);
+    ctx.stroke();
+
+    const dx = rulerEnd.x - rulerStart.x;
+    const dy = rulerEnd.y - rulerStart.y;
+    const distPx = Math.sqrt(dx * dx + dy * dy);
+    const cells = (distPx / gridSize).toFixed(1);
+    const feet = (cells * 5).toFixed(0);
+
+    const midX = (rulerStart.x + rulerEnd.x) / 2;
+    const midY = (rulerStart.y + rulerEnd.y) / 2;
+
+    ctx.setLineDash([]);
+    ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+    ctx.strokeStyle = '#e5a93c';
+    ctx.lineWidth = 1;
+    const label = `${feet} ft (${cells} 칸)`;
+    ctx.font = 'bold 12px sans-serif';
+    const lw = ctx.measureText(label).width;
+    ctx.fillRect(midX - lw / 2 - 6, midY - 12, lw + 12, 20);
+    ctx.strokeRect(midX - lw / 2 - 6, midY - 12, lw + 12, 20);
+    ctx.fillStyle = '#e5a93c';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(label, midX, midY - 2);
+
+    ctx.restore();
+  }
+
+  // AoE Template
+  if (currentTool === 'aoe' && isPlacingAoE) {
+    ctx.save();
+    ctx.fillStyle = 'rgba(239, 68, 68, 0.25)';
+    ctx.strokeStyle = '#ef4444';
+    ctx.lineWidth = 2;
+
+    if (aoeType === 'circle') {
+      ctx.beginPath();
+      ctx.arc(aoeCenter.x, aoeCenter.y, aoeRadius, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+    } else if (aoeType === 'cone') {
+      ctx.beginPath();
+      ctx.moveTo(aoeCenter.x, aoeCenter.y);
+      ctx.arc(aoeCenter.x, aoeCenter.y, aoeRadius, -Math.PI / 4, Math.PI / 4);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+    } else if (aoeType === 'square') {
+      ctx.fillRect(aoeCenter.x - aoeRadius, aoeCenter.y - aoeRadius, aoeRadius * 2, aoeRadius * 2);
+      ctx.strokeRect(aoeCenter.x - aoeRadius, aoeCenter.y - aoeRadius, aoeRadius * 2, aoeRadius * 2);
+    }
+    ctx.restore();
+  }
+
+  // Pings
+  pings.forEach((p, idx) => {
+    ctx.save();
+    ctx.strokeStyle = p.color || '#e5a93c';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+    ctx.stroke();
+
+    ctx.fillStyle = p.color || '#e5a93c';
+    ctx.font = 'bold 12px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(`📍 ${p.user}`, p.x, p.y - p.radius - 6);
+
+    p.radius += 2.5;
+    p.life--;
+    ctx.restore();
+  });
+  pings = pings.filter(p => p.life > 0);
+}
+
+// Master Render Loop
+function render() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  ctx.save();
+  ctx.translate(mapOffsetX, mapOffsetY);
+  ctx.scale(mapScale, mapScale);
+
+  // 1. Background Map
+  drawMapBackground(ctx);
+
+  // 2. Tactical Grid
+  drawGrid(ctx);
+
+  // 3. User Whiteboard Drawings
+  ctx.drawImage(drawingCanvas, 0, 0);
+
+  // 4. Tokens
+  drawTokens(ctx);
+
+  // 5. Fog of War
+  if (showFog) {
+    ctx.save();
+    const isGM = currentUserRole === 'gm';
+    // GM sees translucent fog, players see pitch black
+    ctx.globalAlpha = isGM ? 0.35 : 1.0;
+    ctx.drawImage(fogCanvas, 0, 0);
+    ctx.restore();
+  }
+
+  // 6. Tactical Tools (Ruler, AoE, Pings)
+  drawTacticalTools(ctx);
+
+  ctx.restore();
+
+  if (pings.length > 0) {
+    requestAnimationFrame(render);
+  }
+}
+
+// Coordinate Conversions
+function screenToWorld(sx, sy) {
+  return {
+    x: (sx - mapOffsetX) / mapScale,
+    y: (sy - mapOffsetY) / mapScale
+  };
+}
+
+// Event Listeners for VTT Canvas
+canvas.addEventListener('mousedown', (e) => {
+  const rect = canvas.getBoundingClientRect();
+  const mouseX = e.clientX - rect.left;
+  const mouseY = e.clientY - rect.top;
+  const worldPos = screenToWorld(mouseX, mouseY);
+
+  // Middle click or Space+Click: Pan
+  if (e.button === 1 || e.spaceKey || (e.button === 0 && e.altKey)) {
+    isPanning = true;
+    startPanX = mouseX - mapOffsetX;
+    startPanY = mouseY - mapOffsetY;
+    canvas.style.cursor = 'grabbing';
+    return;
+  }
+
+  if (e.button === 0) {
+    if (currentTool === 'select') {
+      // Check token click (reverse order to pick top token)
+      selectedToken = null;
+      for (let i = tokens.length - 1; i >= 0; i--) {
+        const tok = tokens[i];
+        const rad = (tok.size * gridSize) / 2;
+        const dist = Math.hypot(tok.x - worldPos.x, tok.y - worldPos.y);
+        if (dist <= rad) {
+          selectedToken = tok;
+          isDraggingToken = true;
+          dragTokenOffset = { x: tok.x - worldPos.x, y: tok.y - worldPos.y };
+          break;
+        }
+      }
+      render();
+    } else if (currentTool === 'ruler') {
+      isMeasuring = true;
+      rulerStart = worldPos;
+      rulerEnd = worldPos;
+      render();
+    } else if (currentTool === 'aoe') {
+      isPlacingAoE = true;
+      aoeCenter = worldPos;
+      render();
+    } else if (currentTool === 'ping') {
+      triggerPing(worldPos.x, worldPos.y, currentUserName);
+    } else if (currentTool === 'draw' || currentTool === 'eraser') {
+      isDrawing = true;
+      lastDrawPoint = worldPos;
+    }
+  }
+});
+
+canvas.addEventListener('mousemove', (e) => {
+  const rect = canvas.getBoundingClientRect();
+  const mouseX = e.clientX - rect.left;
+  const mouseY = e.clientY - rect.top;
+  const worldPos = screenToWorld(mouseX, mouseY);
+
+  if (isPanning) {
+    mapOffsetX = mouseX - startPanX;
+    mapOffsetY = mouseY - startPanY;
+    render();
+    return;
+  }
+
+  if (isDraggingToken && selectedToken) {
+    selectedToken.x = worldPos.x + dragTokenOffset.x;
+    selectedToken.y = worldPos.y + dragTokenOffset.y;
+    render();
+    return;
+  }
+
+  if (isMeasuring) {
+    rulerEnd = worldPos;
+    render();
+    return;
+  }
+
+  if (isPlacingAoE) {
+    aoeCenter = worldPos;
+    render();
+    return;
+  }
+
+  if (isDrawing) {
+    drawingCtx.save();
+    if (currentTool === 'eraser') {
+      drawingCtx.globalCompositeOperation = 'destination-out';
+      drawingCtx.beginPath();
+      drawingCtx.arc(worldPos.x, worldPos.y, 16, 0, Math.PI * 2);
+      drawingCtx.fill();
+    } else {
+      drawingCtx.globalCompositeOperation = 'source-over';
+      drawingCtx.strokeStyle = drawColor;
+      drawingCtx.lineWidth = drawWidth;
+      drawingCtx.lineCap = 'round';
+      drawingCtx.beginPath();
+      drawingCtx.moveTo(lastDrawPoint.x, lastDrawPoint.y);
+      drawingCtx.lineTo(worldPos.x, worldPos.y);
+      drawingCtx.stroke();
+    }
+    drawingCtx.restore();
+    lastDrawPoint = worldPos;
+    render();
+  }
+
+  // Fog brush while holding left button and GM fog tool
+  if (e.buttons === 1 && currentTool === 'fog_brush') {
+    applyFogBrush(worldPos.x, worldPos.y);
+  }
+});
+
+window.addEventListener('mouseup', (e) => {
+  if (isPanning) {
+    isPanning = false;
+    canvas.style.cursor = 'default';
+  }
+
+  if (isDraggingToken && selectedToken) {
+    // Snap to grid center
+    selectedToken.x = Math.round(selectedToken.x / gridSize) * gridSize;
+    selectedToken.y = Math.round(selectedToken.y / gridSize) * gridSize;
+    isDraggingToken = false;
+    broadcastRoomEvent({ type: 'sync_tokens', data: tokens });
+    render();
+  }
+
+  if (isMeasuring) {
+    isMeasuring = false;
+    render();
+  }
+
+  if (isDrawing) {
+    isDrawing = false;
+    broadcastRoomEvent({ type: 'sync_drawings', data: drawingCanvas.toDataURL() });
+  }
+});
+
+// Canvas Zoom with Mouse Wheel
+canvas.addEventListener('wheel', (e) => {
+  e.preventDefault();
+  const zoomFactor = e.deltaY < 0 ? 1.1 : 0.9;
+  const newScale = Math.max(0.2, Math.min(3.0, mapScale * zoomFactor));
+
+  const rect = canvas.getBoundingClientRect();
+  const mouseX = e.clientX - rect.left;
+  const mouseY = e.clientY - rect.top;
+
+  mapOffsetX = mouseX - (mouseX - mapOffsetX) * (newScale / mapScale);
+  mapOffsetY = mouseY - (mouseY - mapOffsetY) * (newScale / mapScale);
+  mapScale = newScale;
+
+  document.getElementById('zoom-level-text').innerText = `${Math.round(mapScale * 100)}%`;
+  render();
+}, { passive: false });
+
+// Right-click Token to edit
+canvas.addEventListener('contextmenu', (e) => {
+  e.preventDefault();
+  const rect = canvas.getBoundingClientRect();
+  const mouseX = e.clientX - rect.left;
+  const mouseY = e.clientY - rect.top;
+  const worldPos = screenToWorld(mouseX, mouseY);
+
+  for (let tok of tokens) {
+    const rad = (tok.size * gridSize) / 2;
+    if (Math.hypot(tok.x - worldPos.x, tok.y - worldPos.y) <= rad) {
+      selectedToken = tok;
+      openTokenEditModal(tok);
+      return;
+    }
+  }
+});
+
+// Fog Brush action
+function applyFogBrush(x, y) {
+  fogCtx.save();
+  if (fogBrushMode === 'reveal') {
+    fogCtx.globalCompositeOperation = 'destination-out';
+  } else {
+    fogCtx.globalCompositeOperation = 'source-over';
+    fogCtx.fillStyle = '#000000';
+  }
+  fogCtx.beginPath();
+  fogCtx.arc(x, y, fogBrushSize, 0, Math.PI * 2);
+  fogCtx.fill();
+  fogCtx.restore();
+  render();
+}
+
+function triggerPing(x, y, user) {
+  pings.push({
+    x, y,
+    user: user || currentUserName,
+    radius: 5,
+    life: 35,
+    color: '#e5a93c'
+  });
+  playSynthSound('ping');
+  broadcastRoomEvent({ type: 'ping', x, y, user: currentUserName });
+  render();
+}
+
+function setAoEType(type) {
+  aoeType = type;
+  currentTool = 'aoe';
+  setActiveToolBtn('aoe');
+}
+
+function setDrawColor(col) {
+  drawColor = col;
+  currentTool = 'draw';
+  setActiveToolBtn('draw');
+}
+
+function clearDrawings() {
+  drawingCtx.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
+  broadcastRoomEvent({ type: 'sync_drawings', data: null });
+  render();
+}
+
+function setActiveToolBtn(toolName) {
+  document.querySelectorAll('.tool-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.tool === toolName);
+  });
+}
+
+
+
+// --- ADVANCED DICE ENGINE & FORMULA PARSER ---
+let currentRollMode = 'public'; // 'public', 'gm', 'blind', 'self'
+
+let diceStats = {
+  totalRolls: 0,
+  crits: 0,
+  fumbles: 0,
+  typeCount: { d4: 0, d6: 0, d8: 0, d10: 0, d12: 0, d20: 0, d100: 0, dF: 0 },
+  history: []
+};
+
+// Polyhedral quick roll
+function quickRoll(sides) {
+  const formula = sides === 'F' ? '4dF' : `1d${sides}`;
+  rollDiceFormula(formula);
+}
+
+// Main Formula Roller
+function rollDiceFormula(formula, label = '') {
+  formula = formula.trim().toLowerCase();
+  if (!formula) return;
+
+  playSynthSound('dice');
+  showDiceStageAnimation(formula);
+
+  // Parse formula
+  // Supported: NdX (+/- M), NdXkhY (keep highest Y), NdXklY (keep lowest Y), NdX! (exploding), 4dF
+  let result = evaluateDiceFormula(formula);
+
+  // Record stats
+  diceStats.totalRolls++;
+  diceStats.history.push(result.total);
+  if (result.isCrit) diceStats.crits++;
+  if (result.isFumble) diceStats.fumbles++;
+
+  // Update luck meter
+  updateLuckMeter();
+
+  // Create chat message
+  const msgObj = {
+    id: 'roll_' + Date.now(),
+    type: 'dice',
+    sender: currentUserName,
+    role: currentUserRole,
+    time: getCurrentTimeString(),
+    rollMode: currentRollMode,
+    formula: formula,
+    label: label,
+    rolls: result.rolls,
+    modifier: result.modifier,
+    total: result.total,
+    isCrit: result.isCrit,
+    isFumble: result.isFumble,
+    cocGrade: result.cocGrade,
+    text: result.text
+  };
+
+  appendChatMessage(msgObj);
+  broadcastRoomEvent({ type: 'dice_roll', data: msgObj });
+}
+
+function evaluateDiceFormula(formula) {
+  // Fate/Fudge dice (e.g. 4dF)
+  if (formula.includes('df')) {
+    let rolls = [];
+    let sum = 0;
+    for (let i = 0; i < 4; i++) {
+      let r = Math.floor(Math.random() * 3) - 1; // -1, 0, 1
+      rolls.push(r === 1 ? '+' : (r === -1 ? '-' : '0'));
+      sum += r;
+    }
+    diceStats.typeCount.dF = (diceStats.typeCount.dF || 0) + 4;
+    return {
+      rolls: rolls,
+      modifier: 0,
+      total: sum,
+      isCrit: sum >= 3,
+      isFumble: sum <= -3,
+      text: `[${rolls.join(' ')}] = ${sum >= 0 ? '+' + sum : sum}`
+    };
+  }
+
+  // Regex for NdX (kh/kl/!) (+/- M)
+  const match = formula.match(/^(\d+)?d(\d+)(kh\d+|kl\d+|!)?([+-]\d+)?$/);
+  if (!match) {
+    // Simple arithmetic fallback
+    try {
+      let evalVal = eval(formula.replace(/[^0-9+\-*/]/g, ''));
+      return { rolls: [evalVal], modifier: 0, total: evalVal, text: `${evalVal}` };
+    } catch (e) {
+      return { rolls: [0], modifier: 0, total: 0, text: '잘못된 주사위 수식' };
+    }
+  }
+
+  let count = parseInt(match[1] || '1', 10);
+  let sides = parseInt(match[2], 10);
+  let special = match[3] || '';
+  let modifier = parseInt(match[4] || '0', 10);
+
+  // Clamp limits for safety
+  count = Math.min(count, 50);
+
+  let key = 'd' + sides;
+  diceStats.typeCount[key] = (diceStats.typeCount[key] || 0) + count;
+
+  let rolls = [];
+  for (let i = 0; i < count; i++) {
+    let r = Math.floor(Math.random() * sides) + 1;
+    rolls.push(r);
+    // Exploding dice: if roll is max, roll again!
+    if (special === '!' && r === sides) {
+      let extra = Math.floor(Math.random() * sides) + 1;
+      rolls.push(extra);
+    }
+  }
+
+  let keptRolls = [...rolls];
+  if (special.startsWith('kh')) {
+    let keep = parseInt(special.replace('kh', ''), 10);
+    keptRolls.sort((a, b) => b - a);
+    keptRolls = keptRolls.slice(0, keep);
+  } else if (special.startsWith('kl')) {
+    let keep = parseInt(special.replace('kl', ''), 10);
+    keptRolls.sort((a, b) => a - b);
+    keptRolls = keptRolls.slice(0, keep);
+  }
+
+  let sum = keptRolls.reduce((a, b) => a + b, 0) + modifier;
+
+  // D&D & CoC Critical / Fumble check
+  let isCrit = false;
+  let isFumble = false;
+  let cocGrade = null;
+
+  if (sides === 20 && count === 1) {
+    if (rolls[0] === 20) isCrit = true;
+    if (rolls[0] === 1) isFumble = true;
+  } else if (sides === 100 && count === 1) {
+    let v = rolls[0];
+    if (v === 1) { isCrit = true; cocGrade = '대성공 (Critical 01)'; }
+    else if (v >= 96) { isFumble = true; cocGrade = '대실패 (Fumble)'; }
+    else { cocGrade = '결과: ' + v; }
+  }
+
+  return {
+    rolls: rolls,
+    kept: keptRolls,
+    modifier: modifier,
+    total: sum,
+    isCrit: isCrit,
+    isFumble: isFumble,
+    cocGrade: cocGrade,
+    text: `[${rolls.join(', ')}] ${modifier !== 0 ? (modifier > 0 ? '+ ' + modifier : '- ' + Math.abs(modifier)) : ''} = ${sum}`
+  };
+}
+
+// 3D Animated Tray Visuals
+function showDiceStageAnimation(formula) {
+  const stage = document.getElementById('dice-stage');
+  stage.innerHTML = `
+    <div class="rolling-dice-anim">🎲</div>
+  `;
+  setTimeout(() => {
+    // Show quick result in stage
+    const match = formula.match(/d(\d+)/);
+    const sides = match ? match[1] : '20';
+    stage.innerHTML = `
+      <div style="text-align: center;">
+        <span style="font-size: 0.75rem; color: var(--text-muted);">${formula}</span>
+        <div class="dice-final-result">🎲 굴림 완료</div>
+      </div>
+    `;
+  }, 450);
+}
+
+function updateLuckMeter() {
+  if (diceStats.totalRolls === 0) return;
+  // Compute luck based on crit vs fumble ratio and high rolls
+  let ratio = (diceStats.crits + 1) / (diceStats.fumbles + 1);
+  let luckPct = Math.min(100, Math.max(10, Math.round(ratio * 50)));
+
+  const gauge = document.getElementById('luck-gauge-fill');
+  const label = document.getElementById('luck-percent-label');
+  if (gauge && label) {
+    gauge.style.width = luckPct + '%';
+    label.innerText = luckPct >= 70 ? `대길 (${luckPct}%)` : (luckPct <= 35 ? `불운 (${luckPct}%)` : `평범 (${luckPct}%)`);
+  }
+}
+
+function openDiceStatsModal() {
+  document.getElementById('stats-total-rolls').innerText = diceStats.totalRolls;
+  document.getElementById('stats-crit-count').innerText = diceStats.crits;
+  document.getElementById('stats-fumble-count').innerText = diceStats.fumbles;
+
+  const breakdownContainer = document.getElementById('dice-type-breakdown');
+  breakdownContainer.innerHTML = '';
+  for (let [k, count] of Object.entries(diceStats.typeCount)) {
+    if (count > 0) {
+      breakdownContainer.innerHTML += `<div><strong>${k}:</strong> ${count}회</div>`;
+    }
+  }
+  openModal('modal-dice-stats');
+}
+
+function resetDiceStats() {
+  diceStats.totalRolls = 0;
+  diceStats.crits = 0;
+  diceStats.fumbles = 0;
+  diceStats.history = [];
+  for (let k in diceStats.typeCount) diceStats.typeCount[k] = 0;
+  updateLuckMeter();
+  openDiceStatsModal();
+}
+
+
+
+// --- CONTEXTUAL SCENARIO & RULEBOOK EXCERPT ENGINE ---
+let currentScenario = BUILTIN_SCENARIOS.coc_manor;
+let currentSceneIndex = 0;
+let customScenarioData = null;
+
+function loadScenario(scenarioKey) {
+  if (scenarioKey === 'custom' && customScenarioData) {
+    currentScenario = customScenarioData;
+  } else if (BUILTIN_SCENARIOS[scenarioKey]) {
+    currentScenario = BUILTIN_SCENARIOS[scenarioKey];
+  }
+  currentSceneIndex = 0;
+  renderSceneNavigation();
+  updateContextualExcerpt();
+}
+
+function renderSceneNavigation() {
+  const container = document.getElementById('scene-pills-container');
+  container.innerHTML = '';
+
+  if (!currentScenario || !currentScenario.scenes) return;
+
+  currentScenario.scenes.forEach((sc, idx) => {
+    const pill = document.createElement('div');
+    pill.className = `scene-pill ${idx === currentSceneIndex ? 'active' : ''}`;
+    pill.innerText = sc.name;
+    pill.onclick = () => {
+      currentSceneIndex = idx;
+      renderSceneNavigation();
+      updateContextualExcerpt();
+      // Auto change map preset if specified
+      if (sc.map && BUILTIN_SCENARIOS[currentScenario.id]) {
+        currentPresetMap = sc.map;
+        document.getElementById('map-preset-select').value = sc.map;
+        render();
+      }
+    };
+    container.appendChild(pill);
+  });
+
+  const curSc = currentScenario.scenes[currentSceneIndex];
+  document.getElementById('current-scene-badge').innerText = curSc ? curSc.name : '진행 중';
+}
+
+// Update the Contextual Excerpt Card
+function updateContextualExcerpt() {
+  const scene = currentScenario?.scenes?.[currentSceneIndex];
+  if (!scene) return;
+
+  // 1. Read-Aloud Text
+  document.getElementById('excerpt-readaloud-text').innerText = scene.readAloud || '배경 지문이 없습니다.';
+
+  // 2. GM Secret Notes
+  const isGM = currentUserRole === 'gm';
+  const secretBox = document.getElementById('excerpt-gm-secret-box');
+  if (isGM) {
+    secretBox.style.display = 'block';
+    document.getElementById('excerpt-gm-notes').innerText = scene.gmNotes || '특별한 비밀 사항 없음';
+  } else {
+    secretBox.style.display = 'none'; // Players don't see GM secrets!
+  }
+
+  // 3. Required Checks with 1-click roll
+  const checksList = document.getElementById('excerpt-checks-list');
+  checksList.innerHTML = '';
+  if (scene.checks && scene.checks.length > 0) {
+    scene.checks.forEach(chk => {
+      const item = document.createElement('div');
+      item.className = 'check-item';
+      item.innerHTML = `
+        <div>
+          <strong>${chk.skill}</strong> <span class="badge badge-gold">${chk.target}</span>
+          <div style="font-size: 0.74rem; color: var(--text-muted); margin-top: 2px;">${chk.effect}</div>
+        </div>
+        <button class="btn-small" onclick="rollScenarioCheck('${chk.skill}', '${chk.target}')">🎲 판정</button>
+      `;
+      checksList.appendChild(item);
+    });
+  } else {
+    checksList.innerHTML = '<div style="font-size: 0.75rem; color: var(--text-muted);">요구되는 판정이 없습니다.</div>';
+  }
+
+  // 4. Clues in current scene
+  const cluesList = document.getElementById('excerpt-clues-list');
+  cluesList.innerHTML = '';
+  if (scene.clues && scene.clues.length > 0) {
+    scene.clues.forEach(clue => {
+      const item = document.createElement('div');
+      item.className = 'check-item';
+      item.innerHTML = `
+        <div style="flex: 1;">
+          <div style="font-weight: 600; color: #60a5fa;">📜 ${clue.title}</div>
+          <div style="font-size: 0.74rem; color: #cbd5e1; margin-top: 2px;">${clue.text}</div>
+        </div>
+        <button class="btn-small btn-gold" onclick="revealClueToPlayers('${clue.title}', '${clue.text.replace(/'/g, "\\'")}')">
+          📢 공개
+        </button>
+      `;
+      cluesList.appendChild(item);
+    });
+  } else {
+    cluesList.innerHTML = '<div style="font-size: 0.75rem; color: var(--text-muted);">발견할 단서가 없습니다.</div>';
+  }
+}
+
+// 1-Click Roll from Excerpt
+function rollScenarioCheck(skillName, target) {
+  let formula = '1d20';
+  if (currentScenario.system === 'coc7e' || skillName.includes('SAN') || skillName.includes('관찰력') || skillName.includes('은밀')) {
+    formula = '1d100';
+  }
+  rollDiceFormula(formula, `${skillName} [${target}]`);
+}
+
+// 1-Click Broadcast Narration to Player Chat
+function broadcastNarrationToChat() {
+  const scene = currentScenario?.scenes?.[currentSceneIndex];
+  if (!scene || !scene.readAloud) return;
+
+  const msgObj = {
+    id: 'narr_' + Date.now(),
+    type: 'narration',
+    sender: 'GM 시나리오 낭독',
+    role: 'gm',
+    time: getCurrentTimeString(),
+    text: `📜 [${scene.name}]\n\n"${scene.readAloud}"`
+  };
+
+  appendChatMessage(msgObj);
+  broadcastRoomEvent({ type: 'chat_msg', data: msgObj });
+  playSynthSound('clue');
+}
+
+// Reveal Clue to Clue Board and Chat
+function revealClueToPlayers(title, text) {
+  addClueToBoard(title, text);
+  const msgObj = {
+    id: 'clue_' + Date.now(),
+    type: 'chat',
+    sender: '시스템 [단서 발견]',
+    role: 'gm',
+    time: getCurrentTimeString(),
+    text: `🔍 새로운 단서가 발견되어 단서 보드에 등록되었습니다!\n[${title}]: "${text}"`
+  };
+  appendChatMessage(msgObj);
+  broadcastRoomEvent({ type: 'chat_msg', data: msgObj });
+  playSynthSound('clue');
+}
+
+// Custom Scenario File Uploader & Intelligent Parser
+function parseUploadedScenarioFile(fileContent, fileName) {
+  try {
+    // If it's a JSON file
+    if (fileContent.trim().startsWith('{')) {
+      const parsed = JSON.parse(fileContent);
+      if (parsed.scenes && parsed.scenes.length > 0) {
+        customScenarioData = parsed;
+        finishCustomScenarioLoad(parsed.title || fileName);
+        return;
+      }
+    }
+  } catch (e) {
+    // Fall back to text / markdown parsing
+  }
+
+  // Intelligent TXT / Markdown Parser
+  // Detects # or [씬/장], > or [낭독], [판정], [비밀]
+  const lines = fileContent.split('\n');
+  const scenes = [];
+  let currentSc = null;
+
+  lines.forEach(line => {
+    const trimmed = line.trim();
+    if (!trimmed) return;
+
+    // Detect Chapter / Scene Header (e.g. # 1장, ## 씬 1, [구역 1])
+    if (trimmed.startsWith('#') || trimmed.startsWith('[씬') || trimmed.startsWith('[구역') || trimmed.startsWith('[장')) {
+      if (currentSc) scenes.push(currentSc);
+      currentSc = {
+        id: 'sc_' + (scenes.length + 1),
+        name: trimmed.replace(/^[#\[\]\s]+/, ''),
+        readAloud: '',
+        gmNotes: '',
+        checks: [],
+        clues: []
+      };
+      return;
+    }
+
+    if (!currentSc) {
+      currentSc = {
+        id: 'sc_1',
+        name: '제1장: 시작',
+        readAloud: '',
+        gmNotes: '',
+        checks: [],
+        clues: []
+      };
+    }
+
+    // Detect Read-Aloud box (e.g. > ... or [낭독] ...)
+    if (trimmed.startsWith('>') || trimmed.startsWith('[낭독]')) {
+      const clean = trimmed.replace(/^[>\[낭독\]\s]+/, '');
+      currentSc.readAloud += (currentSc.readAloud ? ' ' : '') + clean;
+    }
+    // Detect GM Secret (e.g. [비밀], [GM], (비밀))
+    else if (trimmed.startsWith('[비밀]') || trimmed.startsWith('[GM]') || trimmed.startsWith('(비밀)')) {
+      const clean = trimmed.replace(/^[(\[GM비밀)\]\s]+/, '');
+      currentSc.gmNotes += (currentSc.gmNotes ? ' ' : '') + clean;
+    }
+    // Detect Check (e.g. [판정], [DC], [관찰력])
+    else if (trimmed.includes('판정') || trimmed.includes('DC') || trimmed.includes('체크')) {
+      currentSc.checks.push({
+        skill: trimmed.split(':')[0] || '능력 판정',
+        target: '난이도 판정',
+        effect: trimmed
+      });
+    }
+    // Detect Clues
+    else if (trimmed.includes('단서:') || trimmed.includes('아이템:')) {
+      currentSc.clues.push({
+        title: trimmed.split(':')[0] || '단서',
+        text: trimmed.split(':')[1] || trimmed,
+        found: false
+      });
+    }
+    else {
+      // General narrative text appended to readAloud if empty
+      if (!currentSc.readAloud) {
+        currentSc.readAloud = trimmed;
+      }
+    }
+  });
+
+  if (currentSc) scenes.push(currentSc);
+
+  if (scenes.length === 0) {
+    scenes.push({
+      id: 'sc_1',
+      name: '첨부 시나리오 본문',
+      readAloud: fileContent.substring(0, 300) + '...',
+      gmNotes: '전체 본문이 파싱되었습니다.',
+      checks: [{ skill: '탐색 판정', target: '보통', effect: '주변 조사' }],
+      clues: []
+    });
+  }
+
+  customScenarioData = {
+    id: 'custom',
+    title: fileName.replace(/\.[^/.]+$/, ''),
+    genre: 'Custom Scenario',
+    system: 'custom',
+    description: `사용자가 첨부한 시나리오 (${fileName})`,
+    scenes: scenes
+  };
+
+  finishCustomScenarioLoad(customScenarioData.title);
+}
+
+function finishCustomScenarioLoad(title) {
+  const sel = document.getElementById('scenario-preset-select');
+  sel.value = 'custom';
+  loadScenario('custom');
+
+  const msgObj = {
+    id: 'sys_' + Date.now(),
+    type: 'chat',
+    sender: '시스템',
+    role: 'gm',
+    time: getCurrentTimeString(),
+    text: `📁 사용자 시나리오 [${title}]이 성공적으로 파싱되어 탑재되었습니다! (${customScenarioData.scenes.length}개 씬 분할 완료)`
+  };
+  appendChatMessage(msgObj);
+  playSynthSound('fanfare');
+}
+
+// Smart Search across Scenario & Rulebook DB
+function searchRulebookAndScenario(query) {
+  const q = query.trim().toLowerCase();
+  const resultsContainer = document.getElementById('rule-search-results');
+  resultsContainer.innerHTML = '';
+  if (!q) return;
+
+  let matches = [];
+
+  // Search Rulebook DB
+  RULEBOOK_DB.forEach(rule => {
+    if (rule.title.toLowerCase().includes(q) || rule.content.toLowerCase().includes(q) || rule.category.toLowerCase().includes(q)) {
+      matches.push({
+        type: `[룰북 - ${rule.category}]`,
+        title: rule.title,
+        content: rule.content
+      });
+    }
+  });
+
+  // Search current Scenario
+  currentScenario?.scenes?.forEach(sc => {
+    if (sc.name.toLowerCase().includes(q) || sc.readAloud?.toLowerCase().includes(q) || sc.gmNotes?.toLowerCase().includes(q)) {
+      matches.push({
+        type: `[시나리오 - ${sc.name}]`,
+        title: sc.name,
+        content: sc.readAloud + (currentUserRole === 'gm' && sc.gmNotes ? ' | 🔒비밀: ' + sc.gmNotes : '')
+      });
+    }
+  });
+
+  if (matches.length === 0) {
+    resultsContainer.innerHTML = '<div style="font-size: 0.78rem; color: var(--text-muted); padding: 4px;">일치하는 검색 결과가 없습니다.</div>';
+    return;
+  }
+
+  matches.forEach(m => {
+    const item = document.createElement('div');
+    item.className = 'check-item';
+    item.style.flexDirection = 'column';
+    item.style.alignItems = 'flex-start';
+    item.innerHTML = `
+      <div style="display: flex; gap: 6px; align-items: center;">
+        <span class="badge badge-blue">${m.type}</span>
+        <strong>${m.title}</strong>
+      </div>
+      <div style="font-size: 0.76rem; color: #cbd5e1; margin-top: 4px; line-height: 1.4;">
+        ${highlightMatch(m.content, q)}
+      </div>
+    `;
+    resultsContainer.appendChild(item);
+  });
+}
+
+function highlightMatch(text, term) {
+  if (!term) return text;
+  const regex = new RegExp(`(${term})`, 'gi');
+  return text.replace(regex, '<span style="background: rgba(229,169,60,0.4); color: #fff; padding: 1px 3px; border-radius: 2px;">$1</span>');
+}
+
+
+
+// --- MULTIPLAYER ROOM & TRIPLE-ENGINE SYNC (WebRTC P2P + WebSocket + BroadcastChannel) ---
+let currentRoomCode = 'DRAGON-2026';
+let currentRoomPassword = '1234';
+let currentUserRole = 'gm'; // 'gm', 'p1', 'p2', 'p3', 'spectator'
+let currentUserName = '마스터 GM';
+
+let broadcastChannel = null;
+let wsClient = null;
+let p2pPeer = null;
+let hostConn = null; // For clients connecting to host
+let peerConnections = new Map(); // For host managing clients: peerId -> conn
+let isP2PHost = false;
+
+// Initialize Networking: Automatic best-engine selection
+function initNetworking() {
+  cleanupNetworking();
+
+  // 1. Local Tab Sync via BroadcastChannel (Always on for local multi-tab zero latency)
+  try {
+    broadcastChannel = new BroadcastChannel('trpg_vtt_room_' + currentRoomCode);
+    broadcastChannel.onmessage = handleRemoteEvent;
+  } catch (e) {}
+
+  // 2. Cross-Tab storage fallback
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'trpg_event_' + currentRoomCode && e.newValue) {
+      try {
+        const payload = JSON.parse(e.newValue);
+        handleRemoteEvent({ data: payload });
+      } catch (err) {}
+    }
+  });
+
+  // 3. Try Dedicated WebSocket server if running via node server.js
+  if (window.location.protocol === 'http:' || window.location.protocol === 'https:') {
+    // Check if host has custom port or same host
+    const wsProto = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const wsUrl = `${wsProto}//${window.location.host}`;
+    try {
+      wsClient = new WebSocket(wsUrl);
+      wsClient.onopen = () => {
+        wsClient.send(JSON.stringify({
+          action: 'join',
+          roomCode: currentRoomCode,
+          password: currentRoomPassword,
+          userName: currentUserName,
+          role: currentUserRole
+        }));
+        console.log('[WS] Connected to dedicated server');
+      };
+      wsClient.onmessage = (event) => {
+        try {
+          const msg = JSON.parse(event.data);
+          if (msg.type === 'join_success') {
+            updateOnlineBadge(`🟢 ${msg.userCount}명 온라인 (서버)`);
+          } else if (msg.type === 'presence' || msg.type === 'user_left') {
+            updateOnlineBadge(`🟢 ${msg.onlineCount || 1}명 온라인 (서버)`);
+          } else if (msg.type === 'error') {
+            alert(`[방 입장 실패] ${msg.message}`);
+          } else {
+            handleRemoteEvent({ data: msg });
+          }
+        } catch (err) {}
+      };
+      wsClient.onerror = () => {
+        // Fall back to WebRTC P2P
+        initWebRTCP2P();
+      };
+    } catch (e) {
+      initWebRTCP2P();
+    }
+  } else {
+    // If opened as file://, also try WebRTC P2P if online
+    initWebRTCP2P();
+  }
+
+  // Announce local presence
+  broadcastRoomEvent({
+    type: 'presence',
+    user: currentUserName,
+    role: currentUserRole
+  });
+}
+
+function cleanupNetworking() {
+  if (broadcastChannel) {
+    try { broadcastChannel.close(); } catch (e) {}
+    broadcastChannel = null;
+  }
+  if (wsClient) {
+    try { wsClient.close(); } catch (e) {}
+    wsClient = null;
+  }
+  if (p2pPeer) {
+    try { p2pPeer.destroy(); } catch (e) {}
+    p2pPeer = null;
+  }
+  hostConn = null;
+  peerConnections.clear();
+  isP2PHost = false;
+}
+
+// WebRTC Serverless P2P using PeerJS Cloud (Free, Zero Server Maintenance)
+function initWebRTCP2P() {
+  if (typeof Peer === 'undefined') {
+    console.log('[P2P] PeerJS not loaded, operating in offline BroadcastChannel mode');
+    return;
+  }
+
+  const cleanRoom = currentRoomCode.toLowerCase().replace(/[^a-z0-9]/g, '');
+  const hostPeerId = `mythos-vtt-${cleanRoom}`;
+
+  if (currentUserRole === 'gm') {
+    // GM acts as WebRTC Host
+    try {
+      p2pPeer = new Peer(hostPeerId, {
+        debug: 1,
+        config: {
+          iceServers: [
+            { urls: 'stun:stun.l.google.com:19302' },
+            { urls: 'stun:global.stun.twilio.com:3478' }
+          ]
+        }
+      });
+
+      p2pPeer.on('open', (id) => {
+        isP2PHost = true;
+        console.log('[P2P Host] Registered as room host:', id);
+        updateOnlineBadge(`🟢 호스트 대기 중 (P2P)`);
+      });
+
+      p2pPeer.on('connection', (conn) => {
+        conn.on('open', () => {
+          // Verify Password
+          const meta = conn.metadata || {};
+          if (currentRoomPassword && meta.password !== currentRoomPassword) {
+            conn.send({ type: 'error', message: '비밀번호가 올바르지 않습니다.' });
+            setTimeout(() => conn.close(), 500);
+            return;
+          }
+
+          peerConnections.set(conn.peer, conn);
+          console.log(`[P2P Host] Player connected: ${meta.userName || conn.peer} (Total: ${peerConnections.size + 1})`);
+          updateOnlineBadge(`🟢 ${peerConnections.size + 1}명 온라인 (P2P)`);
+
+          // Send current game state to newly joined player
+          conn.send({
+            type: 'p2p_welcome',
+            roomCode: currentRoomCode,
+            tokens: tokens,
+            combatants: combatants,
+            currentRound: currentRound,
+            currentTurnIndex: currentTurnIndex,
+            clueBoard: clueBoard,
+            notes: document.getElementById('session-notes-area')?.value || ''
+          });
+
+          // Broadcast player presence to all
+          broadcastRoomEvent({
+            type: 'chat_msg',
+            data: {
+              id: 'sys_' + Date.now(),
+              type: 'chat',
+              sender: '시스템 [P2P]',
+              time: getCurrentTimeString(),
+              text: `👋 ${meta.userName || '새 플레이어'} 님이 방에 입장했습니다!`
+            }
+          });
+        });
+
+        conn.on('data', (data) => {
+          // Re-broadcast from client to other clients
+          peerConnections.forEach((otherConn, pid) => {
+            if (pid !== conn.peer && otherConn.open) {
+              otherConn.send(data);
+            }
+          });
+          // Process locally on host
+          handleRemoteEvent({ data: data });
+        });
+
+        conn.on('close', () => {
+          peerConnections.delete(conn.peer);
+          updateOnlineBadge(`🟢 ${peerConnections.size + 1}명 온라인 (P2P)`);
+        });
+      });
+
+      p2pPeer.on('error', (err) => {
+        if (err.type === 'unavailable-id') {
+          // Another GM already hosts this room; join as client
+          console.log('[P2P] Host ID already taken, joining as secondary client');
+          connectAsP2PClient(hostPeerId);
+        } else {
+          console.warn('[P2P Error]', err);
+        }
+      });
+    } catch (e) {
+      console.warn('[P2P] Host init error:', e);
+    }
+  } else {
+    // Non-GM connects as client to Host
+    connectAsP2PClient(hostPeerId);
+  }
+}
+
+function connectAsP2PClient(hostPeerId) {
+  try {
+    p2pPeer = new Peer(null, {
+      debug: 1,
+      config: {
+        iceServers: [
+          { urls: 'stun:stun.l.google.com:19302' },
+          { urls: 'stun:global.stun.twilio.com:3478' }
+        ]
+      }
+    });
+
+    p2pPeer.on('open', (myId) => {
+      console.log('[P2P Client] Opened client peer ID:', myId);
+      updateOnlineBadge(`🟡 호스트 연결 시도 중...`);
+
+      hostConn = p2pPeer.connect(hostPeerId, {
+        metadata: {
+          password: currentRoomPassword,
+          userName: currentUserName,
+          role: currentUserRole
+        }
+      });
+
+      hostConn.on('open', () => {
+        console.log('[P2P Client] Connected to host!');
+        updateOnlineBadge(`🟢 P2P 연결 완료`);
+        appendChatMessage({
+          id: 'sys_' + Date.now(),
+          type: 'chat',
+          sender: '시스템 [P2P]',
+          time: getCurrentTimeString(),
+          text: `🔗 호스트(${currentRoomCode})에 WebRTC P2P로 직접 연결되었습니다!`
+        });
+      });
+
+      hostConn.on('data', (data) => {
+        if (data.type === 'p2p_welcome') {
+          if (data.tokens) tokens = data.tokens;
+          if (data.combatants) combatants = data.combatants;
+          if (data.currentRound) currentRound = data.currentRound;
+          if (data.currentTurnIndex !== undefined) currentTurnIndex = data.currentTurnIndex;
+          if (data.clueBoard) clueBoard = data.clueBoard;
+          renderCombatantsList();
+          renderClueBoard();
+          render();
+        } else if (data.type === 'error') {
+          alert(`[P2P 오류] ${data.message}`);
+        } else {
+          handleRemoteEvent({ data: data });
+        }
+      });
+
+      hostConn.on('close', () => {
+        updateOnlineBadge(`🔴 호스트 연결 끊김`);
+      });
+    });
+
+    p2pPeer.on('error', (err) => {
+      console.warn('[P2P Client Error]', err);
+      updateOnlineBadge(`⚠️ 로컬 모드 작동 중`);
+    });
+  } catch (e) {
+    console.warn('[P2P Client Init Error]', e);
+  }
+}
+
+function updateOnlineBadge(text) {
+  const badge = document.getElementById('online-users-badge');
+  if (badge) badge.innerText = text;
+}
+
+function broadcastRoomEvent(payload) {
+  payload.senderName = currentUserName;
+  payload.senderRole = currentUserRole;
+  payload.timestamp = Date.now();
+
+  // 1. WebSocket Server if active
+  if (wsClient && wsClient.readyState === WebSocket.OPEN) {
+    try {
+      wsClient.send(JSON.stringify({ action: 'broadcast', payload: payload }));
+    } catch (e) {}
+  }
+
+  // 2. WebRTC P2P: If Host, broadcast to all peers; if Client, send to Host
+  if (isP2PHost) {
+    peerConnections.forEach(conn => {
+      if (conn.open) {
+        try { conn.send(payload); } catch (e) {}
+      }
+    });
+  } else if (hostConn && hostConn.open) {
+    try {
+      hostConn.send(payload);
+    } catch (e) {}
+  }
+
+  // 3. Local BroadcastChannel for same-machine tabs
+  if (broadcastChannel) {
+    try {
+      broadcastChannel.postMessage(payload);
+    } catch (e) {}
+  }
+
+  // 4. LocalStorage Event trigger
+  try {
+    localStorage.setItem('trpg_event_' + currentRoomCode, JSON.stringify(payload));
+  } catch (e) {}
+}
+
+function handleRemoteEvent(e) {
+  const data = e.data;
+  if (!data) return;
+
+  // Ignore self-broadcasts
+  if (data.senderName === currentUserName && data.type !== 'presence') return;
+
+  switch (data.type) {
+    case 'sync_tokens':
+      tokens = data.data;
+      render();
+      break;
+
+    case 'sync_fog':
+      if (data.data) {
+        const img = new Image();
+        img.onload = () => {
+          fogCtx.clearRect(0, 0, fogCanvas.width, fogCanvas.height);
+          fogCtx.drawImage(img, 0, 0);
+          render();
+        };
+        img.src = data.data;
+      }
+      break;
+
+    case 'sync_drawings':
+      if (data.data) {
+        const img = new Image();
+        img.onload = () => {
+          drawingCtx.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
+          drawingCtx.drawImage(img, 0, 0);
+          render();
+        };
+        img.src = data.data;
+      } else {
+        drawingCtx.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
+        render();
+      }
+      break;
+
+    case 'dice_roll':
+      const rollObj = data.data;
+      if (rollObj.rollMode === 'gm' && currentUserRole !== 'gm' && rollObj.sender !== currentUserName) {
+        return;
+      }
+      playSynthSound('dice');
+      appendChatMessage(rollObj);
+      break;
+
+    case 'chat_msg':
+      const msgObj = data.data;
+      if (msgObj.type === 'whisper') {
+        const isTarget = msgObj.target === currentUserName || (msgObj.target === 'gm' && currentUserRole === 'gm');
+        const isSender = msgObj.sender === currentUserName;
+        if (!isTarget && !isSender && currentUserRole !== 'gm') {
+          return;
+        }
+      }
+      appendChatMessage(msgObj);
+      break;
+
+    case 'ping':
+      pings.push({
+        x: data.x,
+        y: data.y,
+        user: data.user,
+        radius: 5,
+        life: 35,
+        color: '#e5a93c'
+      });
+      playSynthSound('ping');
+      render();
+      break;
+
+    case 'initiative_update':
+      combatants = data.combatants;
+      currentTurnIndex = data.turnIndex;
+      currentRound = data.round;
+      renderCombatantsList();
+      render();
+      break;
+
+    case 'x_card':
+      playSynthSound('alarm');
+      alert(`🛑 [X-CARD 경보] ${data.user} 님이 세션 일시정지를 요청했습니다!\n불편하거나 민감한 콘텐츠가 발생하였으니 잠시 멈추고 대화를 나눠주세요.`);
+      break;
+
+    case 'presence':
+      // Flash presence indicator
+      break;
+  }
+}
+
+// User / Role Switcher
+function switchUserRole(newRole) {
+  currentUserRole = newRole;
+  if (newRole === 'gm') {
+    currentUserName = '마스터 GM';
+  } else if (newRole === 'p1') {
+    currentUserName = '아서 (전사)';
+  } else if (newRole === 'p2') {
+    currentUserName = '엘레나 (마법사)';
+  } else if (newRole === 'p3') {
+    currentUserName = '존 (사립탐정)';
+  } else if (newRole === 'spectator') {
+    currentUserName = '관전자';
+  }
+
+  // Update Character Sheet View to match selected role
+  if (newRole === 'p1') {
+    loadCharacterProfile('p1');
+  } else if (newRole === 'p2') {
+    loadCharacterProfile('p2');
+  } else if (newRole === 'p3') {
+    loadCharacterProfile('p3');
+  }
+
+  // Re-initialize P2P if role switched (GM hosts, players connect)
+  initNetworking();
+
+  updateContextualExcerpt();
+  render();
+
+  const msgObj = {
+    id: 'sys_' + Date.now(),
+    type: 'chat',
+    sender: '시스템',
+    role: 'gm',
+    time: getCurrentTimeString(),
+    text: `🎭 역할이 [${currentUserName}] (으)로 변경되었습니다.`
+  };
+  appendChatMessage(msgObj);
+}
+
+
+
+// --- MAIN APPLICATION CONTROLLER & SYNTHESIZER ---
+let audioCtx = null;
+let bgmOscillators = [];
+let isBgmPlaying = false;
+
+// Characters DB
+let charactersDB = {
+  p1: {
+    id: 'p1',
+    name: '아서 펜드래건',
+    system: 'dnd5e',
+    sub: '레벨 3 전사 / 수호자',
+    avatar: '⚔️',
+    hp: 28, maxHp: 28,
+    mp: 4, maxMp: 4,
+    san: 65, maxSan: 65,
+    stats: { 'STR': 16, 'DEX': 14, 'CON': 15, 'INT': 10, 'WIS': 12, 'CHA': 13 },
+    skills: [
+      { name: '운동 (Athletics)', stat: 'STR', mod: '+5' },
+      { name: '위협 (Intimidation)', stat: 'CHA', mod: '+3' },
+      { name: '인식 (Perception)', stat: 'WIS', mod: '+3' },
+      { name: '생존 (Survival)', stat: 'WIS', mod: '+3' }
+    ],
+    conditions: []
+  },
+  p2: {
+    id: 'p2',
+    name: '엘레나 레이븐',
+    system: 'dnd5e',
+    sub: '레벨 3 비전 마법사',
+    avatar: '🔮',
+    hp: 18, maxHp: 18,
+    mp: 12, maxMp: 12,
+    san: 55, maxSan: 55,
+    stats: { 'STR': 8, 'DEX': 14, 'CON': 12, 'INT': 17, 'WIS': 13, 'CHA': 10 },
+    skills: [
+      { name: '비전 (Arcana)', stat: 'INT', mod: '+5' },
+      { name: '역사 (History)', stat: 'INT', mod: '+5' },
+      { name: '조사 (Investigation)', stat: 'INT', mod: '+5' }
+    ],
+    conditions: []
+  },
+  p3: {
+    id: 'p3',
+    name: '존 H. 왓슨',
+    system: 'coc7e',
+    sub: '전직 군의관 / 사립탐정',
+    avatar: '🕵️',
+    hp: 13, maxHp: 13,
+    mp: 11, maxMp: 11,
+    san: 70, maxSan: 70,
+    stats: { 'STR': 60, 'CON': 65, 'SIZ': 70, 'DEX': 50, 'APP': 65, 'INT': 75, 'POW': 70, 'EDU': 80 },
+    skills: [
+      { name: '관찰력 (Spot Hidden)', stat: 'INT', val: '65%' },
+      { name: '듣기 (Listen)', stat: 'INT', val: '50%' },
+      { name: '심리학 (Psychology)', stat: 'POW', val: '60%' },
+      { name: '의학 (First Aid)', stat: 'EDU', val: '75%' },
+      { name: '권총 사격 (Handgun)', stat: 'DEX', val: '55%' }
+    ],
+    conditions: []
+  }
+};
+
+let currentCharacter = charactersDB.p1;
+
+// Combat & Initiative
+let combatants = [
+  { id: 't_p1', name: '아서 (전사)', init: 18, hp: 28, maxHp: 28, avatar: '⚔️' },
+  { id: 't_boss', name: '흑마법사 말로크', init: 15, hp: 45, maxHp: 45, avatar: '🧙‍♂️' },
+  { id: 't_p2', name: '엘레나 (마법사)', init: 14, hp: 18, maxHp: 18, avatar: '🔮' },
+  { id: 't_m1', name: '고블린 정찰병', init: 11, hp: 7, maxHp: 7, avatar: '👺' },
+  { id: 't_p3', name: '존 (사립탐정)', init: 8, hp: 22, maxHp: 22, avatar: '🕵️' }
+];
+let currentTurnIndex = 0;
+let currentRound = 1;
+
+// Clue Handouts
+let clueBoard = [
+  { id: 'clue_1', title: '고대 저택의 평면도', text: '1890년대 양식의 저택 청사진. 서재 뒤편에 지하 납골당으로 이어지는 숨은 통로가 표기되어 있습니다.', revealed: true },
+  { id: 'clue_2', title: '의식용 황동 단검', text: '기이한 심연의 룬 문자가 새겨진 단검. 핏자국이 희미하게 남아있습니다.', revealed: false }
+];
+
+// World Clock & Timer
+let inGameHours = 14;
+let inGameMinutes = 0;
+let sessionSeconds = 0;
+
+// --- WEB AUDIO PROCEDURAL SYNTHESIZER ---
+function getAudioContext() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if (audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
+  return audioCtx;
+}
+
+function playSynthSound(type) {
+  try {
+    const ctx = getAudioContext();
+    const now = ctx.currentTime;
+
+    if (type === 'dice') {
+      // Dice rattle: multiple short clicks + low rumble
+      for (let i = 0; i < 4; i++) {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(150 + Math.random() * 200, now + i * 0.08);
+        gain.gain.setValueAtTime(0.15, now + i * 0.08);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.07);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now + i * 0.08);
+        osc.stop(now + i * 0.08 + 0.08);
+      }
+    } else if (type === 'sword') {
+      // Metallic clash
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(800, now);
+      osc.frequency.exponentialRampToValueAtTime(200, now + 0.25);
+      gain.gain.setValueAtTime(0.25, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.25);
+    } else if (type === 'fanfare') {
+      // Critical triumph major triad chord
+      [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now + idx * 0.06);
+        gain.gain.setValueAtTime(0.2, now + idx * 0.06);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.4);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now + idx * 0.06);
+        osc.stop(now + idx * 0.06 + 0.45);
+      });
+    } else if (type === 'clue') {
+      // High mystery chime
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(880, now);
+      osc.frequency.exponentialRampToValueAtTime(1760, now + 0.35);
+      gain.gain.setValueAtTime(0.18, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.36);
+    } else if (type === 'ping') {
+      // Sonar beep
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(600, now);
+      gain.gain.setValueAtTime(0.2, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.3);
+    } else if (type === 'alarm') {
+      // Low buzzer
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(220, now);
+      gain.gain.setValueAtTime(0.3, now);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.5);
+    }
+  } catch (e) {
+    console.warn('Audio play error:', e);
+  }
+}
+
+// Ambient BGM Synthesizer (Procedural Dark Fantasy Drone)
+function toggleAmbientBGM() {
+  const ctx = getAudioContext();
+  const label = document.getElementById('bgm-label');
+  const icon = document.getElementById('bgm-icon');
+
+  if (isBgmPlaying) {
+    bgmOscillators.forEach(node => {
+      try { node.stop(); node.disconnect(); } catch (e) {}
+    });
+    bgmOscillators = [];
+    isBgmPlaying = false;
+    label.innerText = 'BGM: 꺼짐';
+    icon.innerText = '🎵';
+  } else {
+    try {
+      // Build an atmospheric 3-oscillator drone
+      const freqs = [65.41, 98.00, 130.81]; // C2, G2, C3
+      bgmOscillators = [];
+
+      freqs.forEach(freq => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, ctx.currentTime);
+        gain.gain.setValueAtTime(0.04, ctx.currentTime);
+
+        // Lowpass filter for warm dark atmosphere
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(350, ctx.currentTime);
+
+        osc.connect(filter);
+        filter.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        bgmOscillators.push(osc);
+      });
+
+      isBgmPlaying = true;
+      label.innerText = 'BGM: 켜짐';
+      icon.innerText = '🎶';
+    } catch (e) {
+      console.warn('BGM error:', e);
+    }
+  }
+}
+
+// --- CHARACTER SHEET RENDERING ---
+function loadCharacterProfile(charKey) {
+  if (charactersDB[charKey]) {
+    currentCharacter = charactersDB[charKey];
+  }
+  renderCharacterSheet();
+}
+
+function renderCharacterSheet() {
+  document.getElementById('char-name-input').value = currentCharacter.name;
+  document.getElementById('char-sub-input').value = currentCharacter.sub;
+  document.getElementById('char-avatar-preview').innerText = currentCharacter.avatar || '👤';
+  document.getElementById('char-system-select').value = currentCharacter.system;
+
+  // HP
+  document.getElementById('hp-display').innerText = `${currentCharacter.hp} / ${currentCharacter.maxHp}`;
+  const hpPct = Math.max(0, Math.min(100, (currentCharacter.hp / currentCharacter.maxHp) * 100));
+  document.getElementById('hp-bar-fill').style.width = hpPct + '%';
+
+  // SAN (for CoC)
+  const sanContainer = document.getElementById('san-resource-container');
+  if (currentCharacter.system === 'coc7e') {
+    sanContainer.style.display = 'flex';
+    document.getElementById('san-display').innerText = `${currentCharacter.san} / ${currentCharacter.maxSan}`;
+    const sanPct = Math.max(0, Math.min(100, (currentCharacter.san / currentCharacter.maxSan) * 100));
+    document.getElementById('san-bar-fill').style.width = sanPct + '%';
+  } else {
+    sanContainer.style.display = 'none';
+  }
+
+  // Stats Grid
+  const statsContainer = document.getElementById('stats-container');
+  statsContainer.innerHTML = '';
+  for (let [st, val] of Object.entries(currentCharacter.stats)) {
+    const box = document.createElement('div');
+    box.className = 'stat-box';
+    let modStr = '';
+    if (currentCharacter.system === 'dnd5e') {
+      const mod = Math.floor((val - 10) / 2);
+      modStr = mod >= 0 ? `+${mod}` : `${mod}`;
+    } else {
+      modStr = `1/2: ${Math.floor(val/2)} | 1/5: ${Math.floor(val/5)}`;
+    }
+    box.innerHTML = `
+      <div class="stat-name">${st}</div>
+      <div class="stat-val">${val}</div>
+      <div class="stat-mod">${modStr}</div>
+    `;
+    box.onclick = () => {
+      if (currentCharacter.system === 'dnd5e') {
+        const mod = Math.floor((val - 10) / 2);
+        const formula = `1d20${mod >= 0 ? '+' + mod : mod}`;
+        rollDiceFormula(formula, `${currentCharacter.name} - ${st} 판정`);
+      } else {
+        rollDiceFormula('1d100', `${currentCharacter.name} - ${st} 체크 [목표: ${val}]`);
+      }
+    };
+    statsContainer.appendChild(box);
+  }
+
+  // Skills List
+  const skillsContainer = document.getElementById('skills-container');
+  skillsContainer.innerHTML = '';
+  if (currentCharacter.skills) {
+    currentCharacter.skills.forEach(sk => {
+      const row = document.createElement('div');
+      row.className = 'check-item';
+      row.innerHTML = `
+        <span>${sk.name}</span>
+        <span class="badge badge-gold">${sk.mod || sk.val}</span>
+      `;
+      row.onclick = () => {
+        if (currentCharacter.system === 'dnd5e') {
+          const mod = sk.mod || '+0';
+          rollDiceFormula(`1d20${mod}`, `${sk.name} 판정`);
+        } else {
+          rollDiceFormula('1d100', `${sk.name} 판정 [목표: ${sk.val}]`);
+        }
+      };
+      skillsContainer.appendChild(row);
+    });
+  }
+
+  // Condition Tags
+  const condContainer = document.getElementById('condition-tags-container');
+  condContainer.innerHTML = '';
+  const allConditions = ['중독 (Poisoned)', '실명 (Blinded)', '기절 (Stunned)', '쓰러짐 (Prone)', '축복 (Blessed)', '광기 (Madness)'];
+  allConditions.forEach(cond => {
+    const isActive = currentCharacter.conditions.includes(cond);
+    const badge = document.createElement('span');
+    badge.className = `badge ${isActive ? 'badge-red' : 'badge-gold'}`;
+    badge.style.cursor = 'pointer';
+    badge.innerText = cond;
+    badge.onclick = () => {
+      if (isActive) {
+        currentCharacter.conditions = currentCharacter.conditions.filter(c => c !== cond);
+      } else {
+        currentCharacter.conditions.push(cond);
+      }
+      renderCharacterSheet();
+    };
+    condContainer.appendChild(badge);
+  });
+}
+
+function modifyHP(delta) {
+  currentCharacter.hp = Math.max(0, Math.min(currentCharacter.maxHp, currentCharacter.hp + delta));
+  renderCharacterSheet();
+
+  // Also update corresponding map token if exists
+  const tok = tokens.find(t => t.name.includes(currentCharacter.name.split(' ')[0]));
+  if (tok) {
+    tok.hp = currentCharacter.hp;
+    render();
+    broadcastRoomEvent({ type: 'sync_tokens', data: tokens });
+  }
+}
+
+// --- MONSTER COMPENDIUM SPAWN ---
+function renderMonsterCompendium() {
+  const container = document.getElementById('monster-compendium-list');
+  container.innerHTML = '';
+  MONSTER_COMPENDIUM.forEach(mon => {
+    const item = document.createElement('div');
+    item.className = 'check-item';
+    item.innerHTML = `
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <span style="font-size: 1.2rem;">${mon.icon}</span>
+        <div>
+          <strong>${mon.name}</strong> <span class="badge badge-gold">CR ${mon.cr}</span>
+          <div style="font-size: 0.72rem; color: var(--text-muted);">HP ${mon.hp} | AC ${mon.ac} | 공 ${mon.atk}</div>
+        </div>
+      </div>
+      <button class="btn-small btn-gold" onclick="spawnMonsterToken('${mon.id}')">소환</button>
+    `;
+    container.appendChild(item);
+  });
+}
+
+function spawnMonsterToken(monId) {
+  const mon = MONSTER_COMPENDIUM.find(m => m.id === monId);
+  if (!mon) return;
+
+  const newToken = {
+    id: 'tok_' + Date.now(),
+    name: mon.name,
+    x: 400 + Math.random() * 150,
+    y: 350 + Math.random() * 150,
+    size: mon.size,
+    hp: mon.hp,
+    maxHp: mon.hp,
+    color: mon.color,
+    icon: mon.icon,
+    conditions: []
+  };
+
+  tokens.push(newToken);
+  combatants.push({
+    id: newToken.id,
+    name: newToken.name,
+    init: Math.floor(Math.random() * 20) + 1,
+    hp: newToken.hp,
+    maxHp: newToken.maxHp,
+    avatar: newToken.icon
+  });
+
+  renderCombatantsList();
+  render();
+  broadcastRoomEvent({ type: 'sync_tokens', data: tokens });
+  playSynthSound('sword');
+}
+
+// --- INITIATIVE & TURN ORDER ---
+function renderCombatantsList() {
+  const container = document.getElementById('combatants-list');
+  container.innerHTML = '';
+  document.getElementById('round-counter-badge').innerText = `라운드 ${currentRound}`;
+
+  combatants.forEach((c, idx) => {
+    const isTurn = idx === currentTurnIndex;
+    const item = document.createElement('div');
+    item.className = `combatant-item ${isTurn ? 'active-turn' : ''}`;
+    item.innerHTML = `
+      <div class="combatant-info">
+        <div class="combatant-avatar">${c.avatar || '👤'}</div>
+        <div>
+          <div style="font-weight: 600; font-size: 0.85rem;">${c.name} ${isTurn ? '👑' : ''}</div>
+          <div style="font-size: 0.72rem; color: var(--text-muted);">HP ${c.hp}/${c.maxHp}</div>
+        </div>
+      </div>
+      <div class="combatant-init">${c.init}</div>
+    `;
+    container.appendChild(item);
+  });
+}
+
+function rollAllInitiative() {
+  combatants.forEach(c => {
+    c.init = Math.floor(Math.random() * 20) + 1;
+  });
+  combatants.sort((a, b) => b.init - a.init);
+  currentTurnIndex = 0;
+  currentRound = 1;
+  renderCombatantsList();
+  render();
+  playSynthSound('sword');
+  broadcastRoomEvent({
+    type: 'initiative_update',
+    combatants: combatants,
+    turnIndex: currentTurnIndex,
+    round: currentRound
+  });
+}
+
+function nextTurn() {
+  if (combatants.length === 0) return;
+  currentTurnIndex = (currentTurnIndex + 1) % combatants.length;
+  if (currentTurnIndex === 0) {
+    currentRound++;
+  }
+  renderCombatantsList();
+  render();
+  playSynthSound('ping');
+  broadcastRoomEvent({
+    type: 'initiative_update',
+    combatants: combatants,
+    turnIndex: currentTurnIndex,
+    round: currentRound
+  });
+}
+
+// --- CLUE BOARD & HANDOUTS ---
+function renderClueBoard() {
+  const container = document.getElementById('clue-board-container');
+  container.innerHTML = '';
+  clueBoard.forEach(c => {
+    const isGM = currentUserRole === 'gm';
+    if (!c.revealed && !isGM) return; // Hidden from players if not revealed
+
+    const item = document.createElement('div');
+    item.className = 'check-item';
+    item.style.flexDirection = 'column';
+    item.style.alignItems = 'flex-start';
+    item.innerHTML = `
+      <div style="display: flex; justify-content: space-between; width: 100%;">
+        <strong>🔍 ${c.title}</strong>
+        ${isGM ? `<button class="btn-small" onclick="toggleClueReveal('${c.id}')">${c.revealed ? '비공개로' : '플레이어 공개'}</button>` : ''}
+      </div>
+      <div style="font-size: 0.76rem; color: #cbd5e1; margin-top: 4px; line-height: 1.4;">
+        "${c.text}"
+      </div>
+    `;
+    container.appendChild(item);
+  });
+}
+
+function addClueToBoard(title, text) {
+  const newClue = {
+    id: 'clue_' + Date.now(),
+    title: title,
+    text: text,
+    revealed: true
+  };
+  clueBoard.push(newClue);
+  renderClueBoard();
+}
+
+function toggleClueReveal(id) {
+  const c = clueBoard.find(x => x.id === id);
+  if (c) {
+    c.revealed = !c.revealed;
+    renderClueBoard();
+  }
+}
+
+// --- RANDOM GENERATOR TABLES ---
+function generateRandom(type) {
+  const tbl = RANDOM_TABLES[type];
+  if (!tbl) return;
+  const picked = tbl[Math.floor(Math.random() * tbl.length)];
+
+  const resBox = document.getElementById('random-gen-result');
+  resBox.style.display = 'block';
+  resBox.innerHTML = `<strong>🎲 [${type.toUpperCase()}] 결과:</strong><br>${picked}`;
+  playSynthSound('clue');
+}
+
+// --- CHAT SYSTEM & WHISPERS ---
+function appendChatMessage(msg) {
+  const container = document.getElementById('chat-messages-container');
+  const card = document.createElement('div');
+
+  let typeClass = 'msg-ic';
+  if (msg.type === 'dice') typeClass = 'msg-dice';
+  else if (msg.type === 'narration') typeClass = 'msg-narration';
+  else if (msg.type === 'whisper') typeClass = 'msg-whisper';
+  else if (msg.chatMode === 'ooc') typeClass = 'msg-ooc';
+
+  card.className = `msg-card ${typeClass}`;
+
+  let bodyContent = '';
+  if (msg.type === 'dice') {
+    let critBadge = '';
+    if (msg.isCrit) critBadge = '<span class="dice-result-badge res-crit">★ 크리티컬 대성공!</span>';
+    else if (msg.isFumble) critBadge = '<span class="dice-result-badge res-fumble">💀 펌블 (대실패!)</span>';
+    else if (msg.cocGrade) critBadge = `<span class="badge badge-gold">${msg.cocGrade}</span>`;
+
+    bodyContent = `
+      <div style="font-weight: 600; color: var(--text-gold);">${msg.label ? msg.label + ' : ' : ''}<code>${msg.formula}</code></div>
+      <div style="font-size: 0.8rem; color: var(--text-muted);">${msg.text}</div>
+      ${critBadge}
+    `;
+  } else {
+    bodyContent = `<div class="msg-body">${msg.text.replace(/\n/g, '<br>')}</div>`;
+  }
+
+  card.innerHTML = `
+    <div class="msg-header">
+      <span class="msg-sender">${msg.sender}</span>
+      <span class="msg-time">${msg.time}</span>
+    </div>
+    ${bodyContent}
+  `;
+
+  container.appendChild(card);
+  container.scrollTop = container.scrollHeight;
+}
+
+function sendChatMessage() {
+  const input = document.getElementById('chat-input-field');
+  const text = input.value.trim();
+  if (!text) return;
+
+  const mode = document.getElementById('chat-mode-toggle').value;
+
+  // Check for whisper command (/w player message or /gm message)
+  if (text.startsWith('/w ') || text.startsWith('/gm ')) {
+    let target = 'gm';
+    let content = '';
+    if (text.startsWith('/gm ')) {
+      target = 'gm';
+      content = text.substring(4);
+    } else {
+      const parts = text.substring(3).split(' ');
+      target = parts[0];
+      content = parts.slice(1).join(' ');
+    }
+
+    const msgObj = {
+      id: 'msg_' + Date.now(),
+      type: 'whisper',
+      sender: currentUserName,
+      target: target,
+      time: getCurrentTimeString(),
+      text: `[비밀 귓속말 -> ${target}]: ${content}`
+    };
+
+    appendChatMessage(msgObj);
+    broadcastRoomEvent({ type: 'chat_msg', data: msgObj });
+    input.value = '';
+    return;
+  }
+
+  const msgObj = {
+    id: 'msg_' + Date.now(),
+    type: 'chat',
+    chatMode: mode,
+    sender: currentUserName,
+    role: currentUserRole,
+    time: getCurrentTimeString(),
+    text: text
+  };
+
+  appendChatMessage(msgObj);
+  broadcastRoomEvent({ type: 'chat_msg', data: msgObj });
+  input.value = '';
+}
+
+function executeMacro(type) {
+  if (type === 'attack') {
+    rollDiceFormula('1d20+5', '롱소드 근접 공격');
+  } else if (type === 'dodge') {
+    rollDiceFormula('1d20+2', '민첩 회피 판정');
+  } else if (type === 'spot') {
+    rollDiceFormula('1d100', '관찰력 (Spot Hidden)');
+  } else if (type === 'san') {
+    rollDiceFormula('1d100', '이성 (SAN 체크) [실패 시 1d4 상실]');
+  }
+}
+
+// --- UTILITY & TIME HELPERS ---
+function getCurrentTimeString() {
+  const d = new Date();
+  return `${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`;
+}
+
+// World Clock Rest
+function advanceWorldTime(hours) {
+  inGameHours = (inGameHours + hours) % 24;
+  let period = inGameHours >= 6 && inGameHours < 12 ? '아침' : (inGameHours >= 12 && inGameHours < 18 ? '낮' : (inGameHours >= 18 && inGameHours < 22 ? '저녁' : '심야'));
+  document.getElementById('world-time-text').innerText = `${inGameHours}:00 (${period})`;
+
+  if (hours >= 8) {
+    // Long Rest: full HP & MP recovery
+    currentCharacter.hp = currentCharacter.maxHp;
+    currentCharacter.mp = currentCharacter.maxMp;
+    renderCharacterSheet();
+    appendChatMessage({
+      id: 'sys_' + Date.now(),
+      type: 'chat',
+      sender: '시스템 [긴 휴식]',
+      time: getCurrentTimeString(),
+      text: `🛌 파티가 긴 휴식을 취했습니다 (8시간 경과). 체력과 자원이 완전히 회복되었습니다.`
+    });
+  }
+}
+
+// Download Session Notes
+function downloadSessionNotes() {
+  const text = document.getElementById('session-notes-area').value;
+  const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `TRPG_세션일지_${currentRoomCode}.txt`;
+  a.click();
+}
+
+// Export Full Session State JSON
+function exportSessionJSON() {
+  const state = {
+    roomCode: currentRoomCode,
+    tokens: tokens,
+    combatants: combatants,
+    currentRound: currentRound,
+    clueBoard: clueBoard,
+    notes: document.getElementById('session-notes-area').value,
+    timestamp: new Date().toISOString()
+  };
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `TRPG_Room_${currentRoomCode}_Backup.json`;
+  a.click();
+}
+
+// Modals management
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+
+// Populate 50 Features in Modal
+function populate50FeaturesList() {
+  const container = document.getElementById('features-list-container');
+  container.innerHTML = '';
+  TRPG_50_FEATURES.forEach(f => {
+    const item = document.createElement('div');
+    item.className = 'feature-badge-item';
+    item.innerHTML = `
+      <span class="feature-num">#${f.id}</span>
+      <div>
+        <div style="font-weight: 700; color: #f6c879;">${f.name}</div>
+        <div style="font-size: 0.72rem; color: var(--text-muted);">${f.desc}</div>
+      </div>
+    `;
+    container.appendChild(item);
+  });
+}
+
+// Token Edit Modal
+function openTokenEditModal(tok) {
+  document.getElementById('token-edit-name').value = tok.name;
+  document.getElementById('token-edit-hp').value = tok.hp;
+  document.getElementById('token-edit-maxhp').value = tok.maxHp;
+  document.getElementById('token-edit-size').value = tok.size;
+  document.getElementById('token-edit-icon').value = tok.icon || '👤';
+  openModal('modal-token-edit');
+}
+
+function saveTokenEdit() {
+  if (!selectedToken) return;
+  selectedToken.name = document.getElementById('token-edit-name').value;
+  selectedToken.hp = parseInt(document.getElementById('token-edit-hp').value, 10);
+  selectedToken.maxHp = parseInt(document.getElementById('token-edit-maxhp').value, 10);
+  selectedToken.size = parseInt(document.getElementById('token-edit-size').value, 10);
+  selectedToken.icon = document.getElementById('token-edit-icon').value;
+  closeModal('modal-token-edit');
+  render();
+  broadcastRoomEvent({ type: 'sync_tokens', data: tokens });
+}
+
+function deleteSelectedToken() {
+  if (!selectedToken) return;
+  tokens = tokens.filter(t => t.id !== selectedToken.id);
+  combatants = combatants.filter(c => c.id !== selectedToken.id);
+  selectedToken = null;
+  closeModal('modal-token-edit');
+  render();
+  renderCombatantsList();
+  broadcastRoomEvent({ type: 'sync_tokens', data: tokens });
+}
+
+
+
+// --- DOM EVENT LISTENERS & INITIALIZATION ---
+document.addEventListener('DOMContentLoaded', () => {
+  // 1. Initialize Canvas & Networking
+  initCanvas();
+  initNetworking();
+
+  // 2. Tab Navigation
+  document.querySelectorAll('.panel-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.panel-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.panel-content').forEach(c => c.style.display = 'none');
+      tab.classList.add('active');
+      const targetId = tab.dataset.tab;
+      const targetEl = document.getElementById(targetId);
+      if (targetEl) targetEl.style.display = 'flex';
+    });
+  });
+
+  // 3. Roll Mode Selector Pills
+  document.querySelectorAll('.roll-mode-pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      document.querySelectorAll('.roll-mode-pill').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      currentRollMode = pill.dataset.mode;
+    });
+  });
+
+  // 4. Map Tools Switching
+  document.querySelectorAll('.tool-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (btn.id === 'btn-quick-spawn-token') {
+        spawnMonsterToken('goblin');
+        return;
+      }
+      document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentTool = btn.dataset.tool;
+    });
+  });
+
+  // 5. Room Setup & Password
+  document.getElementById('btn-room-config').addEventListener('click', () => {
+    openModal('modal-room-config');
+  });
+
+  document.getElementById('btn-save-room-config').addEventListener('click', () => {
+    const code = document.getElementById('modal-input-room-code').value.trim() || 'DRAGON-2026';
+    const pw = document.getElementById('modal-input-room-pw').value;
+    const nick = document.getElementById('modal-input-user-name').value.trim() || '플레이어';
+
+    currentRoomCode = code;
+    currentRoomPassword = pw;
+    currentUserName = nick;
+
+    document.getElementById('header-room-code').innerText = currentRoomCode;
+    document.getElementById('header-room-lock').innerText = currentRoomPassword ? '🔒' : '🔓';
+    closeModal('modal-room-config');
+
+    initNetworking();
+    appendChatMessage({
+      id: 'sys_' + Date.now(),
+      type: 'chat',
+      sender: '시스템',
+      time: getCurrentTimeString(),
+      text: `🔑 방 [${currentRoomCode}]에 입장했습니다. (닉네임: ${currentUserName})`
+    });
+  });
+
+  // 6. User Role Selector
+  document.getElementById('user-role-select').addEventListener('change', (e) => {
+    switchUserRole(e.target.value);
+  });
+
+  // 7. Environment Lighting Selector
+  document.getElementById('env-lighting-select').addEventListener('change', (e) => {
+    const overlay = document.getElementById('lighting-overlay');
+    overlay.className = e.target.value;
+  });
+
+  // 8. BGM Toggle
+  document.getElementById('btn-toggle-bgm').addEventListener('click', toggleAmbientBGM);
+
+  // 9. World Clock & Rest button
+  document.getElementById('btn-world-clock').addEventListener('click', () => {
+    advanceWorldTime(1);
+  });
+
+  // 10. Safety X-Card
+  document.getElementById('btn-x-card').addEventListener('click', () => {
+    playSynthSound('alarm');
+    broadcastRoomEvent({ type: 'x_card', user: currentUserName });
+    alert(`🛑 [X-CARD 발동] ${currentUserName} 님이 세션 일시정지를 요청했습니다.\n잠시 게임을 멈추고 안전하고 편안한 플레이를 위해 논의해 주세요.`);
+  });
+
+  // 11. 50 Features Guide Modal
+  document.getElementById('btn-features-list').addEventListener('click', () => {
+    populate50FeaturesList();
+    openModal('modal-features-list');
+  });
+
+  // 12. JSON Backup Export
+  document.getElementById('btn-export-json').addEventListener('click', exportSessionJSON);
+
+  // 13. Scenario Selector & Custom Dropzone
+  document.getElementById('scenario-preset-select').addEventListener('change', (e) => {
+    loadScenario(e.target.value);
+  });
+
+  const dropzone = document.getElementById('scenario-dropzone');
+  const fileInput = document.getElementById('scenario-file-input');
+
+  dropzone.addEventListener('click', () => fileInput.click());
+  fileInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (evt) => parseUploadedScenarioFile(evt.target.result, file.name);
+      reader.readAsText(file);
+    }
+  });
+
+  dropzone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropzone.classList.add('dragover');
+  });
+  dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
+  dropzone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropzone.classList.remove('dragover');
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (evt) => parseUploadedScenarioFile(evt.target.result, file.name);
+      reader.readAsText(file);
+    }
+  });
+
+  // 14. Broadcast Narration to Chat
+  document.getElementById('btn-broadcast-narration').addEventListener('click', broadcastNarrationToChat);
+
+  // 15. Toggle Secret Visibility
+  document.getElementById('btn-toggle-secret-vis').addEventListener('click', () => {
+    const el = document.getElementById('excerpt-gm-notes');
+    el.style.display = el.style.display === 'none' ? 'block' : 'none';
+  });
+
+  // 16. Rulebook & Scenario Search
+  document.getElementById('btn-rule-search').addEventListener('click', () => {
+    searchRulebookAndScenario(document.getElementById('rule-search-input').value);
+  });
+  document.getElementById('rule-search-input').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') searchRulebookAndScenario(e.target.value);
+  });
+
+  // 17. Character System Selector
+  document.getElementById('char-system-select').addEventListener('change', (e) => {
+    currentCharacter.system = e.target.value;
+    renderCharacterSheet();
+  });
+
+  // 18. Initiative Buttons
+  document.getElementById('btn-roll-all-init').addEventListener('click', rollAllInitiative);
+  document.getElementById('btn-next-turn').addEventListener('click', nextTurn);
+  document.getElementById('btn-reset-combat').addEventListener('click', () => {
+    currentTurnIndex = 0;
+    currentRound = 1;
+    renderCombatantsList();
+    render();
+  });
+
+  // 19. Add Clue
+  document.getElementById('btn-add-clue').addEventListener('click', () => {
+    const title = prompt('단서의 제목을 입력하세요:');
+    if (!title) return;
+    const text = prompt('단서 내용 / 조사 결과를 입력하세요:');
+    if (text) addClueToBoard(title, text);
+  });
+
+  // 20. Map Controls
+  document.getElementById('map-preset-select').addEventListener('change', (e) => {
+    currentPresetMap = e.target.value;
+    customMapImage = null;
+    render();
+  });
+
+  const mapFileInput = document.getElementById('map-file-input');
+  document.getElementById('btn-custom-map-upload').addEventListener('click', () => mapFileInput.click());
+  mapFileInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        const img = new Image();
+        img.onload = () => {
+          customMapImage = img;
+          render();
+        };
+        img.src = evt.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  document.getElementById('grid-type-select').addEventListener('change', (e) => {
+    gridType = e.target.value;
+    render();
+  });
+
+  document.getElementById('grid-size-slider').addEventListener('input', (e) => {
+    gridSize = parseInt(e.target.value, 10);
+    render();
+  });
+
+  // Fog Controls
+  document.getElementById('btn-toggle-fog').addEventListener('click', () => {
+    showFog = !showFog;
+    document.getElementById('fog-label').innerText = showFog ? '안개 ON' : '안개 OFF';
+    render();
+  });
+  document.getElementById('btn-fog-brush-reveal').addEventListener('click', () => {
+    currentTool = 'fog_brush';
+    fogBrushMode = 'reveal';
+  });
+  document.getElementById('btn-fog-brush-hide').addEventListener('click', () => {
+    currentTool = 'fog_brush';
+    fogBrushMode = 'hide';
+  });
+  document.getElementById('btn-fog-reveal-all').addEventListener('click', () => {
+    if (confirm('전체 전장의 안개를 걷어내시겠습니까?')) {
+      resetFog(true);
+    }
+  });
+
+  // Zoom Controls
+  document.getElementById('btn-zoom-in').addEventListener('click', () => {
+    mapScale = Math.min(3.0, mapScale * 1.15);
+    document.getElementById('zoom-level-text').innerText = `${Math.round(mapScale * 100)}%`;
+    render();
+  });
+  document.getElementById('btn-zoom-out').addEventListener('click', () => {
+    mapScale = Math.max(0.2, mapScale * 0.85);
+    document.getElementById('zoom-level-text').innerText = `${Math.round(mapScale * 100)}%`;
+    render();
+  });
+  document.getElementById('btn-zoom-reset').addEventListener('click', () => {
+    mapScale = 1.0;
+    mapOffsetX = (canvas.width - 1200) / 2;
+    mapOffsetY = (canvas.height - 900) / 2;
+    document.getElementById('zoom-level-text').innerText = '100%';
+    render();
+  });
+
+  // Dice Roller UI
+  document.getElementById('btn-roll-formula').addEventListener('click', () => {
+    rollDiceFormula(document.getElementById('dice-formula-input').value);
+  });
+  document.getElementById('dice-formula-input').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') rollDiceFormula(e.target.value);
+  });
+  document.getElementById('btn-open-dice-stats').addEventListener('click', openDiceStatsModal);
+
+  // Chat UI
+  document.getElementById('btn-send-chat').addEventListener('click', sendChatMessage);
+  document.getElementById('chat-input-field').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') sendChatMessage();
+  });
+
+  document.querySelectorAll('.chat-filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.chat-filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      document.querySelectorAll('.msg-card').forEach(card => {
+        if (filter === 'all') card.style.display = 'flex';
+        else if (filter === 'chat') card.style.display = card.classList.contains('msg-ic') || card.classList.contains('msg-ooc') || card.classList.contains('msg-whisper') ? 'flex' : 'none';
+        else if (filter === 'dice') card.style.display = card.classList.contains('msg-dice') ? 'flex' : 'none';
+        else if (filter === 'system') card.style.display = card.classList.contains('msg-narration') ? 'flex' : 'none';
+      });
+    });
+  });
+
+  // Initial Data Populate
+  loadScenario('coc_manor');
+  renderCharacterSheet();
+  renderMonsterCompendium();
+  renderCombatantsList();
+  renderClueBoard();
+
+  // Welcome system greeting
+  appendChatMessage({
+    id: 'welcome_1',
+    type: 'chat',
+    sender: '⚔️ MYTHOS VTT 가이드',
+    role: 'gm',
+    time: getCurrentTimeString(),
+    text: '환영합니다! 멀티플레이 방 코드는 [DRAGON-2026], 비밀번호는 [1234]로 설정되어 있습니다. 상단의 [⭐ 50대 기능]을 눌러 구현된 모든 TRPG 전문 기능 목록을 확인하실 수 있습니다.'
+  });
+
+  // Handle Window Resize
+  window.addEventListener('resize', () => {
+    const container = document.getElementById('canvas-container');
+    canvas.width = container.clientWidth;
+    canvas.height = container.clientHeight;
+    render();
+  });
+});
+
+</script>
+</body>
+</html>
