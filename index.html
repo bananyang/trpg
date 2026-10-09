@@ -7,18 +7,20 @@
   <!-- PeerJS for Free Serverless WebRTC P2P Multiplayer on Web Hosting -->
   <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
   <style>
-
+/* --- MYTHOS VTT FANTASY-THEMED, CLEAN & INTUITIVE STYLESHEET --- */
 :root {
-  --bg-darker: #0a0c10;
-  --bg-dark: #12161f;
-  --bg-panel: #181d28;
-  --bg-card: #202636;
-  --bg-card-hover: #293145;
-  --border-color: #2e374d;
-  --border-gold: #d4a359;
-  --text-main: #e2e8f0;
+  --bg-darker: #0a0d14;
+  --bg-dark: #101522;
+  --bg-panel: #161c2c;
+  --bg-card: #1c2438;
+  --bg-card-hover: #242e47;
+  --border-color: #2b354f;
+  --border-gold: #c59b27;
+  --border-gold-glow: rgba(229, 169, 60, 0.4);
+  --text-main: #f1f5f9;
   --text-muted: #94a3b8;
   --text-gold: #f6c879;
+  --text-gold-bright: #ffd885;
   --accent-gold: #e5a93c;
   --accent-gold-hover: #f5bc52;
   --accent-red: #ef4444;
@@ -26,8 +28,8 @@
   --accent-blue: #3b82f6;
   --accent-purple: #a855f7;
   --accent-cyan: #06b6d4;
-  --font-sans: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  --font-serif: 'Cinzel', 'Noto Serif KR', Georgia, serif;
+  --font-sans: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: 'Cinzel', 'Noto Serif KR', 'Chosunilbo_myungjo', Georgia, serif;
 }
 
 * {
@@ -50,18 +52,18 @@ body {
   flex-direction: column;
 }
 
-/* Header bar */
+/* --- HEADER BAR (FANTASY LUXURY GOLD ACCENTS) --- */
 header {
-  height: 50px;
-  min-height: 50px;
-  background: linear-gradient(180deg, #181e2b 0%, #10141d 100%);
-  border-bottom: 1px solid var(--border-color);
+  height: 52px;
+  min-height: 52px;
+  background: linear-gradient(180deg, #1e2638 0%, #121724 100%);
+  border-bottom: 2px solid var(--border-gold);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 10px;
+  padding: 0 12px;
   z-index: 50;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.6);
   gap: 8px;
   overflow-x: auto;
 }
@@ -70,32 +72,60 @@ header::-webkit-scrollbar { display: none; }
 .logo-area {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   flex-shrink: 0;
 }
-
 .logo-title {
   font-family: var(--font-serif);
-  font-size: 1.05rem;
+  font-size: 1.15rem;
   font-weight: 700;
-  color: var(--text-gold);
+  color: var(--text-gold-bright);
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
+  text-shadow: 0 0 10px rgba(229,169,60,0.5);
   white-space: nowrap;
 }
 
 .badge {
-  font-size: 0.68rem;
-  padding: 2px 6px;
+  font-size: 0.7rem;
+  padding: 2px 8px;
   border-radius: 9999px;
   font-weight: 600;
   white-space: nowrap;
 }
-.badge-gold { background: rgba(229,169,60,0.2); color: var(--accent-gold); border: 1px solid rgba(229,169,60,0.4); }
+.badge-gold { background: rgba(229,169,60,0.2); color: var(--accent-gold); border: 1px solid var(--border-gold); }
 .badge-blue { background: rgba(59,130,246,0.2); color: var(--accent-blue); border: 1px solid rgba(59,130,246,0.4); }
 .badge-red { background: rgba(239,68,68,0.2); color: var(--accent-red); border: 1px solid rgba(239,68,68,0.4); }
 .badge-green { background: rgba(34,197,94,0.2); color: var(--accent-green); border: 1px solid rgba(34,197,94,0.4); }
+
+/* Dungeon World Engine Master Switch in Header */
+.dw-toggle-pill {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.5);
+  color: #6ee7b7;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+  transition: all 0.2s;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.2);
+}
+.dw-toggle-pill:hover {
+  background: rgba(16, 185, 129, 0.25);
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+}
+.dw-toggle-pill.off {
+  background: rgba(148, 163, 184, 0.15);
+  border-color: rgba(148, 163, 184, 0.3);
+  color: var(--text-muted);
+  box-shadow: none;
+}
 
 .room-bar {
   display: flex;
@@ -103,16 +133,15 @@ header::-webkit-scrollbar { display: none; }
   gap: 6px;
   flex-shrink: 0;
 }
-
 .room-chip {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
-  padding: 4px 8px;
-  border-radius: 5px;
-  font-size: 0.78rem;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.8rem;
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
   cursor: pointer;
   white-space: nowrap;
   transition: all 0.2s;
@@ -125,18 +154,18 @@ header::-webkit-scrollbar { display: none; }
 .user-selector {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
   background: var(--bg-card);
   border: 1px solid var(--border-color);
-  padding: 3px 6px;
-  border-radius: 5px;
+  padding: 3px 8px;
+  border-radius: 6px;
   white-space: nowrap;
 }
 .user-selector select {
   background: transparent;
   color: var(--text-main);
   border: none;
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   outline: none;
   cursor: pointer;
 }
@@ -144,17 +173,16 @@ header::-webkit-scrollbar { display: none; }
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
   flex-shrink: 0;
 }
-
 .btn-header {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   color: var(--text-main);
-  padding: 4px 8px;
-  border-radius: 5px;
-  font-size: 0.76rem;
+  padding: 4px 9px;
+  border-radius: 6px;
+  font-size: 0.78rem;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -179,18 +207,17 @@ header::-webkit-scrollbar { display: none; }
   color: #fff;
 }
 
-/* App Main Layout */
+/* --- APP MAIN LAYOUT (DESKTOP 3-COLUMNS) --- */
 #app-main {
   flex: 1;
   display: grid;
   grid-template-columns: 360px 1fr 380px;
   overflow: hidden;
   position: relative;
-  height: calc(100vh - 50px);
-  height: calc(100dvh - 50px);
+  height: calc(100vh - 52px);
+  height: calc(100dvh - 52px);
 }
 
-/* Panels */
 .side-panel {
   background-color: var(--bg-dark);
   border-right: 1px solid var(--border-color);
@@ -208,14 +235,14 @@ header::-webkit-scrollbar { display: none; }
 /* Tabs */
 .panel-tabs {
   display: flex;
-  background: #11141c;
+  background: #111520;
   border-bottom: 1px solid var(--border-color);
 }
 .panel-tab {
   flex: 1;
   text-align: center;
-  padding: 9px 3px;
-  font-size: 0.78rem;
+  padding: 10px 4px;
+  font-size: 0.8rem;
   font-weight: 600;
   color: var(--text-muted);
   cursor: pointer;
@@ -229,16 +256,20 @@ header::-webkit-scrollbar { display: none; }
 .panel-tab.active {
   color: var(--text-gold);
   border-bottom-color: var(--accent-gold);
-  background: rgba(229,169,60,0.06);
+  background: rgba(229,169,60,0.08);
+}
+.panel-tab:hover:not(.active) {
+  color: var(--text-main);
+  background: rgba(255,255,255,0.02);
 }
 
 .panel-content {
   flex: 1;
   overflow-y: auto;
-  padding: 10px;
+  padding: 12px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 .panel-content::-webkit-scrollbar { width: 5px; }
 .panel-content::-webkit-scrollbar-thumb { background: #2a3449; border-radius: 3px; }
@@ -259,17 +290,17 @@ header::-webkit-scrollbar { display: none; }
   top: 8px;
   left: 8px;
   right: 8px;
-  height: 40px;
-  background: rgba(18, 22, 31, 0.92);
+  height: 42px;
+  background: rgba(18, 24, 38, 0.94);
   backdrop-filter: blur(8px);
   border: 1px solid var(--border-color);
-  border-radius: 7px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 8px;
+  padding: 0 10px;
   z-index: 20;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.5);
   overflow-x: auto;
   gap: 6px;
 }
@@ -278,21 +309,20 @@ header::-webkit-scrollbar { display: none; }
 .map-control-group {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
   flex-shrink: 0;
 }
-
 .map-btn {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   color: var(--text-main);
-  padding: 3px 7px;
-  border-radius: 4px;
-  font-size: 0.74rem;
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-size: 0.76rem;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 3px;
+  gap: 4px;
   white-space: nowrap;
   transition: all 0.2s;
 }
@@ -305,59 +335,158 @@ header::-webkit-scrollbar { display: none; }
 /* Floating Left Map Toolbar */
 .floating-toolbar {
   position: absolute;
-  top: 56px;
+  top: 58px;
   left: 8px;
-  background: rgba(18, 22, 31, 0.94);
+  background: rgba(18, 24, 38, 0.94);
   backdrop-filter: blur(8px);
   border: 1px solid var(--border-color);
-  border-radius: 7px;
+  border-radius: 8px;
   display: flex;
   flex-direction: column;
-  padding: 4px;
-  gap: 4px;
+  padding: 5px;
+  gap: 5px;
   z-index: 20;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.6);
 }
 
 .tool-btn {
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
   background: transparent;
   border: 1px solid transparent;
-  border-radius: 5px;
+  border-radius: 6px;
   color: var(--text-muted);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.05rem;
-  transition: all 0.2s;
-  position: relative;
+  font-size: 1.15rem;
+  transition: all 0.15s;
 }
 .tool-btn:hover { background: var(--bg-card); color: var(--text-main); }
 .tool-btn.active {
-  background: rgba(229,169,60,0.2);
+  background: rgba(229,169,60,0.22);
   border-color: var(--accent-gold);
   color: var(--text-gold);
 }
 
-.tool-submenu {
+/* --- PERSISTENT FLOATING DRAW TOOLBAR (NO HOVER DISAPPEARANCE BUG) --- */
+#draw-palette-bar {
   position: absolute;
-  left: 42px;
-  top: 0;
-  background: rgba(18, 22, 31, 0.98);
+  bottom: 16px;
+  left: 60px;
+  background: rgba(18, 24, 38, 0.98);
+  border: 1px solid var(--border-gold);
+  border-radius: 8px;
+  padding: 8px 12px;
+  display: none; /* Shown when draw tool active */
+  align-items: center;
+  gap: 10px;
+  z-index: 30;
+  box-shadow: 0 6px 25px rgba(0,0,0,0.8);
+  backdrop-filter: blur(8px);
+  animation: fadeIn 0.2s ease;
+}
+#draw-palette-bar.open {
+  display: flex;
+}
+.color-swatch {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid rgba(255,255,255,0.3);
+  transition: transform 0.15s, border-color 0.15s;
+}
+.color-swatch:hover, .color-swatch.active {
+  transform: scale(1.2);
+  border-color: #fff;
+  box-shadow: 0 0 8px rgba(255,255,255,0.6);
+}
+
+/* --- ROLL20 PAGE SHELF & LAYER SELECTOR --- */
+.page-shelf {
+  position: absolute;
+  top: 48px;
+  left: 0;
+  right: 0;
+  height: 94px;
+  background: rgba(14, 18, 27, 0.98);
+  border-bottom: 2px solid var(--border-gold);
+  backdrop-filter: blur(10px);
+  z-index: 40;
+  display: none;
+  align-items: center;
+  padding: 0 16px;
+  gap: 14px;
+  overflow-x: auto;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.8);
+}
+.page-shelf.open { display: flex; }
+.page-card {
+  width: 95px;
+  height: 68px;
+  background: #1c2438;
   border: 1px solid var(--border-color);
   border-radius: 6px;
-  padding: 6px;
-  display: none;
+  display: flex;
   flex-direction: column;
-  gap: 4px;
-  min-width: 130px;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.6);
-  z-index: 25;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+  transition: all 0.2s;
 }
-.tool-btn:hover .tool-submenu, .tool-submenu:hover { display: flex; }
+.page-card:hover {
+  border-color: var(--accent-gold);
+  transform: translateY(-2px);
+}
+.page-card.active {
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 12px rgba(229,169,60,0.5);
+}
+.page-thumb-icon { font-size: 1.5rem; }
+.page-title-label { font-size: 0.7rem; color: #cbd5e1; margin-top: 2px; text-align: center; max-width: 85px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.player-ribbon {
+  position: absolute;
+  top: -8px;
+  right: 6px;
+  background: #ef4444;
+  color: #fff;
+  font-size: 0.62rem;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 3px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+  pointer-events: none;
+}
 
+.layer-selector {
+  display: flex;
+  background: #111520;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 2px;
+  gap: 2px;
+}
+.layer-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  padding: 2px 7px;
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.layer-btn.active {
+  background: var(--accent-gold);
+  color: #000;
+  font-weight: 700;
+}
+
+/* Canvas Viewport */
 #canvas-container {
   flex: 1;
   width: 100%;
@@ -375,7 +504,6 @@ canvas#vtt-canvas { width: 100%; height: 100%; display: block; }
   z-index: 5;
   transition: background 0.8s ease;
 }
-
 .light-day { background: transparent; }
 .light-dusk { background: rgba(180, 80, 20, 0.15); mix-blend-mode: multiply; }
 .light-night { background: rgba(5, 12, 35, 0.55); mix-blend-mode: multiply; }
@@ -387,37 +515,39 @@ canvas#vtt-canvas { width: 100%; height: 100%; display: block; }
 .card {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
-  border-radius: 7px;
-  padding: 10px;
+  border-radius: 8px;
+  padding: 11px;
   display: flex;
   flex-direction: column;
-  gap: 7px;
+  gap: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
 }
 .card-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid rgba(255,255,255,0.06);
-  padding-bottom: 5px;
+  padding-bottom: 6px;
 }
 .card-title {
-  font-size: 0.82rem;
+  font-family: var(--font-serif);
+  font-size: 0.88rem;
   font-weight: 700;
   color: var(--text-gold);
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
 }
 
-.scenario-selector-box { display: flex; flex-direction: column; gap: 7px; }
-.scene-nav-pills { display: flex; gap: 5px; overflow-x: auto; padding-bottom: 3px; }
-.scene-nav-pills::-webkit-scrollbar { height: 3px; }
+.scenario-selector-box { display: flex; flex-direction: column; gap: 8px; }
+.scene-nav-pills { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; }
+.scene-nav-pills::-webkit-scrollbar { height: 4px; }
 .scene-pill {
-  padding: 3px 8px;
+  padding: 4px 9px;
   background: var(--bg-panel);
   border: 1px solid var(--border-color);
   border-radius: 4px;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   color: var(--text-muted);
   cursor: pointer;
   white-space: nowrap;
@@ -432,14 +562,14 @@ canvas#vtt-canvas { width: 100%; height: 100%; display: block; }
 .excerpt-box {
   background: rgba(14, 18, 27, 0.95);
   border-left: 3px solid var(--accent-gold);
-  padding: 9px;
-  border-radius: 0 5px 5px 0;
-  font-size: 0.82rem;
-  line-height: 1.5;
+  padding: 10px;
+  border-radius: 0 6px 6px 0;
+  font-size: 0.84rem;
+  line-height: 1.55;
   color: #f1f5f9;
 }
 .excerpt-label {
-  font-size: 0.68rem;
+  font-size: 0.7rem;
   font-weight: 700;
   text-transform: uppercase;
   color: var(--accent-gold);
@@ -452,9 +582,9 @@ canvas#vtt-canvas { width: 100%; height: 100%; display: block; }
 .gm-secret-box {
   background: rgba(45, 20, 20, 0.4);
   border-left: 3px solid #f87171;
-  padding: 8px;
-  border-radius: 0 5px 5px 0;
-  font-size: 0.78rem;
+  padding: 8px 10px;
+  border-radius: 0 6px 6px 0;
+  font-size: 0.8rem;
   color: #fecaca;
 }
 
@@ -464,19 +594,19 @@ canvas#vtt-canvas { width: 100%; height: 100%; display: block; }
   justify-content: space-between;
   background: rgba(255,255,255,0.03);
   border: 1px solid var(--border-color);
-  border-radius: 5px;
-  padding: 5px 7px;
-  font-size: 0.78rem;
-  gap: 5px;
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-size: 0.8rem;
+  gap: 6px;
 }
 
 .btn-small {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   color: var(--text-main);
-  padding: 3px 7px;
-  border-radius: 4px;
-  font-size: 0.72rem;
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-size: 0.74rem;
   cursor: pointer;
   transition: all 0.15s;
   white-space: nowrap;
@@ -496,10 +626,10 @@ canvas#vtt-canvas { width: 100%; height: 100%; display: block; }
 
 .upload-dropzone {
   border: 2px dashed var(--border-color);
-  border-radius: 7px;
-  padding: 10px;
+  border-radius: 8px;
+  padding: 12px;
   text-align: center;
-  font-size: 0.76rem;
+  font-size: 0.78rem;
   color: var(--text-muted);
   cursor: pointer;
   background: rgba(0,0,0,0.2);
@@ -513,13 +643,13 @@ canvas#vtt-canvas { width: 100%; height: 100%; display: block; }
 .stat-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 5px;
+  gap: 6px;
 }
 .stat-box {
   background: var(--bg-panel);
   border: 1px solid var(--border-color);
-  border-radius: 5px;
-  padding: 5px 3px;
+  border-radius: 6px;
+  padding: 6px 4px;
   text-align: center;
   cursor: pointer;
   transition: all 0.15s;
@@ -528,13 +658,13 @@ canvas#vtt-canvas { width: 100%; height: 100%; display: block; }
   border-color: var(--accent-gold);
   transform: translateY(-1px);
 }
-.stat-name { font-size: 0.65rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
-.stat-val { font-size: 1.05rem; font-weight: 700; color: var(--text-gold); }
-.stat-mod { font-size: 0.7rem; color: var(--text-main); }
+.stat-name { font-size: 0.68rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
+.stat-val { font-size: 1.1rem; font-weight: 700; color: var(--text-gold); }
+.stat-mod { font-size: 0.72rem; color: var(--text-main); }
 
 .resource-bar { display: flex; flex-direction: column; gap: 3px; }
-.resource-label-row { display: flex; justify-content: space-between; font-size: 0.74rem; font-weight: 600; }
-.gauge-track { height: 7px; background: #0f131a; border-radius: 4px; overflow: hidden; position: relative; }
+.resource-label-row { display: flex; justify-content: space-between; font-size: 0.76rem; font-weight: 600; }
+.gauge-track { height: 8px; background: #0f131a; border-radius: 4px; overflow: hidden; position: relative; }
 .gauge-fill { height: 100%; border-radius: 4px; transition: width 0.3s ease; }
 .gauge-hp { background: linear-gradient(90deg, #ef4444, #f87171); }
 .gauge-mp { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
@@ -546,138 +676,138 @@ canvas#vtt-canvas { width: 100%; height: 100%; display: block; }
   justify-content: space-between;
   background: var(--bg-panel);
   border: 1px solid var(--border-color);
-  border-radius: 5px;
-  padding: 5px 7px;
+  border-radius: 6px;
+  padding: 6px 8px;
 }
 .combatant-item.active-turn {
   border-color: var(--accent-gold);
   background: rgba(229,169,60,0.1);
 }
-.combatant-info { display: flex; align-items: center; gap: 5px; }
+.combatant-info { display: flex; align-items: center; gap: 6px; }
 .combatant-avatar {
-  width: 24px; height: 24px; border-radius: 50%; background: #2a3449;
-  display: flex; align-items: center; justify-content: center; font-size: 0.75rem;
+  width: 26px; height: 26px; border-radius: 50%; background: #2a3449;
+  display: flex; align-items: center; justify-content: center; font-size: 0.8rem;
 }
-.combatant-init { font-size: 0.95rem; font-weight: 700; color: var(--text-gold); }
+.combatant-init { font-size: 1rem; font-weight: 700; color: var(--text-gold); }
 
 /* Right Panel: Dice & Chat */
 .dice-tray-card {
-  background: #11141c;
+  background: #111520;
   border: 1px solid var(--border-color);
-  border-radius: 7px;
-  padding: 9px;
+  border-radius: 8px;
+  padding: 10px;
   display: flex;
   flex-direction: column;
-  gap: 7px;
+  gap: 8px;
 }
-.dice-buttons-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+.dice-buttons-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
 .dice-btn {
   background: linear-gradient(145deg, #262e40, #1b202d);
   border: 1px solid #37425c;
   color: #f1f5f9;
-  padding: 7px 0;
-  border-radius: 5px;
-  font-size: 0.8rem;
+  padding: 8px 0;
+  border-radius: 6px;
+  font-size: 0.82rem;
   font-weight: 700;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1px;
+  gap: 2px;
 }
 .dice-btn:hover { border-color: var(--accent-gold); color: var(--text-gold); transform: translateY(-1px); }
 
-.formula-row { display: flex; gap: 4px; }
+.formula-row { display: flex; gap: 5px; }
 .formula-input {
   flex: 1;
   background: #0d1017;
   border: 1px solid var(--border-color);
   color: #fff;
-  border-radius: 5px;
-  padding: 5px 7px;
-  font-size: 0.8rem;
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-size: 0.82rem;
   outline: none;
   font-family: monospace;
 }
 .formula-input:focus { border-color: var(--accent-gold); }
 
-.roll-mode-selector { display: flex; gap: 3px; }
+.roll-mode-selector { display: flex; gap: 4px; }
 .roll-mode-pill {
-  flex: 1; text-align: center; font-size: 0.68rem; padding: 3px 0;
-  background: #181d28; border: 1px solid var(--border-color); border-radius: 3px;
+  flex: 1; text-align: center; font-size: 0.7rem; padding: 4px 0;
+  background: #181d28; border: 1px solid var(--border-color); border-radius: 4px;
   color: var(--text-muted); cursor: pointer;
 }
 .roll-mode-pill.active { background: rgba(229,169,60,0.2); border-color: var(--accent-gold); color: var(--text-gold); font-weight: 600; }
 
 #dice-stage {
-  height: 65px;
+  height: 68px;
   background: radial-gradient(ellipse at center, #1e2638 0%, #0d1017 100%);
   border: 1px dashed var(--border-color);
-  border-radius: 5px;
+  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   overflow: hidden;
 }
-.rolling-dice-anim { font-size: 1.8rem; animation: rollTumble 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+.rolling-dice-anim { font-size: 2rem; animation: rollTumble 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
 @keyframes rollTumble {
   0% { transform: scale(0.2) rotate(-360deg); opacity: 0; }
   50% { transform: scale(1.3) rotate(180deg); }
   100% { transform: scale(1) rotate(0deg); opacity: 1; }
 }
-.dice-final-result { font-size: 1.5rem; font-weight: 800; color: var(--text-gold); }
+.dice-final-result { font-size: 1.6rem; font-weight: 800; color: var(--text-gold); }
 
 .chat-container {
   flex: 1;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background: #12151e;
+  background: #121622;
   border: 1px solid var(--border-color);
-  border-radius: 7px;
+  border-radius: 8px;
 }
 .chat-filter-bar {
   display: flex;
   background: #0f121a;
   border-bottom: 1px solid var(--border-color);
-  padding: 3px 5px;
-  gap: 3px;
+  padding: 4px 6px;
+  gap: 4px;
   align-items: center;
 }
 .chat-filter-btn {
-  background: transparent; border: none; color: var(--text-muted); font-size: 0.7rem; padding: 2px 5px; border-radius: 3px; cursor: pointer;
+  background: transparent; border: none; color: var(--text-muted); font-size: 0.72rem; padding: 3px 6px; border-radius: 4px; cursor: pointer;
 }
 .chat-filter-btn.active { background: var(--bg-card); color: var(--text-gold); font-weight: 600; }
 
 .chat-messages {
   flex: 1;
   overflow-y: auto;
-  padding: 7px;
+  padding: 8px;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 6px;
 }
-.chat-messages::-webkit-scrollbar { width: 4px; }
+.chat-messages::-webkit-scrollbar { width: 5px; }
 .chat-messages::-webkit-scrollbar-thumb { background: #2a3449; }
 
 .msg-card {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
-  border-radius: 5px;
-  padding: 6px 7px;
-  font-size: 0.8rem;
+  border-radius: 6px;
+  padding: 7px 9px;
+  font-size: 0.82rem;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
   animation: fadeIn 0.2s ease;
 }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
 
-.msg-header { display: flex; justify-content: space-between; align-items: center; font-size: 0.68rem; }
+.msg-header { display: flex; justify-content: space-between; align-items: center; font-size: 0.7rem; }
 .msg-sender { font-weight: 700; color: var(--text-gold); display: flex; align-items: center; gap: 4px; }
 .msg-time { color: var(--text-muted); }
-.msg-body { color: var(--text-main); line-height: 1.4; word-break: break-word; }
+.msg-body { color: var(--text-main); line-height: 1.45; word-break: break-word; }
 .msg-ic { border-left: 3px solid var(--accent-blue); background: rgba(59,130,246,0.06); }
 .msg-ooc { border-left: 3px solid var(--text-muted); color: #cbd5e1; }
 .msg-whisper { border-left: 3px solid var(--accent-purple); background: rgba(168,85,247,0.08); }
@@ -685,7 +815,7 @@ canvas#vtt-canvas { width: 100%; height: 100%; display: block; }
 .msg-narration { border-left: 3px solid #ec4899; background: rgba(236,72,153,0.06); font-family: var(--font-serif); }
 
 .dice-result-badge {
-  font-size: 0.95rem; font-weight: 800; padding: 2px 6px; border-radius: 4px; display: inline-block; margin-top: 3px;
+  font-size: 1rem; font-weight: 800; padding: 2px 7px; border-radius: 4px; display: inline-block; margin-top: 3px;
 }
 .res-crit { background: rgba(34,197,94,0.25); color: #4ade80; border: 1px solid #22c55e; }
 .res-fumble { background: rgba(239,68,68,0.25); color: #f87171; border: 1px solid #ef4444; }
@@ -694,23 +824,23 @@ canvas#vtt-canvas { width: 100%; height: 100%; display: block; }
 .chat-input-bar {
   background: #0f121a;
   border-top: 1px solid var(--border-color);
-  padding: 5px;
+  padding: 6px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 5px;
 }
-.chat-input-row { display: flex; gap: 4px; }
+.chat-input-row { display: flex; gap: 5px; }
 .chat-input {
-  flex: 1; background: #181d28; border: 1px solid var(--border-color); border-radius: 5px;
-  color: #fff; padding: 5px 7px; font-size: 0.8rem; outline: none;
+  flex: 1; background: #181d28; border: 1px solid var(--border-color); border-radius: 6px;
+  color: #fff; padding: 6px 8px; font-size: 0.82rem; outline: none;
 }
 .chat-input:focus { border-color: var(--accent-gold); }
 
-.macro-bar { display: flex; gap: 3px; overflow-x: auto; padding-bottom: 2px; }
-.macro-bar::-webkit-scrollbar { height: 2px; }
+.macro-bar { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 2px; }
+.macro-bar::-webkit-scrollbar { height: 3px; }
 .macro-btn {
   background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-muted);
-  font-size: 0.68rem; padding: 2px 5px; border-radius: 3px; white-space: nowrap; cursor: pointer;
+  font-size: 0.7rem; padding: 3px 6px; border-radius: 4px; white-space: nowrap; cursor: pointer;
 }
 .macro-btn:hover { color: var(--text-gold); border-color: var(--border-gold); }
 
@@ -718,7 +848,7 @@ canvas#vtt-canvas { width: 100%; height: 100%; display: block; }
 .cutscene-overlay {
   position: fixed;
   top: 0; left: 0; width: 100vw; height: 100vh; height: 100dvh;
-  background: rgba(0, 0, 0, 0.94);
+  background: rgba(0, 0, 0, 0.95);
   z-index: 300;
   display: none;
   flex-direction: column;
@@ -732,7 +862,7 @@ canvas#vtt-canvas { width: 100%; height: 100%; display: block; }
 .cutscene-letterbox { width: 100%; height: 70px; background: #000; }
 .cutscene-text {
   max-width: 800px; padding: 20px; font-family: var(--font-serif);
-  font-size: 1.4rem; line-height: 1.7; color: var(--text-gold);
+  font-size: 1.45rem; line-height: 1.75; color: var(--text-gold);
   text-align: center; text-shadow: 0 0 20px rgba(229,169,60,0.8);
 }
 
@@ -752,34 +882,76 @@ canvas#vtt-canvas { width: 100%; height: 100%; display: block; }
 @keyframes modalPop { from { transform: scale(0.92); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
 .modal-header {
-  padding: 10px 12px; border-bottom: 1px solid var(--border-color);
+  padding: 11px 14px; border-bottom: 1px solid var(--border-color);
   display: flex; align-items: center; justify-content: space-between;
 }
-.modal-title { font-family: var(--font-serif); font-size: 1rem; font-weight: 700; color: var(--text-gold); }
-.modal-close { background: transparent; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer; }
-.modal-body { padding: 12px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; font-size: 0.82rem; }
-.modal-footer { padding: 8px 12px; border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end; gap: 6px; }
+.modal-title { font-family: var(--font-serif); font-size: 1.05rem; font-weight: 700; color: var(--text-gold); }
+.modal-close { background: transparent; border: none; color: var(--text-muted); font-size: 1.25rem; cursor: pointer; }
+.modal-body { padding: 14px; overflow-y: auto; display: flex; flex-direction: column; gap: 11px; font-size: 0.84rem; }
+.modal-footer { padding: 9px 14px; border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end; gap: 7px; }
 
-.features-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; font-size: 0.74rem; }
+.features-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 0.76rem; }
 .feature-badge-item {
-  background: var(--bg-panel); border: 1px solid var(--border-color); padding: 5px 7px; border-radius: 5px;
-  display: flex; align-items: center; gap: 5px;
+  background: var(--bg-panel); border: 1px solid var(--border-color); padding: 6px 8px; border-radius: 6px;
+  display: flex; align-items: center; gap: 6px;
 }
-.feature-num { color: var(--accent-gold); font-weight: 700; min-width: 24px; font-size: 0.7rem; }
+.feature-num { color: var(--accent-gold); font-weight: 700; min-width: 26px; font-size: 0.72rem; }
+
+/* Inline Dice Rolls in Chat */
+.inline-roll {
+  background: rgba(229,169,60,0.18);
+  border: 1px solid var(--accent-gold);
+  color: var(--text-gold);
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-family: monospace;
+  display: inline-block;
+  margin: 0 2px;
+  cursor: pointer;
+}
+.inline-roll:hover {
+  background: rgba(229,169,60,0.35);
+  box-shadow: 0 0 6px rgba(229,169,60,0.5);
+}
+
+/* Card Deck Container */
+.card-deck-box {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.drawn-card-badge {
+  font-size: 1.25rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: #f8fafc;
+  color: #0f172a;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 3px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
 
 /* Mobile Navigation */
 .mobile-nav-bar { display: none; }
 
 @media (max-width: 900px) {
-  header { height: 46px; min-height: 46px; padding: 0 6px; }
-  .logo-title { font-size: 0.9rem; }
+  header { height: 48px; min-height: 48px; padding: 0 8px; }
+  .logo-title { font-size: 0.95rem; }
   .header-actions .btn-header:not(#btn-x-card):not(#btn-room-config) span:not(:first-child) { display: none; }
   .user-selector select { max-width: 90px; }
 
   #app-main {
     display: flex; flex-direction: column;
-    height: calc(100vh - 46px - 50px);
-    height: calc(100dvh - 46px - 50px);
+    height: calc(100vh - 48px - 52px);
+    height: calc(100dvh - 48px - 52px);
   }
 
   .side-panel.left-panel, #center-workspace, .side-panel.right-panel {
@@ -792,34 +964,41 @@ canvas#vtt-canvas { width: 100%; height: 100%; display: block; }
   body.mobile-view-scenario .side-panel.left-panel { display: flex !important; }
 
   .mobile-nav-bar {
-    display: flex; position: fixed; bottom: 0; left: 0; right: 0; height: 50px;
+    display: flex; position: fixed; bottom: 0; left: 0; right: 0; height: 52px;
     background: #0d1017; border-top: 1px solid var(--border-gold); z-index: 100;
   }
   .mobile-nav-btn {
     flex: 1; background: transparent; border: none; color: var(--text-muted);
-    font-size: 0.7rem; font-weight: 600; display: flex; flex-direction: column;
+    font-size: 0.72rem; font-weight: 600; display: flex; flex-direction: column;
     align-items: center; justify-content: center; gap: 2px; cursor: pointer;
   }
   .mobile-nav-btn.active { color: var(--text-gold); background: rgba(229,169,60,0.12); border-top: 2px solid var(--accent-gold); }
-  .mobile-nav-icon { font-size: 1.1rem; }
+  .mobile-nav-icon { font-size: 1.15rem; }
 
-  .map-top-bar { top: 4px; left: 4px; right: 4px; height: 36px; padding: 0 4px; }
-  .floating-toolbar { top: 46px; left: 4px; padding: 3px; gap: 3px; }
-  .tool-btn { width: 30px; height: 30px; font-size: 0.9rem; }
+  .map-top-bar { top: 4px; left: 4px; right: 4px; height: 38px; padding: 0 6px; }
+  .floating-toolbar { top: 48px; left: 4px; padding: 4px; gap: 4px; }
+  .tool-btn { width: 32px; height: 32px; font-size: 0.95rem; }
+  #draw-palette-bar { left: 10px; bottom: 60px; }
   .features-grid { grid-template-columns: 1fr; }
 }
+"""
 
   </style>
 </head>
 <body>
 
-
+<!-- --- MYTHOS VTT HTML STRUCTURE (FANTASY, SIMPLE, INTUITIVE & DW TOGGLE) --- -->
 <header>
   <div class="logo-area">
     <div class="logo-title">
       <span>⚔️</span> MYTHOS
     </div>
     <span class="badge badge-gold">TRPG</span>
+  </div>
+
+  <!-- Dungeon World Master Engine ON/OFF Toggle Switch -->
+  <div id="btn-toggle-dw-engine" class="dw-toggle-pill" onclick="toggleDungeonWorldEngine()" title="던전월드(Dungeon World / PbtA) 2d6 판정 및 무브 엔진 ON/OFF 토글">
+    <span>🐉</span> <span id="dw-engine-status-text">던전월드 엔진: ON</span>
   </div>
 
   <div class="room-bar">
@@ -846,7 +1025,7 @@ canvas#vtt-canvas { width: 100%; height: 100%; display: block; }
 
   <div class="header-actions">
     <!-- Weather FX Selector -->
-    <div class="user-selector" title="날씨 파티클">
+    <div class="user-selector" title="실시간 날씨 파티클">
       <span>🌧️</span>
       <select id="weather-select" onchange="setWeather(this.value)">
         <option value="none">날씨: 맑음</option>
@@ -925,7 +1104,7 @@ canvas#vtt-canvas { width: 100%; height: 100%; display: block; }
           <span class="card-title">📖 시나리오 & 세계관 선택</span>
         </div>
         <div class="scenario-selector-box">
-          <select id="scenario-preset-select" class="chat-input" style="padding: 5px;">
+          <select id="scenario-preset-select" class="chat-input" style="padding: 6px;">
             <option value="dw_wyrm">🐉 [던전월드] 검은 숲의 고룡 유적 (Dungeon World / PbtA)</option>
             <option value="dnd_mine">⚔️ [D&D 5e] 잊혀진 광산의 그림자 (Fantasy)</option>
             <option value="coc_manor">🔍 [크툴루 CoC 7e] 블러드스톤 저택의 비밀 (Cosmic Horror)</option>
@@ -1028,9 +1207,9 @@ canvas#vtt-canvas { width: 100%; height: 100%; display: block; }
       <div class="card">
         <div class="card-header">
           <span class="card-title">👤 캐릭터 관리</span>
-          <select id="char-system-select" class="btn-small">
+          <select id="char-system-select" class="btn-small" onchange="onSystemSelectChange(this.value)">
             <option value="dungeonworld">던전월드 (Dungeon World / PbtA)</option>
-            <option value="dnd5e">D&D 5e</option>
+            <option value="dnd5e">D&D 5e (판타지)</option>
             <option value="coc7e">크툴루의 부름 (CoC 7e)</option>
             <option value="freeform">자유형 (Custom)</option>
           </select>
@@ -1172,6 +1351,20 @@ canvas#vtt-canvas { width: 100%; height: 100%; display: block; }
         </div>
       </div>
 
+      <!-- Card Deck -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">🎴 트럼프 카드 덱 (Roll20 Card Deck)</span>
+          <span class="badge badge-gold" id="deck-remaining-badge">52장</span>
+        </div>
+        <div style="display: flex; gap: 5px;">
+          <button class="btn-small btn-gold" onclick="drawCard()" style="flex: 1;">🃏 카드 뽑기</button>
+          <button class="btn-small" onclick="shuffleCardDeck()">🔀 셔플</button>
+        </div>
+        <div id="drawn-card-display" style="display: none; text-align: center;">
+        </div>
+      </div>
+
       <!-- Clue Board -->
       <div class="card">
         <div class="card-header">
@@ -1210,11 +1403,45 @@ canvas#vtt-canvas { width: 100%; height: 100%; display: block; }
 
   <!-- CENTER VTT WORKSPACE -->
   <main id="center-workspace">
+    <!-- Roll20 Style Page Shelf / Map Drawer -->
+    <div id="roll20-page-shelf" class="page-shelf">
+      <div class="page-card active" data-map="dungeon" onclick="selectPageMap('dungeon')">
+        <div class="player-ribbon">PLAYERS</div>
+        <span class="page-thumb-icon">🏰</span>
+        <span class="page-title-label">지하감옥</span>
+      </div>
+      <div class="page-card" data-map="tavern" onclick="selectPageMap('tavern')">
+        <span class="page-thumb-icon">🍺</span>
+        <span class="page-title-label">숲속 여관</span>
+      </div>
+      <div class="page-card" data-map="manor" onclick="selectPageMap('manor')">
+        <span class="page-thumb-icon">🏛️</span>
+        <span class="page-title-label">저택</span>
+      </div>
+      <div class="page-card" data-map="cyber" onclick="selectPageMap('cyber')">
+        <span class="page-thumb-icon">🌆</span>
+        <span class="page-title-label">사이버</span>
+      </div>
+      <div class="page-card" data-map="alien" onclick="selectPageMap('alien')">
+        <span class="page-thumb-icon">🚀</span>
+        <span class="page-title-label">우주선</span>
+      </div>
+    </div>
+
     <!-- Top Map Control Bar -->
     <div class="map-top-bar">
-      <!-- Map Selection -->
+      <!-- Roll20 Page Shelf & Layer Switcher -->
       <div class="map-control-group">
-        <span>🗺️</span>
+        <button class="map-btn" onclick="togglePageShelf()" title="Roll20 맵 서랍장 & 플레이어 북마크">📑 페이지</button>
+        <div class="layer-selector" title="Roll20 작업 레이어">
+          <button class="layer-btn active" data-layer="token" onclick="switchLayer('token')">토큰</button>
+          <button class="layer-btn" data-layer="map" onclick="switchLayer('map')">배경</button>
+          <button class="layer-btn" data-layer="gm" onclick="switchLayer('gm')">GM</button>
+        </div>
+      </div>
+
+      <!-- Map Presets -->
+      <div class="map-control-group">
         <select id="map-preset-select" class="map-btn">
           <option value="dungeon">지하감옥</option>
           <option value="tavern">여관/숲</option>
@@ -1259,45 +1486,50 @@ canvas#vtt-canvas { width: 100%; height: 100%; display: block; }
 
     <!-- Floating Map Left Toolbar -->
     <div class="floating-toolbar">
-      <button class="tool-btn active" data-tool="select" title="선택/이동">
+      <button class="tool-btn active" data-tool="select" title="선택/이동 (V)">
         <span>🖐️</span>
       </button>
 
-      <button class="tool-btn" data-tool="ruler" title="거리 측정">
+      <button class="tool-btn" data-tool="ruler" title="거리 측정 (M)">
         <span>📏</span>
       </button>
 
-      <button class="tool-btn" data-tool="aoe" title="AoE 마법 범위">
+      <button class="tool-btn" data-tool="aoe" onclick="toggleAoESubmenu()" title="AoE 마법 범위">
         <span>📐</span>
-        <div class="tool-submenu">
-          <div onclick="setAoEType('circle')">🔴 원형 (20ft)</div>
-          <div onclick="setAoEType('cone')">🔻 부채꼴 (30ft)</div>
-          <div onclick="setAoEType('square')">⬛ 사각형 (20ft)</div>
-        </div>
       </button>
 
-      <button class="tool-btn" data-tool="ping" title="GM 핑">
+      <button class="tool-btn" data-tool="ping" title="GM 핑 (P)">
         <span>📍</span>
       </button>
 
-      <button class="tool-btn" data-tool="draw" title="화이트보드 그리기">
+      <button class="tool-btn" data-tool="draw" onclick="toggleDrawPalette()" title="화이트보드 그리기 (D)">
         <span>✏️</span>
-        <div class="tool-submenu">
-          <div onclick="setDrawColor('#ef4444')">🔴 빨간 펜</div>
-          <div onclick="setDrawColor('#3b82f6')">🔵 파란 펜</div>
-          <div onclick="setDrawColor('#22c55e')">🟢 초록 펜</div>
-          <div onclick="setDrawColor('#e5a93c')">🟡 형광펜</div>
-          <div onclick="clearDrawings()">🗑️ 전체 지우기</div>
-        </div>
       </button>
 
-      <button class="tool-btn" data-tool="eraser" title="지우개">
+      <button class="tool-btn" data-tool="eraser" title="지우개 (E)">
         <span>🧽</span>
       </button>
 
       <button class="tool-btn" id="btn-quick-spawn-token" title="토큰 소환">
         <span>➕</span>
       </button>
+    </div>
+
+    <!-- PERSISTENT DRAWING PALETTE BAR (NO HOVER GAP BUG) -->
+    <div id="draw-palette-bar">
+      <span style="font-size: 0.74rem; font-weight: 700; color: var(--text-gold);">✏️ 펜:</span>
+      <div class="color-swatch active" style="background: #ef4444;" onclick="selectDrawColor('#ef4444', this)" title="빨강"></div>
+      <div class="color-swatch" style="background: #3b82f6;" onclick="selectDrawColor('#3b82f6', this)" title="파랑"></div>
+      <div class="color-swatch" style="background: #22c55e;" onclick="selectDrawColor('#22c55e', this)" title="초록"></div>
+      <div class="color-swatch" style="background: #e5a93c;" onclick="selectDrawColor('#e5a93c', this)" title="노랑"></div>
+      <div class="color-swatch" style="background: #ffffff;" onclick="selectDrawColor('#ffffff', this)" title="흰색"></div>
+      <div class="color-swatch" style="background: #000000;" onclick="selectDrawColor('#000000', this)" title="검정"></div>
+      <span style="font-size: 0.7rem; color: var(--text-muted); margin-left: 4px;">굵기:</span>
+      <button class="btn-small" onclick="setDrawWidth(2)">2px</button>
+      <button class="btn-small btn-gold" onclick="setDrawWidth(4)">4px</button>
+      <button class="btn-small" onclick="setDrawWidth(8)">8px</button>
+      <button class="btn-small" style="color: #ef4444;" onclick="clearDrawings()">🗑️ 지우기</button>
+      <button class="btn-small" onclick="closeDrawPalette()">✕</button>
     </div>
 
     <!-- Canvas Container -->
@@ -1404,7 +1636,7 @@ canvas#vtt-canvas { width: 100%; height: 100%; display: block; }
         </div>
 
         <div class="chat-input-row">
-          <input type="text" id="chat-input-field" class="chat-input" placeholder="대사 입력... (/w [대상], /gm 으로 귓속말)" />
+          <input type="text" id="chat-input-field" class="chat-input" placeholder="대사 입력... (/r [수식], [[1d20+5]] 인라인, /w [대상])" />
           <button class="btn-small btn-gold" id="btn-send-chat">전송</button>
         </div>
       </div>
@@ -2038,6 +2270,7 @@ let weatherParticles = [];
 // Layers & Canvas Objects
 let customMapImage = null;
 let currentPresetMap = 'dungeon';
+let currentLayer = 'token'; // 'map', 'token', 'gm'
 let fogCanvas = document.createElement('canvas');
 let fogCtx = fogCanvas.getContext('2d');
 let drawingCanvas = document.createElement('canvas');
@@ -2045,12 +2278,12 @@ let drawingCtx = drawingCanvas.getContext('2d');
 
 // Tokens with advanced attributes (Elevation, Stealth, Facing, Rotation)
 let tokens = [
-  { id: 't_p1', name: '아서 (전사)', x: 300, y: 300, size: 1, hp: 28, maxHp: 28, color: '#3b82f6', icon: '⚔️', elevation: 0, stealth: false, rotation: 0, conditions: [] },
-  { id: 't_p2', name: '엘레나 (마법사)', x: 250, y: 300, size: 1, hp: 18, maxHp: 18, color: '#8b5cf6', icon: '🔮', elevation: 0, stealth: false, rotation: 0, conditions: [] },
-  { id: 't_p3', name: '존 (사립탐정)', x: 300, y: 350, size: 1, hp: 22, maxHp: 22, color: '#e5a93c', icon: '🕵️', elevation: 0, stealth: false, rotation: 0, conditions: [] },
-  { id: 't_dw', name: '브란 (던전월드 바드)', x: 250, y: 350, size: 1, hp: 20, maxHp: 20, color: '#10b981', icon: '🪕', elevation: 0, stealth: false, rotation: 0, conditions: [] },
-  { id: 't_m1', name: '고블린 정찰병', x: 550, y: 250, size: 1, hp: 7, maxHp: 7, color: '#ef4444', icon: '👺', elevation: 0, stealth: false, rotation: 0, conditions: [] },
-  { id: 't_boss', name: '흑마법사 말로크', x: 650, y: 350, size: 2, hp: 45, maxHp: 45, color: '#dc2626', icon: '🧙‍♂️', elevation: 10, stealth: false, rotation: 0, conditions: ['축복'] }
+  { id: 't_p1', name: '아서 (전사)', x: 300, y: 300, size: 1, hp: 28, maxHp: 28, ac: 18, speed: 30, color: '#3b82f6', icon: '⚔️', elevation: 0, auraRadius: 0, auraColor: 'rgba(59,130,246,0.2)', layer: 'token', stealth: false, rotation: 0, conditions: [] },
+  { id: 't_p2', name: '엘레나 (마법사)', x: 250, y: 300, size: 1, hp: 18, maxHp: 18, ac: 13, speed: 30, color: '#8b5cf6', icon: '🔮', elevation: 0, auraRadius: 15, auraColor: 'rgba(168,85,247,0.2)', layer: 'token', stealth: false, rotation: 0, conditions: [] },
+  { id: 't_p3', name: '존 (사립탐정)', x: 300, y: 350, size: 1, hp: 22, maxHp: 22, ac: 12, speed: 30, color: '#e5a93c', icon: '🕵️', elevation: 0, auraRadius: 0, auraColor: 'rgba(229,169,60,0.2)', layer: 'token', stealth: false, rotation: 0, conditions: [] },
+  { id: 't_dw', name: '브란 (던전월드 바드)', x: 250, y: 350, size: 1, hp: 20, maxHp: 20, ac: 1, speed: 10, color: '#10b981', icon: '🪕', elevation: 0, auraRadius: 20, auraColor: 'rgba(16,185,129,0.2)', layer: 'token', stealth: false, rotation: 0, conditions: [] },
+  { id: 't_m1', name: '고블린 정찰병', x: 550, y: 250, size: 1, hp: 7, maxHp: 7, ac: 15, speed: 30, color: '#ef4444', icon: '👺', elevation: 0, auraRadius: 0, auraColor: 'rgba(239,68,68,0.2)', layer: 'token', stealth: false, rotation: 0, conditions: [] },
+  { id: 't_boss', name: '흑마법사 말로크', x: 650, y: 350, size: 2, hp: 45, maxHp: 45, ac: 16, speed: 30, color: '#dc2626', icon: '🧙‍♂️', elevation: 10, auraRadius: 30, auraColor: 'rgba(239,68,68,0.25)', layer: 'token', stealth: false, rotation: 0, conditions: ['축복'] }
 ];
 
 let selectedToken = null;
@@ -2317,6 +2550,18 @@ function drawTokens(ctx) {
       ctx.stroke();
     }
 
+    // Roll20 Token Aura (Light / Spell Radius)
+    if (tok.auraRadius && tok.auraRadius > 0) {
+      const auraPx = (tok.auraRadius / 5) * gridSize;
+      ctx.beginPath();
+      ctx.arc(0, 0, auraPx, 0, Math.PI * 2);
+      ctx.fillStyle = tok.auraColor || 'rgba(229,169,60,0.18)';
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(229,169,60,0.5)';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    }
+
     // Token Body Circle
     ctx.beginPath();
     ctx.arc(0, 0, rad, 0, Math.PI * 2);
@@ -2409,6 +2654,44 @@ function drawTokens(ctx) {
       ctx.restore();
     }
 
+    // Roll20 3-Color Radial Bubbles when Selected
+    if (isSelected) {
+      const bubbleRad = 9;
+      // 🟢 Green Bubble (HP) - top center
+      ctx.beginPath();
+      ctx.arc(0, -rad - 20, bubbleRad, 0, Math.PI * 2);
+      ctx.fillStyle = '#22c55e';
+      ctx.fill();
+      ctx.strokeStyle = '#15803d';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.fillStyle = '#fff';
+      ctx.font = 'bold 8px sans-serif';
+      ctx.fillText(tok.hp, 0, -rad - 17);
+
+      // 🔵 Blue Bubble (AC / Armor) - top right
+      ctx.beginPath();
+      ctx.arc(rad + 10, -rad - 8, bubbleRad, 0, Math.PI * 2);
+      ctx.fillStyle = '#3b82f6';
+      ctx.fill();
+      ctx.strokeStyle = '#1d4ed8';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.fillStyle = '#fff';
+      ctx.fillText(tok.ac || 10, rad + 10, -rad - 5);
+
+      // 🔴 Red Bubble (Speed / Move) - top left
+      ctx.beginPath();
+      ctx.arc(-rad - 10, -rad - 8, bubbleRad, 0, Math.PI * 2);
+      ctx.fillStyle = '#ef4444';
+      ctx.fill();
+      ctx.strokeStyle = '#b91c1c';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.fillStyle = '#fff';
+      ctx.fillText(tok.speed || 30, -rad - 10, -rad - 5);
+    }
+
     ctx.restore();
   });
 }
@@ -2490,6 +2773,44 @@ function drawTacticalTools(ctx) {
     ctx.font = 'bold 10px sans-serif';
     ctx.fillStyle = '#fff';
     ctx.fillText(pin.title, pin.x, pin.y + 16);
+    // Roll20 3-Color Radial Bubbles when Selected
+    if (isSelected) {
+      const bubbleRad = 9;
+      // 🟢 Green Bubble (HP) - top center
+      ctx.beginPath();
+      ctx.arc(0, -rad - 20, bubbleRad, 0, Math.PI * 2);
+      ctx.fillStyle = '#22c55e';
+      ctx.fill();
+      ctx.strokeStyle = '#15803d';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.fillStyle = '#fff';
+      ctx.font = 'bold 8px sans-serif';
+      ctx.fillText(tok.hp, 0, -rad - 17);
+
+      // 🔵 Blue Bubble (AC / Armor) - top right
+      ctx.beginPath();
+      ctx.arc(rad + 10, -rad - 8, bubbleRad, 0, Math.PI * 2);
+      ctx.fillStyle = '#3b82f6';
+      ctx.fill();
+      ctx.strokeStyle = '#1d4ed8';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.fillStyle = '#fff';
+      ctx.fillText(tok.ac || 10, rad + 10, -rad - 5);
+
+      // 🔴 Red Bubble (Speed / Move) - top left
+      ctx.beginPath();
+      ctx.arc(-rad - 10, -rad - 8, bubbleRad, 0, Math.PI * 2);
+      ctx.fillStyle = '#ef4444';
+      ctx.fill();
+      ctx.strokeStyle = '#b91c1c';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.fillStyle = '#fff';
+      ctx.fillText(tok.speed || 30, -rad - 10, -rad - 5);
+    }
+
     ctx.restore();
   });
 
@@ -2505,6 +2826,44 @@ function drawTacticalTools(ctx) {
     ctx.fillText(ft.text, ft.x, ft.y);
     ft.y += ft.dy;
     ft.life--;
+    // Roll20 3-Color Radial Bubbles when Selected
+    if (isSelected) {
+      const bubbleRad = 9;
+      // 🟢 Green Bubble (HP) - top center
+      ctx.beginPath();
+      ctx.arc(0, -rad - 20, bubbleRad, 0, Math.PI * 2);
+      ctx.fillStyle = '#22c55e';
+      ctx.fill();
+      ctx.strokeStyle = '#15803d';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.fillStyle = '#fff';
+      ctx.font = 'bold 8px sans-serif';
+      ctx.fillText(tok.hp, 0, -rad - 17);
+
+      // 🔵 Blue Bubble (AC / Armor) - top right
+      ctx.beginPath();
+      ctx.arc(rad + 10, -rad - 8, bubbleRad, 0, Math.PI * 2);
+      ctx.fillStyle = '#3b82f6';
+      ctx.fill();
+      ctx.strokeStyle = '#1d4ed8';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.fillStyle = '#fff';
+      ctx.fillText(tok.ac || 10, rad + 10, -rad - 5);
+
+      // 🔴 Red Bubble (Speed / Move) - top left
+      ctx.beginPath();
+      ctx.arc(-rad - 10, -rad - 8, bubbleRad, 0, Math.PI * 2);
+      ctx.fillStyle = '#ef4444';
+      ctx.fill();
+      ctx.strokeStyle = '#b91c1c';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.fillStyle = '#fff';
+      ctx.fillText(tok.speed || 30, -rad - 10, -rad - 5);
+    }
+
     ctx.restore();
   });
   floatingTexts = floatingTexts.filter(ft => ft.life > 0);
@@ -2525,6 +2884,44 @@ function drawTacticalTools(ctx) {
 
     p.radius += 2.5;
     p.life--;
+    // Roll20 3-Color Radial Bubbles when Selected
+    if (isSelected) {
+      const bubbleRad = 9;
+      // 🟢 Green Bubble (HP) - top center
+      ctx.beginPath();
+      ctx.arc(0, -rad - 20, bubbleRad, 0, Math.PI * 2);
+      ctx.fillStyle = '#22c55e';
+      ctx.fill();
+      ctx.strokeStyle = '#15803d';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.fillStyle = '#fff';
+      ctx.font = 'bold 8px sans-serif';
+      ctx.fillText(tok.hp, 0, -rad - 17);
+
+      // 🔵 Blue Bubble (AC / Armor) - top right
+      ctx.beginPath();
+      ctx.arc(rad + 10, -rad - 8, bubbleRad, 0, Math.PI * 2);
+      ctx.fillStyle = '#3b82f6';
+      ctx.fill();
+      ctx.strokeStyle = '#1d4ed8';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.fillStyle = '#fff';
+      ctx.fillText(tok.ac || 10, rad + 10, -rad - 5);
+
+      // 🔴 Red Bubble (Speed / Move) - top left
+      ctx.beginPath();
+      ctx.arc(-rad - 10, -rad - 8, bubbleRad, 0, Math.PI * 2);
+      ctx.fillStyle = '#ef4444';
+      ctx.fill();
+      ctx.strokeStyle = '#b91c1c';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.fillStyle = '#fff';
+      ctx.fillText(tok.speed || 30, -rad - 10, -rad - 5);
+    }
+
     ctx.restore();
   });
   pings = pings.filter(p => p.life > 0);
@@ -2954,6 +3351,105 @@ function setActiveToolBtn(toolName) {
   });
 }
 
+function switchLayer(layer) {
+  currentLayer = layer;
+  document.querySelectorAll('.layer-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.layer === layer);
+  });
+  render();
+}
+
+function togglePageShelf() {
+  const shelf = document.getElementById('roll20-page-shelf');
+  shelf.classList.toggle('open');
+}
+
+function selectPageMap(mapId) {
+  currentPresetMap = mapId;
+  document.querySelectorAll('.page-card').forEach(c => {
+    const isTarget = c.dataset.map === mapId;
+    c.classList.toggle('active', isTarget);
+    let ribbon = c.querySelector('.player-ribbon');
+    if (isTarget && !ribbon) {
+      const r = document.createElement('div');
+      r.className = 'player-ribbon';
+      r.innerText = 'PLAYERS';
+      c.appendChild(r);
+    } else if (!isTarget && ribbon) {
+      ribbon.remove();
+    }
+  });
+
+  const select = document.getElementById('map-preset-select');
+  if (select) select.value = mapId;
+
+  customMapImage = null;
+  render();
+
+  broadcastRoomEvent({
+    type: 'switch_map',
+    mapId: mapId
+  });
+
+  appendChatMessage({
+    id: 'map_' + Date.now(),
+    type: 'chat',
+    sender: '👑 GM 맵 이동',
+    role: 'gm',
+    time: getCurrentTimeString(),
+    text: '🗺️ 마스터가 전원을 [' + mapId.toUpperCase() + '] 맵으로 이동시켰습니다!'
+  });
+}
+
+
+// --- PERSISTENT DRAWING PALETTE CONTROLS ---
+function toggleDrawPalette() {
+  const bar = document.getElementById('draw-palette-bar');
+  if (bar.classList.contains('open')) {
+    closeDrawPalette();
+  } else {
+    bar.classList.add('open');
+    currentTool = 'draw';
+    setActiveToolBtn('draw');
+  }
+}
+
+function selectDrawColor(color, el) {
+  drawColor = color;
+  currentTool = 'draw';
+  setActiveToolBtn('draw');
+  document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+  if (el) el.classList.add('active');
+}
+
+function setDrawWidth(w) {
+  drawWidth = w;
+  currentTool = 'draw';
+  setActiveToolBtn('draw');
+}
+
+function closeDrawPalette() {
+  const bar = document.getElementById('draw-palette-bar');
+  if (bar) bar.classList.remove('open');
+  currentTool = 'select';
+  setActiveToolBtn('select');
+}
+
+function toggleAoESubmenu() {
+  const types = ['circle', 'cone', 'square'];
+  const nextIdx = (types.indexOf(aoeType) + 1) % types.length;
+  aoeType = types[nextIdx];
+  currentTool = 'aoe';
+  setActiveToolBtn('aoe');
+  appendChatMessage({
+    id: 'aoe_' + Date.now(),
+    type: 'chat',
+    sender: '📐 템플릿',
+    time: getCurrentTimeString(),
+    text: `AoE 템플릿 모드: [${aoeType === 'circle' ? '원형 폭발(20ft)' : (aoeType === 'cone' ? '부채꼴 콘(30ft)' : '사각형(20ft)')}]`
+  });
+}
+
 
 
 // --- ADVANCED DICE ENGINE & FORMULA PARSER ---
@@ -3132,7 +3628,7 @@ function evaluateDiceFormula(formula, options = {}) {
     else { cocGrade = '결과: ' + v; }
   }
   // Dungeon World (PbtA) 2d6 evaluation
-  else if (sides === 6 && count === 2 && (currentCharacter.system === 'dungeonworld' || options.isDWMove)) {
+  else if (sides === 6 && count === 2 && (typeof dungeonWorldEngineActive !== 'undefined' ? dungeonWorldEngineActive : true) && (currentCharacter.system === 'dungeonworld' || options.isDWMove)) {
     if (sum >= 10) {
       isCrit = true;
       dwGrade = '★ 완전 성공 (10+)';
@@ -3212,6 +3708,25 @@ function resetDiceStats() {
   for (let k in diceStats.typeCount) diceStats.typeCount[k] = 0;
   updateLuckMeter();
   openDiceStatsModal();
+}
+
+
+// Roll20 Style Inline Dice Rolls: [[1d20+5]] inside text
+function parseInlineDice(text) {
+  if (!text) return '';
+  return text.replace(/\\[\\[(.*?)\\]\\]/g, (match, formula) => {
+    try {
+      const res = evaluateDiceFormula(formula.trim());
+      diceStats.totalRolls++;
+      diceStats.history.push(res.total);
+      if (res.isCrit) diceStats.crits++;
+      if (res.isFumble) diceStats.fumbles++;
+      const tooltip = formula.trim() + ' -> ' + res.text;
+      return '<span class="inline-roll" title="' + tooltip + '">' + res.total + '</span>';
+    } catch(e) {
+      return match;
+    }
+  });
 }
 
 
@@ -3853,6 +4368,16 @@ function handleRemoteEvent(e) {
   if (data.senderName === currentUserName && data.type !== 'presence') return;
 
   switch (data.type) {
+        case 'switch_map':
+      currentPresetMap = data.mapId;
+      document.querySelectorAll('.page-card').forEach(c => {
+        c.classList.toggle('active', c.dataset.map === data.mapId);
+      });
+      const sel = document.getElementById('map-preset-select');
+      if (sel) sel.value = data.mapId;
+      customMapImage = null;
+      render();
+      break;
     case 'sync_tokens':
       tokens = data.data;
       render();
@@ -3997,6 +4522,134 @@ function switchUserRole(newRole) {
   });
 }
 
+
+
+// --- DUNGEON WORLD ENGINE ON/OFF TOGGLE LOGIC ---
+let dungeonWorldEngineActive = true;
+
+function toggleDungeonWorldEngine() {
+  dungeonWorldEngineActive = !dungeonWorldEngineActive;
+  const btn = document.getElementById('btn-toggle-dw-engine');
+  const text = document.getElementById('dw-engine-status-text');
+  const dwArea = document.getElementById('dw-specific-sheet-area');
+  const dwMovesCard = document.getElementById('dw-gm-moves-card');
+
+  if (dungeonWorldEngineActive) {
+    if (btn) btn.classList.remove('off');
+    if (text) text.innerText = '던전월드 엔진: ON';
+    currentCharacter.system = 'dungeonworld';
+    const sel = document.getElementById('char-system-select');
+    if (sel) sel.value = 'dungeonworld';
+    if (dwArea) dwArea.style.display = 'flex';
+    if (dwMovesCard) dwMovesCard.style.display = 'block';
+
+    appendChatMessage({
+      id: 'dw_on_' + Date.now(),
+      type: 'chat',
+      sender: '🐉 시스템',
+      time: getCurrentTimeString(),
+      text: '🐉 **던전월드(Dungeon World) 엔진이 켜졌습니다!** (2d6 성공/부분성공/실패 판정, 기본 액션, 인연, XP 트래커 활성화)'
+    });
+  } else {
+    if (btn) btn.classList.add('off');
+    if (text) text.innerText = '던전월드 엔진: OFF';
+    currentCharacter.system = 'dnd5e';
+    const sel = document.getElementById('char-system-select');
+    if (sel) sel.value = 'dnd5e';
+    if (dwArea) dwArea.style.display = 'none';
+    if (dwMovesCard) dwMovesCard.style.display = 'none';
+
+    appendChatMessage({
+      id: 'dw_off_' + Date.now(),
+      type: 'chat',
+      sender: '⚔️ 시스템',
+      time: getCurrentTimeString(),
+      text: '⚔️ **던전월드 엔진이 꺼졌습니다.** (D&D 5e / 일반 다이스 모드로 전환)'
+    });
+  }
+  renderCharacterSheet();
+  broadcastRoomEvent({ type: 'sync_dw_engine', active: dungeonWorldEngineActive });
+}
+
+function onSystemSelectChange(sys) {
+  const btn = document.getElementById('btn-toggle-dw-engine');
+  const text = document.getElementById('dw-engine-status-text');
+  if (sys === 'dungeonworld') {
+    dungeonWorldEngineActive = true;
+    if (btn) btn.classList.remove('off');
+    if (text) text.innerText = '던전월드 엔진: ON';
+  } else {
+    dungeonWorldEngineActive = false;
+    if (btn) btn.classList.add('off');
+    if (text) text.innerText = '던전월드 엔진: OFF';
+  }
+  currentCharacter.system = sys;
+  renderCharacterSheet();
+}
+
+
+// --- ROLL20 PLAYING CARD DECK SYSTEM ---
+let playingCardDeck = [];
+const SUITS = ['♠', '♥', '♦', '♣'];
+const RANKS = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+
+function initCardDeck() {
+  playingCardDeck = [];
+  for (let s of SUITS) {
+    for (let r of RANKS) {
+      playingCardDeck.push({ suit: s, rank: r, isRed: s === '♥' || s === '♦' });
+    }
+  }
+  playingCardDeck.push({ suit: '🃏', rank: '흑백 조커', isRed: false });
+  playingCardDeck.push({ suit: '🃏', rank: '컬러 조커', isRed: true });
+  shuffleCardDeck(false);
+}
+
+function shuffleCardDeck(notify = true) {
+  for (let i = playingCardDeck.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [playingCardDeck[i], playingCardDeck[j]] = [playingCardDeck[j], playingCardDeck[i]];
+  }
+  const badge = document.getElementById('deck-remaining-badge');
+  if (badge) badge.innerText = `${playingCardDeck.length}장`;
+
+  if (notify) {
+    appendChatMessage({
+      id: 'deck_' + Date.now(),
+      type: 'chat',
+      sender: '🎴 덱 관리',
+      time: getCurrentTimeString(),
+      text: '🔀 트럼프 카드 덱(54장)이 셔플되었습니다.'
+    });
+    playSynthSound('clue');
+  }
+}
+
+function drawCard() {
+  if (playingCardDeck.length === 0) {
+    alert('덱의 카드를 모두 소진했습니다! 덱을 셔플하세요.');
+    initCardDeck();
+  }
+  const card = playingCardDeck.pop();
+  const badge = document.getElementById('deck-remaining-badge');
+  if (badge) badge.innerText = `${playingCardDeck.length}장`;
+
+  const cardHtml = `<div class="drawn-card-badge" style="color: ${card.isRed ? '#dc2626' : '#0f172a'};">${card.suit} ${card.rank}</div>`;
+  const display = document.getElementById('drawn-card-display');
+  if (display) {
+    display.style.display = 'block';
+    display.innerHTML = `<strong>방금 뽑은 카드:</strong><br>${cardHtml}`;
+  }
+
+  appendChatMessage({
+    id: 'card_' + Date.now(),
+    type: 'chat',
+    sender: currentUserName,
+    time: getCurrentTimeString(),
+    text: `🎴 [카드 드로우] ${currentUserName} 님이 카드를 1장 뽑았습니다: ${card.suit} ${card.rank}`
+  });
+  playSynthSound('clue');
+}
 
 
 // --- MAIN APPLICATION CONTROLLER, GM GOD MODE & SYNTHESIZER ---
@@ -4809,6 +5462,56 @@ function sendChatMessage() {
   if (!text) return;
 
   const mode = document.getElementById('chat-mode-toggle').value;
+
+  // Roll20 Slash Commands: /clear
+  if (text === '/clear') {
+    const box = document.getElementById('chat-messages-container');
+    if (box) box.innerHTML = '';
+    input.value = '';
+    return;
+  }
+
+  // Roll20 Slash Commands: /roll, /r, /gmroll, /broll
+  if (text.startsWith('/r ') || text.startsWith('/roll ')) {
+    const formula = text.replace(/^\/(r|roll)\s+/, '');
+    rollDiceFormula(formula);
+    input.value = '';
+    return;
+  }
+  if (text.startsWith('/gmroll ') || text.startsWith('/gr ')) {
+    const formula = text.replace(/^\/(gmroll|gr)\s+/, '');
+    const prevMode = currentRollMode;
+    currentRollMode = 'gm';
+    rollDiceFormula(formula, 'GM 비밀 롤');
+    currentRollMode = prevMode;
+    input.value = '';
+    return;
+  }
+  if (text.startsWith('/broll ') || text.startsWith('/blindroll ')) {
+    const formula = text.replace(/^\/(broll|blindroll)\s+/, '');
+    const prevMode = currentRollMode;
+    currentRollMode = 'blind';
+    rollDiceFormula(formula, '블라인드 롤');
+    currentRollMode = prevMode;
+    input.value = '';
+    return;
+  }
+
+  // Roll20 Emote: /em or /me
+  if (text.startsWith('/em ') || text.startsWith('/me ')) {
+    const action = text.replace(/^\/(em|me)\s+/, '');
+    const msgObj = {
+      id: 'em_' + Date.now(),
+      type: 'chat',
+      sender: '*',
+      time: getCurrentTimeString(),
+      text: `* ${currentUserName} ${action}`
+    };
+    appendChatMessage(msgObj);
+    broadcastRoomEvent({ type: 'chat_msg', data: msgObj });
+    input.value = '';
+    return;
+  }
 
   // Trigger speech bubble on token if in-character (IC)
   if (mode === 'ic') {
