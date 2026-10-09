@@ -35,6 +35,7 @@
   margin: 0;
   padding: 0;
   user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
@@ -43,6 +44,7 @@ body {
   color: var(--text-main);
   overflow: hidden;
   height: 100vh;
+  height: 100dvh; /* Mobile dynamic viewport */
   width: 100vw;
   display: flex;
   flex-direction: column;
@@ -51,31 +53,37 @@ body {
 /* Header bar */
 header {
   height: 52px;
+  min-height: 52px;
   background: linear-gradient(180deg, #181e2b 0%, #10141d 100%);
   border-bottom: 1px solid var(--border-color);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 16px;
+  padding: 0 12px;
   z-index: 50;
   box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  gap: 8px;
+  overflow-x: auto;
 }
+header::-webkit-scrollbar { display: none; }
 
 .logo-area {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+  flex-shrink: 0;
 }
 
 .logo-title {
   font-family: var(--font-serif);
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   font-weight: 700;
   letter-spacing: 0.5px;
   color: var(--text-gold);
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
+  white-space: nowrap;
 }
 
 .badge {
@@ -83,6 +91,7 @@ header {
   padding: 2px 7px;
   border-radius: 9999px;
   font-weight: 600;
+  white-space: nowrap;
 }
 .badge-gold { background: rgba(229,169,60,0.2); color: var(--accent-gold); border: 1px solid rgba(229,169,60,0.4); }
 .badge-blue { background: rgba(59,130,246,0.2); color: var(--accent-blue); border: 1px solid rgba(59,130,246,0.4); }
@@ -92,19 +101,21 @@ header {
 .room-bar {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
+  flex-shrink: 0;
 }
 
 .room-chip {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
-  padding: 5px 12px;
+  padding: 4px 10px;
   border-radius: 6px;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   cursor: pointer;
+  white-space: nowrap;
   transition: all 0.2s;
 }
 .room-chip:hover {
@@ -115,38 +126,42 @@ header {
 .user-selector {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   background: var(--bg-card);
   border: 1px solid var(--border-color);
-  padding: 4px 8px;
+  padding: 3px 6px;
   border-radius: 6px;
+  white-space: nowrap;
 }
 .user-selector select {
   background: transparent;
   color: var(--text-main);
   border: none;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   outline: none;
   cursor: pointer;
+  max-width: 140px;
 }
 
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
+  flex-shrink: 0;
 }
 
 .btn-header {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   color: var(--text-main);
-  padding: 5px 11px;
+  padding: 4px 9px;
   border-radius: 6px;
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
+  white-space: nowrap;
   transition: all 0.2s;
 }
 .btn-header:hover {
@@ -166,13 +181,15 @@ header {
   color: #fff;
 }
 
-/* App Main Layout: 3 Columns */
+/* App Main Layout: Desktop 3 Columns */
 #app-main {
   flex: 1;
   display: grid;
   grid-template-columns: 360px 1fr 380px;
   overflow: hidden;
   position: relative;
+  height: calc(100vh - 52px);
+  height: calc(100dvh - 52px);
 }
 
 /* Panels */
@@ -181,7 +198,7 @@ header {
   border-right: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 52px);
+  height: 100%;
   overflow: hidden;
   z-index: 10;
 }
@@ -200,7 +217,7 @@ header {
   flex: 1;
   text-align: center;
   padding: 10px 4px;
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   font-weight: 600;
   color: var(--text-muted);
   cursor: pointer;
@@ -224,10 +241,10 @@ header {
 .panel-content {
   flex: 1;
   overflow-y: auto;
-  padding: 14px;
+  padding: 12px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
 }
 .panel-content::-webkit-scrollbar {
   width: 6px;
@@ -244,44 +261,50 @@ header {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  height: 100%;
 }
 
 /* Top Map Controls Bar */
 .map-top-bar {
   position: absolute;
-  top: 12px;
-  left: 16px;
-  right: 16px;
-  height: 44px;
-  background: rgba(18, 22, 31, 0.88);
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  height: 42px;
+  background: rgba(18, 22, 31, 0.92);
   backdrop-filter: blur(8px);
   border: 1px solid var(--border-color);
   border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 12px;
+  padding: 0 10px;
   z-index: 20;
   box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  overflow-x: auto;
+  gap: 6px;
 }
+.map-top-bar::-webkit-scrollbar { display: none; }
 
 .map-control-group {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
+  flex-shrink: 0;
 }
 
 .map-btn {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   color: var(--text-main);
-  padding: 5px 9px;
+  padding: 4px 8px;
   border-radius: 5px;
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 4px;
+  white-space: nowrap;
   transition: all 0.2s;
 }
 .map-btn:hover, .map-btn.active {
@@ -293,23 +316,23 @@ header {
 /* Floating Left Map Toolbar */
 .floating-toolbar {
   position: absolute;
-  top: 68px;
-  left: 16px;
-  background: rgba(18, 22, 31, 0.92);
+  top: 62px;
+  left: 10px;
+  background: rgba(18, 22, 31, 0.94);
   backdrop-filter: blur(8px);
   border: 1px solid var(--border-color);
   border-radius: 8px;
   display: flex;
   flex-direction: column;
-  padding: 6px;
-  gap: 6px;
+  padding: 5px;
+  gap: 5px;
   z-index: 20;
   box-shadow: 0 4px 20px rgba(0,0,0,0.5);
 }
 
 .tool-btn {
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
   background: transparent;
   border: 1px solid transparent;
   border-radius: 6px;
@@ -318,7 +341,7 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   transition: all 0.2s;
   position: relative;
 }
@@ -335,17 +358,18 @@ header {
 /* Tool Submenu */
 .tool-submenu {
   position: absolute;
-  left: 48px;
+  left: 44px;
   top: 0;
-  background: rgba(18, 22, 31, 0.96);
+  background: rgba(18, 22, 31, 0.98);
   border: 1px solid var(--border-color);
   border-radius: 6px;
-  padding: 8px;
+  padding: 6px;
   display: none;
   flex-direction: column;
-  gap: 6px;
-  min-width: 140px;
+  gap: 5px;
+  min-width: 130px;
   box-shadow: 0 6px 16px rgba(0,0,0,0.6);
+  z-index: 25;
 }
 .tool-btn:hover .tool-submenu, .tool-submenu:hover {
   display: flex;
@@ -358,6 +382,7 @@ header {
   height: 100%;
   position: relative;
   cursor: default;
+  touch-action: none; /* Crucial for custom touch handling */
 }
 canvas#vtt-canvas {
   width: 100%;
@@ -390,20 +415,20 @@ canvas#vtt-canvas {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: 8px;
-  padding: 12px;
+  padding: 10px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 .card-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid rgba(255,255,255,0.06);
-  padding-bottom: 8px;
+  padding-bottom: 6px;
 }
 .card-title {
-  font-size: 0.88rem;
+  font-size: 0.85rem;
   font-weight: 700;
   color: var(--text-gold);
   display: flex;
@@ -429,7 +454,7 @@ canvas#vtt-canvas {
   background: var(--bg-panel);
   border: 1px solid var(--border-color);
   border-radius: 4px;
-  font-size: 0.76rem;
+  font-size: 0.75rem;
   color: var(--text-muted);
   cursor: pointer;
   white-space: nowrap;
@@ -444,20 +469,20 @@ canvas#vtt-canvas {
 .excerpt-box {
   background: rgba(14, 18, 27, 0.95);
   border-left: 3px solid var(--accent-gold);
-  padding: 12px;
+  padding: 10px;
   border-radius: 0 6px 6px 0;
-  font-size: 0.86rem;
-  line-height: 1.55;
+  font-size: 0.84rem;
+  line-height: 1.5;
   color: #f1f5f9;
   position: relative;
 }
 .excerpt-label {
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 700;
   text-transform: uppercase;
   color: var(--accent-gold);
   letter-spacing: 0.5px;
-  margin-bottom: 6px;
+  margin-bottom: 5px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -465,9 +490,9 @@ canvas#vtt-canvas {
 .gm-secret-box {
   background: rgba(45, 20, 20, 0.4);
   border-left: 3px solid #f87171;
-  padding: 10px;
+  padding: 8px 10px;
   border-radius: 0 6px 6px 0;
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   color: #fecaca;
 }
 
@@ -478,8 +503,9 @@ canvas#vtt-canvas {
   background: rgba(255,255,255,0.03);
   border: 1px solid var(--border-color);
   border-radius: 6px;
-  padding: 7px 10px;
-  font-size: 0.82rem;
+  padding: 6px 8px;
+  font-size: 0.8rem;
+  gap: 6px;
 }
 
 .btn-small {
@@ -488,9 +514,10 @@ canvas#vtt-canvas {
   color: var(--text-main);
   padding: 3px 8px;
   border-radius: 4px;
-  font-size: 0.75rem;
+  font-size: 0.74rem;
   cursor: pointer;
   transition: all 0.15s;
+  white-space: nowrap;
 }
 .btn-small:hover {
   border-color: var(--border-gold);
@@ -512,9 +539,9 @@ canvas#vtt-canvas {
 .upload-dropzone {
   border: 2px dashed var(--border-color);
   border-radius: 8px;
-  padding: 14px;
+  padding: 12px;
   text-align: center;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   color: var(--text-muted);
   cursor: pointer;
   transition: all 0.2s;
@@ -530,13 +557,13 @@ canvas#vtt-canvas {
 .stat-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
+  gap: 6px;
 }
 .stat-box {
   background: var(--bg-panel);
   border: 1px solid var(--border-color);
   border-radius: 6px;
-  padding: 8px 6px;
+  padding: 6px 4px;
   text-align: center;
   cursor: pointer;
   transition: all 0.2s;
@@ -546,30 +573,30 @@ canvas#vtt-canvas {
   transform: translateY(-1px);
 }
 .stat-name {
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   color: var(--text-muted);
   font-weight: 600;
   text-transform: uppercase;
 }
 .stat-val {
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   font-weight: 700;
   color: var(--text-gold);
 }
 .stat-mod {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   color: var(--text-main);
 }
 
 .resource-bar {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
 }
 .resource-label-row {
   display: flex;
   justify-content: space-between;
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   font-weight: 600;
 }
 .gauge-track {
@@ -596,7 +623,7 @@ canvas#vtt-canvas {
   background: var(--bg-panel);
   border: 1px solid var(--border-color);
   border-radius: 6px;
-  padding: 8px 10px;
+  padding: 6px 8px;
   transition: all 0.2s;
 }
 .combatant-item.active-turn {
@@ -607,24 +634,24 @@ canvas#vtt-canvas {
 .combatant-info {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 .combatant-avatar {
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
   background: #2a3449;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.85rem;
-  border: 2px solid var(--border-color);
+  font-size: 0.8rem;
+  border: 1px solid var(--border-color);
 }
 .combatant-init {
-  font-size: 1.05rem;
+  font-size: 1rem;
   font-weight: 700;
   color: var(--text-gold);
-  min-width: 26px;
+  min-width: 24px;
   text-align: right;
 }
 
@@ -633,25 +660,25 @@ canvas#vtt-canvas {
   background: #11141c;
   border: 1px solid var(--border-color);
   border-radius: 8px;
-  padding: 12px;
+  padding: 10px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
 /* 3D-styled animated dice button row */
 .dice-buttons-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 6px;
+  gap: 5px;
 }
 .dice-btn {
   background: linear-gradient(145deg, #262e40, #1b202d);
   border: 1px solid #37425c;
   color: #f1f5f9;
-  padding: 9px 0;
+  padding: 8px 0;
   border-radius: 6px;
-  font-size: 0.86rem;
+  font-size: 0.82rem;
   font-weight: 700;
   cursor: pointer;
   display: flex;
@@ -659,25 +686,25 @@ canvas#vtt-canvas {
   align-items: center;
   gap: 2px;
   transition: all 0.15s;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
 }
 .dice-btn:hover {
   border-color: var(--accent-gold);
   color: var(--text-gold);
   transform: translateY(-2px);
-  box-shadow: 0 5px 10px rgba(0,0,0,0.5);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.5);
 }
 .dice-btn:active {
   transform: translateY(1px);
 }
 .dice-icon {
-  font-size: 1rem;
+  font-size: 0.95rem;
 }
 
 /* Dice Formula input */
 .formula-row {
   display: flex;
-  gap: 6px;
+  gap: 5px;
 }
 .formula-input {
   flex: 1;
@@ -685,8 +712,8 @@ canvas#vtt-canvas {
   border: 1px solid var(--border-color);
   color: #fff;
   border-radius: 6px;
-  padding: 7px 10px;
-  font-size: 0.85rem;
+  padding: 6px 8px;
+  font-size: 0.82rem;
   outline: none;
   font-family: monospace;
 }
@@ -701,7 +728,7 @@ canvas#vtt-canvas {
 .roll-mode-pill {
   flex: 1;
   text-align: center;
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   padding: 4px 0;
   background: #181d28;
   border: 1px solid var(--border-color);
@@ -718,7 +745,7 @@ canvas#vtt-canvas {
 
 /* 3D Animated Rolling Stage */
 #dice-stage {
-  height: 80px;
+  height: 70px;
   background: radial-gradient(ellipse at center, #1e2638 0%, #0d1017 100%);
   border: 1px dashed var(--border-color);
   border-radius: 6px;
@@ -729,7 +756,7 @@ canvas#vtt-canvas {
   overflow: hidden;
 }
 .rolling-dice-anim {
-  font-size: 2.2rem;
+  font-size: 2rem;
   animation: rollTumble 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
 }
 @keyframes rollTumble {
@@ -738,7 +765,7 @@ canvas#vtt-canvas {
   100% { transform: scale(1) rotate(0deg); opacity: 1; }
 }
 .dice-final-result {
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   font-weight: 800;
   color: var(--text-gold);
   text-shadow: 0 0 15px rgba(229,169,60,0.6);
@@ -760,13 +787,14 @@ canvas#vtt-canvas {
   border-bottom: 1px solid var(--border-color);
   padding: 4px 6px;
   gap: 4px;
+  align-items: center;
 }
 .chat-filter-btn {
   background: transparent;
   border: none;
   color: var(--text-muted);
   font-size: 0.72rem;
-  padding: 3px 8px;
+  padding: 3px 6px;
   border-radius: 4px;
   cursor: pointer;
 }
@@ -779,10 +807,10 @@ canvas#vtt-canvas {
 .chat-messages {
   flex: 1;
   overflow-y: auto;
-  padding: 10px;
+  padding: 8px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 .chat-messages::-webkit-scrollbar { width: 5px; }
 .chat-messages::-webkit-scrollbar-thumb { background: #2a3449; }
@@ -792,11 +820,11 @@ canvas#vtt-canvas {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: 6px;
-  padding: 8px 10px;
-  font-size: 0.84rem;
+  padding: 6px 8px;
+  font-size: 0.82rem;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
   animation: fadeIn 0.2s ease;
 }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
@@ -805,21 +833,21 @@ canvas#vtt-canvas {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.72rem;
+  font-size: 0.7rem;
 }
 .msg-sender {
   font-weight: 700;
   color: var(--text-gold);
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 4px;
 }
 .msg-time {
   color: var(--text-muted);
 }
 .msg-body {
   color: var(--text-main);
-  line-height: 1.45;
+  line-height: 1.4;
   word-break: break-word;
 }
 .msg-ic {
@@ -845,12 +873,12 @@ canvas#vtt-canvas {
 }
 
 .dice-result-badge {
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 800;
-  padding: 2px 8px;
+  padding: 2px 6px;
   border-radius: 4px;
   display: inline-block;
-  margin-top: 4px;
+  margin-top: 3px;
 }
 .res-crit { background: rgba(34,197,94,0.25); color: #4ade80; border: 1px solid #22c55e; }
 .res-fumble { background: rgba(239,68,68,0.25); color: #f87171; border: 1px solid #ef4444; }
@@ -861,14 +889,14 @@ canvas#vtt-canvas {
 .chat-input-bar {
   background: #0f121a;
   border-top: 1px solid var(--border-color);
-  padding: 8px;
+  padding: 6px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 5px;
 }
 .chat-input-row {
   display: flex;
-  gap: 6px;
+  gap: 5px;
 }
 .chat-input {
   flex: 1;
@@ -876,8 +904,8 @@ canvas#vtt-canvas {
   border: 1px solid var(--border-color);
   border-radius: 6px;
   color: #fff;
-  padding: 7px 10px;
-  font-size: 0.85rem;
+  padding: 6px 8px;
+  font-size: 0.82rem;
   outline: none;
 }
 .chat-input:focus { border-color: var(--accent-gold); }
@@ -893,8 +921,8 @@ canvas#vtt-canvas {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   color: var(--text-muted);
-  font-size: 0.72rem;
-  padding: 3px 7px;
+  font-size: 0.7rem;
+  padding: 3px 6px;
   border-radius: 4px;
   white-space: nowrap;
   cursor: pointer;
@@ -911,12 +939,14 @@ canvas#vtt-canvas {
   left: 0;
   width: 100vw;
   height: 100vh;
+  height: 100dvh;
   background: rgba(0,0,0,0.75);
   backdrop-filter: blur(4px);
   display: none;
   align-items: center;
   justify-content: center;
-  z-index: 100;
+  z-index: 200;
+  padding: 10px;
 }
 .modal-overlay.open {
   display: flex;
@@ -925,9 +955,10 @@ canvas#vtt-canvas {
   background: var(--bg-dark);
   border: 1px solid var(--border-gold);
   border-radius: 10px;
-  width: 90%;
+  width: 100%;
   max-width: 580px;
   max-height: 85vh;
+  max-height: 85dvh;
   display: flex;
   flex-direction: column;
   box-shadow: 0 10px 40px rgba(0,0,0,0.8);
@@ -936,7 +967,7 @@ canvas#vtt-canvas {
 @keyframes modalPop { from { transform: scale(0.92); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
 .modal-header {
-  padding: 14px 18px;
+  padding: 12px 14px;
   border-bottom: 1px solid var(--border-color);
   display: flex;
   align-items: center;
@@ -944,7 +975,7 @@ canvas#vtt-canvas {
 }
 .modal-title {
   font-family: var(--font-serif);
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 700;
   color: var(--text-gold);
 }
@@ -958,41 +989,162 @@ canvas#vtt-canvas {
 .modal-close:hover { color: #fff; }
 
 .modal-body {
-  padding: 18px;
+  padding: 14px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  font-size: 0.88rem;
+  gap: 12px;
+  font-size: 0.85rem;
 }
 .modal-footer {
-  padding: 12px 18px;
+  padding: 10px 14px;
   border-top: 1px solid var(--border-color);
   display: flex;
   justify-content: flex-end;
   gap: 8px;
 }
 
-/* Feature 50 List Modal special styling */
 .features-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  font-size: 0.78rem;
+  gap: 6px;
+  font-size: 0.76rem;
 }
 .feature-badge-item {
   background: var(--bg-panel);
   border: 1px solid var(--border-color);
-  padding: 6px 9px;
+  padding: 5px 8px;
   border-radius: 6px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 .feature-num {
   color: var(--accent-gold);
   font-weight: 700;
-  min-width: 22px;
+  min-width: 20px;
+}
+
+/* ========================================================
+   📱 MOBILE RESPONSIVE UI STYLES (Screen width <= 900px)
+   ======================================================== */
+.mobile-nav-bar {
+  display: none; /* Hidden on desktop */
+}
+
+@media (max-width: 900px) {
+  /* Header optimizations on mobile */
+  header {
+    height: 48px;
+    min-height: 48px;
+    padding: 0 8px;
+  }
+  .logo-title {
+    font-size: 0.95rem;
+  }
+  .header-actions .btn-header:not(#btn-x-card):not(#btn-room-config) span:not(:first-child) {
+    display: none; /* Show icon only for compact mobile header */
+  }
+  .user-selector select {
+    max-width: 100px;
+  }
+
+  /* Main Layout: Switch from 3-column grid to Tabbed Single Screen */
+  #app-main {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 48px - 54px);
+    height: calc(100dvh - 48px - 54px); /* Subtract header (48px) and mobile nav (54px) */
+    padding-bottom: 0;
+  }
+
+  /* Show only the active mobile section */
+  .side-panel.left-panel,
+  #center-workspace,
+  .side-panel.right-panel {
+    display: none !important;
+    width: 100% !important;
+    height: 100% !important;
+    border: none !important;
+    flex: 1;
+  }
+
+  /* Classes toggled by mobile nav */
+  body.mobile-view-map #center-workspace {
+    display: flex !important;
+  }
+  body.mobile-view-dice .side-panel.right-panel {
+    display: flex !important;
+  }
+  body.mobile-view-character .side-panel.left-panel {
+    display: flex !important;
+  }
+  body.mobile-view-scenario .side-panel.left-panel {
+    display: flex !important;
+  }
+
+  /* Bottom Mobile Navigation Bar */
+  .mobile-nav-bar {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 54px;
+    background: #0d1017;
+    border-top: 1px solid var(--border-gold);
+    z-index: 100;
+    box-shadow: 0 -3px 12px rgba(0,0,0,0.6);
+  }
+
+  .mobile-nav-btn {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.72rem;
+    font-weight: 600;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .mobile-nav-btn.active {
+    color: var(--text-gold);
+    background: rgba(229,169,60,0.12);
+    border-top: 2px solid var(--accent-gold);
+  }
+  .mobile-nav-icon {
+    font-size: 1.15rem;
+  }
+
+  /* Map top bar and toolbars on mobile */
+  .map-top-bar {
+    top: 6px;
+    left: 6px;
+    right: 6px;
+    height: 38px;
+    padding: 0 6px;
+  }
+  .floating-toolbar {
+    top: 50px;
+    left: 6px;
+    padding: 4px;
+    gap: 4px;
+  }
+  .tool-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 0.95rem;
+  }
+
+  /* Features grid single column on mobile */
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
   </style>
@@ -1003,30 +1155,30 @@ canvas#vtt-canvas {
 <header>
   <div class="logo-area">
     <div class="logo-title">
-      <span>⚔️</span> MYTHOS VTT
+      <span>⚔️</span> MYTHOS
     </div>
-    <span class="badge badge-gold">TRPG 시뮬레이터</span>
+    <span class="badge badge-gold">TRPG</span>
   </div>
 
   <div class="room-bar">
     <div class="room-chip" id="btn-room-config" title="방 설정 및 비밀번호 변경">
       <span>🔑</span>
-      <span>방 코드: <strong id="header-room-code">DRAGON-2026</strong></span>
+      <span id="header-room-code">DRAGON-2026</span>
       <span id="header-room-lock">🔒</span>
     </div>
 
     <div class="user-selector">
-      <span>🎭 역할:</span>
+      <span>🎭</span>
       <select id="user-role-select">
-        <option value="gm">👑 GM (게임 마스터)</option>
-        <option value="p1">⚔️ 아서 (전사 / 탐정)</option>
-        <option value="p2">🔮 엘레나 (마법사 / 학자)</option>
-        <option value="p3">🕵️ 존 (성직자 / 사립탐정)</option>
-        <option value="spectator">👁️ 관전자 (Spectator)</option>
+        <option value="gm">👑 GM</option>
+        <option value="p1">⚔️ 아서</option>
+        <option value="p2">🔮 엘레나</option>
+        <option value="p3">🕵️ 존</option>
+        <option value="spectator">👁️ 관전</option>
       </select>
     </div>
 
-    <span class="badge badge-green" id="online-users-badge" title="현재 접속자: GM, 아서, 엘레나">🟢 3명 온라인</span>
+    <span class="badge badge-green" id="online-users-badge">🟢 온라인</span>
   </div>
 
   <div class="header-actions">
@@ -1034,38 +1186,38 @@ canvas#vtt-canvas {
     <div class="user-selector" title="환경 조명 설정">
       <span>💡</span>
       <select id="env-lighting-select">
-        <option value="light-day">☀️ 주간 (기본)</option>
-        <option value="light-dusk">🌅 황혼 (노을)</option>
-        <option value="light-night">🌙 야간 (심야)</option>
-        <option value="light-torch">🔥 횃불 (던전)</option>
-        <option value="light-campfire">🏕️ 모닥불 (야영)</option>
-        <option value="light-neon">🌆 사이버 네온</option>
+        <option value="light-day">☀️ 주간</option>
+        <option value="light-dusk">🌅 황혼</option>
+        <option value="light-night">🌙 야간</option>
+        <option value="light-torch">🔥 횃불</option>
+        <option value="light-campfire">🏕️ 모닥불</option>
+        <option value="light-neon">🌆 네온</option>
       </select>
     </div>
 
     <!-- BGM Toggle -->
     <button class="btn-header" id="btn-toggle-bgm" title="앰비언스 BGM 토글">
-      <span id="bgm-icon">🎵</span> <span id="bgm-label">BGM: 꺼짐</span>
+      <span id="bgm-icon">🎵</span> <span id="bgm-label">BGM</span>
     </button>
 
     <!-- World Clock & Rest -->
     <button class="btn-header" id="btn-world-clock" title="인게임 시간 및 휴식 관리">
-      <span>🕒</span> <span id="world-time-text">14:00 (낮)</span>
+      <span>🕒</span> <span id="world-time-text">14:00</span>
     </button>
 
     <!-- Safety X-Card -->
-    <button class="btn-header btn-xcard" id="btn-x-card" title="X-Card: 불편한 상황이나 트리거 발생 시 즉시 세션을 일시정지합니다.">
-      <span>🛑</span> X-CARD
+    <button class="btn-header btn-xcard" id="btn-x-card" title="X-Card: 긴급 세션 일시정지">
+      <span>🛑</span> <span>X-CARD</span>
     </button>
 
     <!-- 50 Features Guide -->
     <button class="btn-header" id="btn-features-list" title="구현된 50대 전문 TRPG 기능 목록">
-      <span>⭐</span> 50대 기능
+      <span>⭐</span> <span>50대 기능</span>
     </button>
 
     <!-- JSON State Backup -->
-    <button class="btn-header" id="btn-export-json" title="세션 데이터 전체 백업 (JSON)">
-      <span>💾</span> 저장
+    <button class="btn-header" id="btn-export-json" title="세션 데이터 백업 (JSON)">
+      <span>💾</span> <span>저장</span>
     </button>
   </div>
 </header>
@@ -1336,87 +1488,86 @@ canvas#vtt-canvas {
       <div class="map-control-group">
         <span>🗺️</span>
         <select id="map-preset-select" class="map-btn">
-          <option value="dungeon">고대 지하 감옥 (Dungeon)</option>
-          <option value="manor">빅토리아 저택 (Manor)</option>
-          <option value="tavern">숲속 안식처 여관 (Tavern)</option>
-          <option value="cyber">네온 사이버 클럽 (Cyberpunk)</option>
-          <option value="alien">심우주 탐사선 함교 (Sci-Fi)</option>
+          <option value="dungeon">지하감옥</option>
+          <option value="manor">저택</option>
+          <option value="tavern">여관</option>
+          <option value="cyber">사이버</option>
+          <option value="alien">우주선</option>
         </select>
-        <button class="map-btn" id="btn-custom-map-upload" title="내 PC의 지도 이미지 파일 업로드">
-          <span>📁</span> 맵 업로드
+        <button class="map-btn" id="btn-custom-map-upload" title="내 지도 업로드">
+          <span>📁</span>
         </button>
         <input type="file" id="map-file-input" accept="image/*" style="display: none;" />
       </div>
 
       <!-- Grid Controls -->
       <div class="map-control-group">
-        <span>📐 그리드:</span>
+        <span>📐</span>
         <select id="grid-type-select" class="map-btn">
-          <option value="square">정사각형</option>
-          <option value="hex">육각형</option>
+          <option value="square">사각</option>
+          <option value="hex">육각</option>
           <option value="none">없음</option>
         </select>
-        <input type="range" id="grid-size-slider" min="30" max="100" value="50" style="width: 70px;" title="그리드 크기 조절" />
+        <input type="range" id="grid-size-slider" min="30" max="100" value="50" style="width: 50px;" title="그리드 크기" />
       </div>
 
-      <!-- Fog of War Controls -->
+      <!-- Fog Controls -->
       <div class="map-control-group">
         <button class="map-btn" id="btn-toggle-fog">
-          <span>🌫️</span> <span id="fog-label">안개 ON</span>
+          <span>🌫️</span> <span id="fog-label">안개</span>
         </button>
-        <button class="map-btn" id="btn-fog-brush-reveal" title="시야 밝히기 브러시">밝히기</button>
-        <button class="map-btn" id="btn-fog-brush-hide" title="시야 가리기 브러시">가리기</button>
-        <button class="map-btn" id="btn-fog-reveal-all" title="전체 안개 걷어내기">전체공개</button>
+        <button class="map-btn" id="btn-fog-brush-reveal" title="시야 밝히기">밝히기</button>
+        <button class="map-btn" id="btn-fog-brush-hide" title="시야 가리기">가리기</button>
       </div>
 
-      <!-- Zoom & Viewport -->
+      <!-- Zoom -->
       <div class="map-control-group">
-        <button class="map-btn" id="btn-zoom-out" title="축소">-</button>
-        <span id="zoom-level-text" style="font-size: 0.78rem; min-width: 38px; text-align: center;">100%</span>
-        <button class="map-btn" id="btn-zoom-in" title="확대">+</button>
-        <button class="map-btn" id="btn-zoom-reset" title="원래 크기">리셋</button>
+        <button class="map-btn" id="btn-zoom-out">-</button>
+        <span id="zoom-level-text" style="font-size: 0.72rem; min-width: 32px; text-align: center;">100%</span>
+        <button class="map-btn" id="btn-zoom-in">+</button>
+        <button class="map-btn" id="btn-zoom-reset">리셋</button>
       </div>
     </div>
 
     <!-- Floating Map Left Toolbar -->
     <div class="floating-toolbar">
-      <button class="tool-btn active" data-tool="select" title="선택 및 토큰 이동 (V)">
+      <button class="tool-btn active" data-tool="select" title="선택/이동">
         <span>🖐️</span>
       </button>
 
-      <button class="tool-btn" data-tool="ruler" title="전술 거리 측정 자 (M)">
+      <button class="tool-btn" data-tool="ruler" title="거리 측정">
         <span>📏</span>
       </button>
 
-      <button class="tool-btn" data-tool="aoe" title="마법 범위 템플릿 (AoE)">
+      <button class="tool-btn" data-tool="aoe" title="AoE 범위">
         <span>📐</span>
         <div class="tool-submenu">
-          <div onclick="setAoEType('circle')">🔴 원형 폭발 (20ft)</div>
-          <div onclick="setAoEType('cone')">🔻 부채꼴 콘 (30ft)</div>
+          <div onclick="setAoEType('circle')">🔴 원형 (20ft)</div>
+          <div onclick="setAoEType('cone')">🔻 부채꼴 (30ft)</div>
           <div onclick="setAoEType('square')">⬛ 사각형 (20ft)</div>
         </div>
       </button>
 
-      <button class="tool-btn" data-tool="ping" title="GM 핑 / 관심 지점 비콘 (P)">
+      <button class="tool-btn" data-tool="ping" title="GM 핑">
         <span>📍</span>
       </button>
 
-      <button class="tool-btn" data-tool="draw" title="화이트보드 그리기 (D)">
+      <button class="tool-btn" data-tool="draw" title="그리기">
         <span>✏️</span>
         <div class="tool-submenu">
           <div onclick="setDrawColor('#ef4444')">🔴 빨간 펜</div>
           <div onclick="setDrawColor('#3b82f6')">🔵 파란 펜</div>
           <div onclick="setDrawColor('#22c55e')">🟢 초록 펜</div>
-          <div onclick="setDrawColor('#e5a93c')">🟡 노란 형광펜</div>
+          <div onclick="setDrawColor('#e5a93c')">🟡 형광펜</div>
           <div onclick="clearDrawings()">🗑️ 전체 지우기</div>
         </div>
       </button>
 
-      <button class="tool-btn" data-tool="eraser" title="지우개 (E)">
+      <button class="tool-btn" data-tool="eraser" title="지우개">
         <span>🧽</span>
       </button>
 
-      <button class="tool-btn" id="btn-quick-spawn-token" title="빠른 토큰 소환">
+      <button class="tool-btn" id="btn-quick-spawn-token" title="토큰 소환">
         <span>➕</span>
       </button>
     </div>
@@ -1434,7 +1585,7 @@ canvas#vtt-canvas {
     <div class="dice-tray-card">
       <div class="card-header">
         <span class="card-title">🎲 3D 시각 주사위 트레이</span>
-        <button class="btn-small" id="btn-open-dice-stats" title="주사위 통계 및 행운도 분석">
+        <button class="btn-small" id="btn-open-dice-stats" title="주사위 통계">
           📊 통계
         </button>
       </div>
@@ -1483,16 +1634,16 @@ canvas#vtt-canvas {
 
       <!-- Roll Modes -->
       <div class="roll-mode-selector">
-        <div class="roll-mode-pill active" data-mode="public" title="모든 플레이어에게 결과 공개">🌍 공개</div>
-        <div class="roll-mode-pill" data-mode="gm" title="GM에게만 비밀 굴림">🔒 GM비밀</div>
-        <div class="roll-mode-pill" data-mode="blind" title="GM만 결과를 알고 본인은 모름">🙈 블라인드</div>
-        <div class="roll-mode-pill" data-mode="self" title="나에게만 표시">👤 개인</div>
+        <div class="roll-mode-pill active" data-mode="public" title="공개">🌍 공개</div>
+        <div class="roll-mode-pill" data-mode="gm" title="GM비밀">🔒 GM비밀</div>
+        <div class="roll-mode-pill" data-mode="blind" title="블라인드">🙈 블라인드</div>
+        <div class="roll-mode-pill" data-mode="self" title="개인">👤 개인</div>
       </div>
 
       <!-- 3D Rolling Visual Stage -->
       <div id="dice-stage">
         <div id="dice-stage-content">
-          <span style="font-size: 0.8rem; color: var(--text-muted);">주사위를 클릭하거나 수식을 입력하세요</span>
+          <span style="font-size: 0.78rem; color: var(--text-muted);">주사위를 터치하거나 수식을 입력하세요</span>
         </div>
       </div>
     </div>
@@ -1501,13 +1652,13 @@ canvas#vtt-canvas {
     <div class="chat-container">
       <div class="chat-filter-bar">
         <button class="chat-filter-btn active" data-filter="all">전체</button>
-        <button class="chat-filter-btn" data-filter="chat">대화만</button>
+        <button class="chat-filter-btn" data-filter="chat">대화</button>
         <button class="chat-filter-btn" data-filter="dice">주사위</button>
         <button class="chat-filter-btn" data-filter="system">시스템</button>
         <div style="flex: 1;"></div>
         <select id="chat-mode-toggle" class="btn-small" style="font-size: 0.7rem; padding: 1px 4px;">
-          <option value="ic">🎭 인게임 (IC)</option>
-          <option value="ooc">💬 잡담 (OOC)</option>
+          <option value="ic">🎭 IC</option>
+          <option value="ooc">💬 OOC</option>
         </select>
       </div>
 
@@ -1518,14 +1669,14 @@ canvas#vtt-canvas {
       <div class="chat-input-bar">
         <!-- Macro bar -->
         <div class="macro-bar">
-          <div class="macro-btn" onclick="executeMacro('attack')">⚔️ 근접 공격 (1d20+5)</div>
-          <div class="macro-btn" onclick="executeMacro('dodge')">🛡️ 회피 판정</div>
-          <div class="macro-btn" onclick="executeMacro('spot')">👁️ 관찰력 체크</div>
-          <div class="macro-btn" onclick="executeMacro('san')">🧠 SAN 체크 (1/1d4)</div>
+          <div class="macro-btn" onclick="executeMacro('attack')">⚔️ 공격 (1d20+5)</div>
+          <div class="macro-btn" onclick="executeMacro('dodge')">🛡️ 회피</div>
+          <div class="macro-btn" onclick="executeMacro('spot')">👁️ 관찰력</div>
+          <div class="macro-btn" onclick="executeMacro('san')">🧠 SAN 체크</div>
         </div>
 
         <div class="chat-input-row">
-          <input type="text" id="chat-input-field" class="chat-input" placeholder="메시지 입력... (/w 대상, /gm 으로 귓속말)" />
+          <input type="text" id="chat-input-field" class="chat-input" placeholder="메시지 입력... (/w 대상)" />
           <button class="btn-small btn-gold" id="btn-send-chat">전송</button>
         </div>
       </div>
@@ -1533,7 +1684,27 @@ canvas#vtt-canvas {
   </aside>
 </div>
 
-<!-- MODAL: Room Setup & Password Verification -->
+<!-- 📱 MOBILE BOTTOM NAVIGATION BAR -->
+<nav class="mobile-nav-bar">
+  <button class="mobile-nav-btn active" data-view="map">
+    <span class="mobile-nav-icon">🗺️</span>
+    <span>맵 캔버스</span>
+  </button>
+  <button class="mobile-nav-btn" data-view="dice">
+    <span class="mobile-nav-icon">🎲</span>
+    <span>주사위·채팅</span>
+  </button>
+  <button class="mobile-nav-btn" data-view="character">
+    <span class="mobile-nav-icon">👤</span>
+    <span>캐릭터</span>
+  </button>
+  <button class="mobile-nav-btn" data-view="scenario">
+    <span class="mobile-nav-icon">📜</span>
+    <span>시나리오</span>
+  </button>
+</nav>
+
+<!-- MODALS -->
 <div class="modal-overlay" id="modal-room-config">
   <div class="modal-card">
     <div class="modal-header">
@@ -1542,26 +1713,22 @@ canvas#vtt-canvas {
     </div>
     <div class="modal-body">
       <div style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
-        멀티 탭 또는 다른 브라우저 창에서 같은 <strong>방 코드</strong>와 <strong>비밀번호</strong>를 입력하면 실시간으로 동기화되어 함께 플레이할 수 있습니다.
+        모바일이나 다른 PC에서 같은 <strong>방 코드</strong>와 <strong>비밀번호</strong>를 입력하면 실시간으로 동기화됩니다.
       </div>
 
-      <div style="display: flex; flex-direction: column; gap: 8px;">
+      <div style="display: flex; flex-direction: column; gap: 6px;">
         <label style="font-size: 0.8rem; font-weight: 600;">방 코드 (Room Code):</label>
         <input type="text" id="modal-input-room-code" class="formula-input" value="DRAGON-2026" />
       </div>
 
-      <div style="display: flex; flex-direction: column; gap: 8px;">
+      <div style="display: flex; flex-direction: column; gap: 6px;">
         <label style="font-size: 0.8rem; font-weight: 600;">방 비밀번호 (Room Password):</label>
-        <input type="password" id="modal-input-room-pw" class="formula-input" placeholder="비밀번호를 입력하세요 (선택)" value="1234" />
+        <input type="password" id="modal-input-room-pw" class="formula-input" placeholder="비밀번호" value="1234" />
       </div>
 
-      <div style="display: flex; flex-direction: column; gap: 8px;">
+      <div style="display: flex; flex-direction: column; gap: 6px;">
         <label style="font-size: 0.8rem; font-weight: 600;">접속자 닉네임:</label>
-        <input type="text" id="modal-input-user-name" class="formula-input" value="마스터 GM" />
-      </div>
-
-      <div style="background: rgba(229,169,60,0.1); border: 1px solid var(--accent-gold); padding: 10px; border-radius: 6px; font-size: 0.8rem;">
-        💡 <strong>팁</strong>: 새 창이나 탭을 열고 동일한 방 코드와 비밀번호로 접속하면 토큰 이동, 다이스 굴림, 채팅이 완벽하게 실시간 동기화됩니다!
+        <input type="text" id="modal-input-user-name" class="formula-input" value="모바일 플레이어" />
       </div>
     </div>
     <div class="modal-footer">
@@ -1571,19 +1738,14 @@ canvas#vtt-canvas {
   </div>
 </div>
 
-<!-- MODAL: 50 Features Checklist -->
 <div class="modal-overlay" id="modal-features-list">
   <div class="modal-card" style="max-width: 700px;">
     <div class="modal-header">
-      <span class="modal-title">⭐ 시뮬레이터에 구현된 50대 전문 TRPG 기능</span>
+      <span class="modal-title">⭐ 50대 전문 TRPG 기능 목록</span>
       <button class="modal-close" onclick="closeModal('modal-features-list')">✕</button>
     </div>
     <div class="modal-body" style="max-height: 70vh;">
-      <div style="font-size: 0.84rem; color: var(--text-muted); margin-bottom: 8px;">
-        사용자 요청에 따라 고안 및 구현된 50가지 필수 및 고급 TRPG 기능 목록입니다. 모든 기능이 시뮬레이터 내에 완전하게 내장되어 즉시 작동합니다.
-      </div>
       <div class="features-grid" id="features-list-container">
-        <!-- 50 features dynamically injected here -->
       </div>
     </div>
     <div class="modal-footer">
@@ -1592,35 +1754,34 @@ canvas#vtt-canvas {
   </div>
 </div>
 
-<!-- MODAL: Dice Statistics & Luck Meter -->
 <div class="modal-overlay" id="modal-dice-stats">
   <div class="modal-card">
     <div class="modal-header">
-      <span class="modal-title">📊 세션 주사위 통계 & 행운 분석</span>
+      <span class="modal-title">📊 세션 주사위 통계 & 행운도</span>
       <button class="modal-close" onclick="closeModal('modal-dice-stats')">✕</button>
     </div>
     <div class="modal-body">
-      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; text-align: center;">
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; text-align: center;">
         <div class="stat-box">
-          <div class="stat-name">총 굴림 횟수</div>
+          <div class="stat-name">총 굴림</div>
           <div class="stat-val" id="stats-total-rolls">0</div>
         </div>
         <div class="stat-box">
-          <div class="stat-name">크리티컬 성공</div>
+          <div class="stat-name">대성공</div>
           <div class="stat-val" id="stats-crit-count" style="color: #4ade80;">0</div>
         </div>
         <div class="stat-box">
-          <div class="stat-name">대실패 (펌블)</div>
+          <div class="stat-name">대실패</div>
           <div class="stat-val" id="stats-fumble-count" style="color: #f87171;">0</div>
         </div>
       </div>
 
-      <div class="card" style="margin-top: 10px;">
-        <div class="card-title">🍀 플레이어 행운도 지수</div>
-        <div class="gauge-track" style="height: 12px; margin-top: 6px;">
+      <div class="card" style="margin-top: 8px;">
+        <div class="card-title">🍀 실시간 행운 지수</div>
+        <div class="gauge-track" style="height: 12px; margin-top: 4px;">
           <div class="gauge-fill" id="luck-gauge-fill" style="width: 50%; background: linear-gradient(90deg, #ef4444, #e5a93c, #22c55e);"></div>
         </div>
-        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">
+        <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-muted); margin-top: 3px;">
           <span>불운 (0%)</span>
           <span id="luck-percent-label">보통 (50%)</span>
           <span>천운 (100%)</span>
@@ -1628,20 +1789,18 @@ canvas#vtt-canvas {
       </div>
 
       <div class="card">
-        <div class="card-title">주사위 종류별 굴림 횟수</div>
-        <div id="dice-type-breakdown" style="font-size: 0.82rem; color: var(--text-muted); display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;">
-          <!-- Dynamically populated -->
+        <div class="card-title">주사위별 횟수</div>
+        <div id="dice-type-breakdown" style="font-size: 0.8rem; color: var(--text-muted); display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px;">
         </div>
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn-small" onclick="resetDiceStats()">통계 초기화</button>
+      <button class="btn-small" onclick="resetDiceStats()">초기화</button>
       <button class="btn-small btn-gold" onclick="closeModal('modal-dice-stats')">닫기</button>
     </div>
   </div>
 </div>
 
-<!-- MODAL: Token Quick Edit -->
 <div class="modal-overlay" id="modal-token-edit">
   <div class="modal-card">
     <div class="modal-header">
@@ -1649,11 +1808,11 @@ canvas#vtt-canvas {
       <button class="modal-close" onclick="closeModal('modal-token-edit')">✕</button>
     </div>
     <div class="modal-body">
-      <div style="display: flex; flex-direction: column; gap: 6px;">
+      <div style="display: flex; flex-direction: column; gap: 5px;">
         <label style="font-size: 0.8rem;">토큰 이름:</label>
         <input type="text" id="token-edit-name" class="formula-input" />
       </div>
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
         <div>
           <label style="font-size: 0.8rem;">현재 HP:</label>
           <input type="number" id="token-edit-hp" class="formula-input" />
@@ -1663,21 +1822,21 @@ canvas#vtt-canvas {
           <input type="number" id="token-edit-maxhp" class="formula-input" />
         </div>
       </div>
-      <div style="display: flex; flex-direction: column; gap: 6px;">
-        <label style="font-size: 0.8rem;">크기 (Size):</label>
+      <div style="display: flex; flex-direction: column; gap: 5px;">
+        <label style="font-size: 0.8rem;">크기:</label>
         <select id="token-edit-size" class="formula-input">
           <option value="1">Medium (1칸)</option>
           <option value="2">Large (2x2칸)</option>
           <option value="3">Huge (3x3칸)</option>
         </select>
       </div>
-      <div style="display: flex; flex-direction: column; gap: 6px;">
-        <label style="font-size: 0.8rem;">아이콘 / 아바타 (이모지 또는 이미지 URL):</label>
-        <input type="text" id="token-edit-icon" class="formula-input" placeholder="예: ⚔️, 🧙, 🐉 또는 이미지 링크" />
+      <div style="display: flex; flex-direction: column; gap: 5px;">
+        <label style="font-size: 0.8rem;">아이콘 (이모지):</label>
+        <input type="text" id="token-edit-icon" class="formula-input" placeholder="예: ⚔️, 🧙, 🐉" />
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn-small" style="color: #ef4444;" onclick="deleteSelectedToken()">토큰 삭제</button>
+      <button class="btn-small" style="color: #ef4444;" onclick="deleteSelectedToken()">삭제</button>
       <button class="btn-small btn-gold" onclick="saveTokenEdit()">저장</button>
     </div>
   </div>
@@ -2003,18 +2162,16 @@ let lastDrawPoint = null;
 // Initialize Canvases
 function initCanvas() {
   const container = document.getElementById('canvas-container');
-  canvas.width = container.clientWidth;
-  canvas.height = container.clientHeight;
+  canvas.width = container.clientWidth || 800;
+  canvas.height = container.clientHeight || 600;
 
   fogCanvas.width = 2400;
   fogCanvas.height = 1800;
   drawingCanvas.width = 2400;
   drawingCanvas.height = 1800;
 
-  // Initialize Fog with black
   resetFog(false);
 
-  // Center initial view
   mapOffsetX = (canvas.width - 1200) / 2;
   mapOffsetY = (canvas.height - 900) / 2;
 
@@ -2028,7 +2185,6 @@ function resetFog(revealed = false) {
   } else {
     fogCtx.fillStyle = '#000000';
     fogCtx.fillRect(0, 0, fogCanvas.width, fogCanvas.height);
-    // Reveal a starting area around players
     fogCtx.globalCompositeOperation = 'destination-out';
     fogCtx.beginPath();
     fogCtx.arc(300, 320, 180, 0, Math.PI * 2);
@@ -2047,12 +2203,9 @@ function drawMapBackground(ctx) {
     return;
   }
 
-  // Draw rich procedural high-detail background based on preset
   if (currentPresetMap === 'dungeon') {
-    // Stone dungeon floor
     ctx.fillStyle = '#171922';
     ctx.fillRect(0, 0, 2400, 1800);
-    // Large stone flagstones
     ctx.strokeStyle = '#232738';
     ctx.lineWidth = 3;
     for (let x = 0; x < 2400; x += 100) {
@@ -2060,21 +2213,17 @@ function drawMapBackground(ctx) {
         ctx.strokeRect(x, y, 100, 100);
       }
     }
-    // Dungeon moss and blood splatters
     ctx.fillStyle = 'rgba(34, 197, 94, 0.08)';
     ctx.beginPath();
     ctx.arc(450, 400, 120, 0, Math.PI * 2);
     ctx.fill();
-    // Torches
     ctx.fillStyle = 'rgba(239, 68, 68, 0.15)';
     ctx.beginPath();
     ctx.arc(650, 350, 180, 0, Math.PI * 2);
     ctx.fill();
   } else if (currentPresetMap === 'manor') {
-    // Victorian wooden floor & luxury red carpet
     ctx.fillStyle = '#261b15';
     ctx.fillRect(0, 0, 2400, 1800);
-    // Wood plank lines
     ctx.strokeStyle = '#35251d';
     ctx.lineWidth = 2;
     for (let y = 0; y < 1800; y += 25) {
@@ -2083,20 +2232,16 @@ function drawMapBackground(ctx) {
       ctx.lineTo(2400, y);
       ctx.stroke();
     }
-    // Grand velvet carpet
     ctx.fillStyle = '#5c141e';
     ctx.fillRect(200, 200, 800, 500);
     ctx.strokeStyle = '#d4a359';
     ctx.lineWidth = 4;
     ctx.strokeRect(200, 200, 800, 500);
   } else if (currentPresetMap === 'tavern') {
-    // Forest tavern
     ctx.fillStyle = '#2e2017';
     ctx.fillRect(0, 0, 2400, 1800);
-    // Tavern bar counter
     ctx.fillStyle = '#4a3525';
     ctx.fillRect(150, 100, 700, 60);
-    // Tables
     ctx.fillStyle = '#3d2b1f';
     for (let tx = 250; tx <= 750; tx += 200) {
       for (let ty = 300; ty <= 600; ty += 180) {
@@ -2108,10 +2253,8 @@ function drawMapBackground(ctx) {
       }
     }
   } else if (currentPresetMap === 'cyber') {
-    // Cyberpunk neon club
     ctx.fillStyle = '#080a12';
     ctx.fillRect(0, 0, 2400, 1800);
-    // Neon grid floor
     ctx.strokeStyle = 'rgba(6, 182, 212, 0.2)';
     ctx.lineWidth = 1;
     for (let x = 0; x < 2400; x += 50) {
@@ -2120,14 +2263,12 @@ function drawMapBackground(ctx) {
     for (let y = 0; y < 1800; y += 50) {
       ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(2400, y); ctx.stroke();
     }
-    // Cyberpunk glow circles
     ctx.strokeStyle = '#ec4899';
     ctx.lineWidth = 3;
     ctx.beginPath();
     ctx.arc(500, 400, 150, 0, Math.PI * 2);
     ctx.stroke();
   } else if (currentPresetMap === 'alien') {
-    // Starship bridge
     ctx.fillStyle = '#0b0f19';
     ctx.fillRect(0, 0, 2400, 1800);
     ctx.strokeStyle = '#20293d';
@@ -2137,7 +2278,6 @@ function drawMapBackground(ctx) {
         ctx.strokeRect(x, y, 80, 80);
       }
     }
-    // Command console
     ctx.fillStyle = '#1e293b';
     ctx.beginPath();
     ctx.ellipse(500, 450, 200, 100, 0, 0, Math.PI * 2);
@@ -2147,26 +2287,18 @@ function drawMapBackground(ctx) {
   }
 }
 
-// Grid Renderer
 function drawGrid(ctx) {
   if (gridType === 'none') return;
-
   ctx.save();
   ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
   ctx.lineWidth = 1;
 
   if (gridType === 'square') {
     for (let x = 0; x <= 2400; x += gridSize) {
-      ctx.beginPath();
-      ctx.moveTo(x, 0);
-      ctx.lineTo(x, 1800);
-      ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, 1800); ctx.stroke();
     }
     for (let y = 0; y <= 1800; y += gridSize) {
-      ctx.beginPath();
-      ctx.moveTo(0, y);
-      ctx.lineTo(2400, y);
-      ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(2400, y); ctx.stroke();
     }
   } else if (gridType === 'hex') {
     const r = gridSize / 2;
@@ -2194,7 +2326,6 @@ function drawHexagon(ctx, x, y, r) {
   ctx.stroke();
 }
 
-// Token Renderer
 function drawTokens(ctx) {
   tokens.forEach(tok => {
     const rad = (tok.size * gridSize) / 2 - 3;
@@ -2204,7 +2335,6 @@ function drawTokens(ctx) {
     ctx.save();
     ctx.translate(tok.x, tok.y);
 
-    // Active Turn Glow Ring
     if (isActiveTurn) {
       ctx.beginPath();
       ctx.arc(0, 0, rad + 8, 0, Math.PI * 2);
@@ -2216,7 +2346,6 @@ function drawTokens(ctx) {
       ctx.shadowBlur = 0;
     }
 
-    // Selected Ring
     if (isSelected) {
       ctx.beginPath();
       ctx.arc(0, 0, rad + 4, 0, Math.PI * 2);
@@ -2225,7 +2354,6 @@ function drawTokens(ctx) {
       ctx.stroke();
     }
 
-    // Token Body Circle
     ctx.beginPath();
     ctx.arc(0, 0, rad, 0, Math.PI * 2);
     ctx.fillStyle = tok.color || '#3b82f6';
@@ -2234,14 +2362,12 @@ function drawTokens(ctx) {
     ctx.lineWidth = 2;
     ctx.stroke();
 
-    // Token Icon / Avatar
     ctx.fillStyle = '#ffffff';
     ctx.font = `${rad * 0.9}px sans-serif`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(tok.icon || '👤', 0, 0);
 
-    // HP Bar on Top of Token
     const barW = rad * 2;
     const barH = 5;
     const barX = -rad;
@@ -2256,7 +2382,6 @@ function drawTokens(ctx) {
     ctx.lineWidth = 1;
     ctx.strokeRect(barX, barY, barW, barH);
 
-    // Name Plate Below Token
     ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
     ctx.font = '10px sans-serif';
     const textW = ctx.measureText(tok.name).width;
@@ -2264,7 +2389,6 @@ function drawTokens(ctx) {
     ctx.fillStyle = '#e2e8f0';
     ctx.fillText(tok.name, 0, rad + 14);
 
-    // Conditions Icons
     if (tok.conditions && tok.conditions.length > 0) {
       let cx = -rad;
       tok.conditions.forEach(cond => {
@@ -2283,9 +2407,7 @@ function drawTokens(ctx) {
   });
 }
 
-// Tactical Ruler & AoE Templates
 function drawTacticalTools(ctx) {
-  // Ruler
   if (isMeasuring) {
     ctx.save();
     ctx.strokeStyle = '#e5a93c';
@@ -2323,7 +2445,6 @@ function drawTacticalTools(ctx) {
     ctx.restore();
   }
 
-  // AoE Template
   if (currentTool === 'aoe' && isPlacingAoE) {
     ctx.save();
     ctx.fillStyle = 'rgba(239, 68, 68, 0.25)';
@@ -2349,8 +2470,7 @@ function drawTacticalTools(ctx) {
     ctx.restore();
   }
 
-  // Pings
-  pings.forEach((p, idx) => {
+  pings.forEach((p) => {
     ctx.save();
     ctx.strokeStyle = p.color || '#e5a93c';
     ctx.lineWidth = 3;
@@ -2370,7 +2490,6 @@ function drawTacticalTools(ctx) {
   pings = pings.filter(p => p.life > 0);
 }
 
-// Master Render Loop
 function render() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -2378,31 +2497,20 @@ function render() {
   ctx.translate(mapOffsetX, mapOffsetY);
   ctx.scale(mapScale, mapScale);
 
-  // 1. Background Map
   drawMapBackground(ctx);
-
-  // 2. Tactical Grid
   drawGrid(ctx);
-
-  // 3. User Whiteboard Drawings
   ctx.drawImage(drawingCanvas, 0, 0);
-
-  // 4. Tokens
   drawTokens(ctx);
 
-  // 5. Fog of War
   if (showFog) {
     ctx.save();
     const isGM = currentUserRole === 'gm';
-    // GM sees translucent fog, players see pitch black
     ctx.globalAlpha = isGM ? 0.35 : 1.0;
     ctx.drawImage(fogCanvas, 0, 0);
     ctx.restore();
   }
 
-  // 6. Tactical Tools (Ruler, AoE, Pings)
   drawTacticalTools(ctx);
-
   ctx.restore();
 
   if (pings.length > 0) {
@@ -2410,7 +2518,6 @@ function render() {
   }
 }
 
-// Coordinate Conversions
 function screenToWorld(sx, sy) {
   return {
     x: (sx - mapOffsetX) / mapScale,
@@ -2418,14 +2525,13 @@ function screenToWorld(sx, sy) {
   };
 }
 
-// Event Listeners for VTT Canvas
+// Mouse events
 canvas.addEventListener('mousedown', (e) => {
   const rect = canvas.getBoundingClientRect();
   const mouseX = e.clientX - rect.left;
   const mouseY = e.clientY - rect.top;
   const worldPos = screenToWorld(mouseX, mouseY);
 
-  // Middle click or Space+Click: Pan
   if (e.button === 1 || e.spaceKey || (e.button === 0 && e.altKey)) {
     isPanning = true;
     startPanX = mouseX - mapOffsetX;
@@ -2436,13 +2542,11 @@ canvas.addEventListener('mousedown', (e) => {
 
   if (e.button === 0) {
     if (currentTool === 'select') {
-      // Check token click (reverse order to pick top token)
       selectedToken = null;
       for (let i = tokens.length - 1; i >= 0; i--) {
         const tok = tokens[i];
         const rad = (tok.size * gridSize) / 2;
-        const dist = Math.hypot(tok.x - worldPos.x, tok.y - worldPos.y);
-        if (dist <= rad) {
+        if (Math.hypot(tok.x - worldPos.x, tok.y - worldPos.y) <= rad) {
           selectedToken = tok;
           isDraggingToken = true;
           dragTokenOffset = { x: tok.x - worldPos.x, y: tok.y - worldPos.y };
@@ -2522,39 +2626,34 @@ canvas.addEventListener('mousemove', (e) => {
     render();
   }
 
-  // Fog brush while holding left button and GM fog tool
   if (e.buttons === 1 && currentTool === 'fog_brush') {
     applyFogBrush(worldPos.x, worldPos.y);
   }
 });
 
-window.addEventListener('mouseup', (e) => {
+window.addEventListener('mouseup', () => {
   if (isPanning) {
     isPanning = false;
     canvas.style.cursor = 'default';
   }
-
   if (isDraggingToken && selectedToken) {
-    // Snap to grid center
     selectedToken.x = Math.round(selectedToken.x / gridSize) * gridSize;
     selectedToken.y = Math.round(selectedToken.y / gridSize) * gridSize;
     isDraggingToken = false;
     broadcastRoomEvent({ type: 'sync_tokens', data: tokens });
     render();
   }
-
   if (isMeasuring) {
     isMeasuring = false;
     render();
   }
-
   if (isDrawing) {
     isDrawing = false;
     broadcastRoomEvent({ type: 'sync_drawings', data: drawingCanvas.toDataURL() });
   }
 });
 
-// Canvas Zoom with Mouse Wheel
+// Wheel zoom
 canvas.addEventListener('wheel', (e) => {
   e.preventDefault();
   const zoomFactor = e.deltaY < 0 ? 1.1 : 0.9;
@@ -2572,7 +2671,7 @@ canvas.addEventListener('wheel', (e) => {
   render();
 }, { passive: false });
 
-// Right-click Token to edit
+// Context Menu (Right Click)
 canvas.addEventListener('contextmenu', (e) => {
   e.preventDefault();
   const rect = canvas.getBoundingClientRect();
@@ -2590,7 +2689,142 @@ canvas.addEventListener('contextmenu', (e) => {
   }
 });
 
-// Fog Brush action
+// --- TOUCH SCREEN & MOBILE GESTURE SUPPORT ---
+let initialPinchDist = null;
+let initialPinchScale = 1.0;
+
+canvas.addEventListener('touchstart', (e) => {
+  e.preventDefault();
+  const rect = canvas.getBoundingClientRect();
+
+  if (e.touches.length === 1) {
+    const touch = e.touches[0];
+    const mouseX = touch.clientX - rect.left;
+    const mouseY = touch.clientY - rect.top;
+    const worldPos = screenToWorld(mouseX, mouseY);
+
+    if (currentTool === 'select') {
+      selectedToken = null;
+      for (let i = tokens.length - 1; i >= 0; i--) {
+        const tok = tokens[i];
+        const rad = (tok.size * gridSize) / 2 + 12; // Extra padding for finger taps
+        if (Math.hypot(tok.x - worldPos.x, tok.y - worldPos.y) <= rad) {
+          selectedToken = tok;
+          isDraggingToken = true;
+          dragTokenOffset = { x: tok.x - worldPos.x, y: tok.y - worldPos.y };
+          break;
+        }
+      }
+      if (!selectedToken) {
+        // Single finger drag pans the map
+        isPanning = true;
+        startPanX = mouseX - mapOffsetX;
+        startPanY = mouseY - mapOffsetY;
+      }
+      render();
+    } else if (currentTool === 'ping') {
+      triggerPing(worldPos.x, worldPos.y, currentUserName);
+    } else if (currentTool === 'ruler') {
+      isMeasuring = true;
+      rulerStart = worldPos;
+      rulerEnd = worldPos;
+      render();
+    } else if (currentTool === 'draw' || currentTool === 'eraser') {
+      isDrawing = true;
+      lastDrawPoint = worldPos;
+    }
+  } else if (e.touches.length === 2) {
+    // Two-finger pinch to zoom
+    isDraggingToken = false;
+    isPanning = false;
+    const t1 = e.touches[0];
+    const t2 = e.touches[1];
+    initialPinchDist = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
+    initialPinchScale = mapScale;
+  }
+}, { passive: false });
+
+canvas.addEventListener('touchmove', (e) => {
+  e.preventDefault();
+  const rect = canvas.getBoundingClientRect();
+
+  if (e.touches.length === 1) {
+    const touch = e.touches[0];
+    const mouseX = touch.clientX - rect.left;
+    const mouseY = touch.clientY - rect.top;
+    const worldPos = screenToWorld(mouseX, mouseY);
+
+    if (isDraggingToken && selectedToken) {
+      selectedToken.x = worldPos.x + dragTokenOffset.x;
+      selectedToken.y = worldPos.y + dragTokenOffset.y;
+      render();
+      return;
+    }
+
+    if (isPanning) {
+      mapOffsetX = mouseX - startPanX;
+      mapOffsetY = mouseY - startPanY;
+      render();
+      return;
+    }
+
+    if (isMeasuring) {
+      rulerEnd = worldPos;
+      render();
+      return;
+    }
+
+    if (isDrawing) {
+      drawingCtx.save();
+      if (currentTool === 'eraser') {
+        drawingCtx.globalCompositeOperation = 'destination-out';
+        drawingCtx.beginPath();
+        drawingCtx.arc(worldPos.x, worldPos.y, 20, 0, Math.PI * 2);
+        drawingCtx.fill();
+      } else {
+        drawingCtx.globalCompositeOperation = 'source-over';
+        drawingCtx.strokeStyle = drawColor;
+        drawingCtx.lineWidth = drawWidth;
+        drawingCtx.lineCap = 'round';
+        drawingCtx.beginPath();
+        drawingCtx.moveTo(lastDrawPoint.x, lastDrawPoint.y);
+        drawingCtx.lineTo(worldPos.x, worldPos.y);
+        drawingCtx.stroke();
+      }
+      drawingCtx.restore();
+      lastDrawPoint = worldPos;
+      render();
+    }
+  } else if (e.touches.length === 2 && initialPinchDist) {
+    const t1 = e.touches[0];
+    const t2 = e.touches[1];
+    const dist = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
+    const zoomFactor = dist / initialPinchDist;
+    mapScale = Math.max(0.2, Math.min(3.0, initialPinchScale * zoomFactor));
+    document.getElementById('zoom-level-text').innerText = `${Math.round(mapScale * 100)}%`;
+    render();
+  }
+}, { passive: false });
+
+canvas.addEventListener('touchend', (e) => {
+  if (isDraggingToken && selectedToken) {
+    selectedToken.x = Math.round(selectedToken.x / gridSize) * gridSize;
+    selectedToken.y = Math.round(selectedToken.y / gridSize) * gridSize;
+    isDraggingToken = false;
+    broadcastRoomEvent({ type: 'sync_tokens', data: tokens });
+    render();
+  }
+  isPanning = false;
+  isMeasuring = false;
+  if (isDrawing) {
+    isDrawing = false;
+    broadcastRoomEvent({ type: 'sync_drawings', data: drawingCanvas.toDataURL() });
+  }
+  if (e.touches.length < 2) {
+    initialPinchDist = null;
+  }
+});
+
 function applyFogBrush(x, y) {
   fogCtx.save();
   if (fogBrushMode === 'reveal') {
@@ -4397,7 +4631,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initCanvas();
   initNetworking();
 
-  // 2. Tab Navigation
+  // 2. Tab Navigation (Left Panel)
   document.querySelectorAll('.panel-tab').forEach(tab => {
     tab.addEventListener('click', () => {
       document.querySelectorAll('.panel-tab').forEach(t => t.classList.remove('active'));
@@ -4409,7 +4643,32 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 3. Roll Mode Selector Pills
+  // 3. Mobile Navigation Bottom Bar
+  document.querySelectorAll('.mobile-nav-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.mobile-nav-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const view = btn.dataset.view;
+
+      document.body.classList.remove('mobile-view-map', 'mobile-view-dice', 'mobile-view-character', 'mobile-view-scenario');
+      document.body.classList.add(`mobile-view-${view}`);
+
+      if (view === 'character') {
+        const charTab = document.querySelector('[data-tab="tab-character"]');
+        if (charTab) charTab.click();
+      } else if (view === 'scenario') {
+        const scTab = document.querySelector('[data-tab="tab-scenario"]');
+        if (scTab) scTab.click();
+      }
+
+      if (view === 'map') {
+        setTimeout(initCanvas, 50);
+      }
+    });
+  });
+  document.body.classList.add('mobile-view-map');
+
+  // 4. Roll Mode Selector Pills
   document.querySelectorAll('.roll-mode-pill').forEach(pill => {
     pill.addEventListener('click', () => {
       document.querySelectorAll('.roll-mode-pill').forEach(p => p.classList.remove('active'));
@@ -4418,7 +4677,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 4. Map Tools Switching
+  // 5. Map Tools Switching
   document.querySelectorAll('.tool-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       if (btn.id === 'btn-quick-spawn-token') {
@@ -4431,7 +4690,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 5. Room Setup & Password
+  // 6. Room Setup & Password
   document.getElementById('btn-room-config').addEventListener('click', () => {
     openModal('modal-room-config');
   });
@@ -4459,42 +4718,42 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 6. User Role Selector
+  // 7. User Role Selector
   document.getElementById('user-role-select').addEventListener('change', (e) => {
     switchUserRole(e.target.value);
   });
 
-  // 7. Environment Lighting Selector
+  // 8. Environment Lighting Selector
   document.getElementById('env-lighting-select').addEventListener('change', (e) => {
     const overlay = document.getElementById('lighting-overlay');
     overlay.className = e.target.value;
   });
 
-  // 8. BGM Toggle
+  // 9. BGM Toggle
   document.getElementById('btn-toggle-bgm').addEventListener('click', toggleAmbientBGM);
 
-  // 9. World Clock & Rest button
+  // 10. World Clock & Rest button
   document.getElementById('btn-world-clock').addEventListener('click', () => {
     advanceWorldTime(1);
   });
 
-  // 10. Safety X-Card
+  // 11. Safety X-Card
   document.getElementById('btn-x-card').addEventListener('click', () => {
     playSynthSound('alarm');
     broadcastRoomEvent({ type: 'x_card', user: currentUserName });
     alert(`🛑 [X-CARD 발동] ${currentUserName} 님이 세션 일시정지를 요청했습니다.\n잠시 게임을 멈추고 안전하고 편안한 플레이를 위해 논의해 주세요.`);
   });
 
-  // 11. 50 Features Guide Modal
+  // 12. 50 Features Guide Modal
   document.getElementById('btn-features-list').addEventListener('click', () => {
     populate50FeaturesList();
     openModal('modal-features-list');
   });
 
-  // 12. JSON Backup Export
+  // 13. JSON Backup Export
   document.getElementById('btn-export-json').addEventListener('click', exportSessionJSON);
 
-  // 13. Scenario Selector & Custom Dropzone
+  // 14. Scenario Selector & Custom Dropzone
   document.getElementById('scenario-preset-select').addEventListener('change', (e) => {
     loadScenario(e.target.value);
   });
@@ -4528,16 +4787,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // 14. Broadcast Narration to Chat
+  // 15. Broadcast Narration to Chat
   document.getElementById('btn-broadcast-narration').addEventListener('click', broadcastNarrationToChat);
 
-  // 15. Toggle Secret Visibility
+  // 16. Toggle Secret Visibility
   document.getElementById('btn-toggle-secret-vis').addEventListener('click', () => {
     const el = document.getElementById('excerpt-gm-notes');
     el.style.display = el.style.display === 'none' ? 'block' : 'none';
   });
 
-  // 16. Rulebook & Scenario Search
+  // 17. Rulebook & Scenario Search
   document.getElementById('btn-rule-search').addEventListener('click', () => {
     searchRulebookAndScenario(document.getElementById('rule-search-input').value);
   });
@@ -4545,13 +4804,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'Enter') searchRulebookAndScenario(e.target.value);
   });
 
-  // 17. Character System Selector
+  // 18. Character System Selector
   document.getElementById('char-system-select').addEventListener('change', (e) => {
     currentCharacter.system = e.target.value;
     renderCharacterSheet();
   });
 
-  // 18. Initiative Buttons
+  // 19. Initiative Buttons
   document.getElementById('btn-roll-all-init').addEventListener('click', rollAllInitiative);
   document.getElementById('btn-next-turn').addEventListener('click', nextTurn);
   document.getElementById('btn-reset-combat').addEventListener('click', () => {
@@ -4561,7 +4820,7 @@ document.addEventListener('DOMContentLoaded', () => {
     render();
   });
 
-  // 19. Add Clue
+  // 20. Add Clue
   document.getElementById('btn-add-clue').addEventListener('click', () => {
     const title = prompt('단서의 제목을 입력하세요:');
     if (!title) return;
@@ -4569,7 +4828,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (text) addClueToBoard(title, text);
   });
 
-  // 20. Map Controls
+  // 21. Map Controls
   document.getElementById('map-preset-select').addEventListener('change', (e) => {
     currentPresetMap = e.target.value;
     customMapImage = null;
@@ -4617,11 +4876,6 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('btn-fog-brush-hide').addEventListener('click', () => {
     currentTool = 'fog_brush';
     fogBrushMode = 'hide';
-  });
-  document.getElementById('btn-fog-reveal-all').addEventListener('click', () => {
-    if (confirm('전체 전장의 안개를 걷어내시겠습니까?')) {
-      resetFog(true);
-    }
   });
 
   // Zoom Controls
@@ -4679,22 +4933,19 @@ document.addEventListener('DOMContentLoaded', () => {
   renderCombatantsList();
   renderClueBoard();
 
-  // Welcome system greeting
+  // Welcome greeting
   appendChatMessage({
     id: 'welcome_1',
     type: 'chat',
     sender: '⚔️ MYTHOS VTT 가이드',
     role: 'gm',
     time: getCurrentTimeString(),
-    text: '환영합니다! 멀티플레이 방 코드는 [DRAGON-2026], 비밀번호는 [1234]로 설정되어 있습니다. 상단의 [⭐ 50대 기능]을 눌러 구현된 모든 TRPG 전문 기능 목록을 확인하실 수 있습니다.'
+    text: '모바일 및 PC 반응형 TRPG 시뮬레이터에 오신 것을 환영합니다! 모바일에서는 하단 탭(🗺️ 맵 / 🎲 주사위·채팅 / 👤 캐릭터 / 📜 시나리오)을 터치하여 쾌적하게 화면을 전환할 수 있습니다.'
   });
 
-  // Handle Window Resize
+  // Window Resize
   window.addEventListener('resize', () => {
-    const container = document.getElementById('canvas-container');
-    canvas.width = container.clientWidth;
-    canvas.height = container.clientHeight;
-    render();
+    initCanvas();
   });
 });
 
